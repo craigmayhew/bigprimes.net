@@ -1,5 +1,5 @@
 [package]
-name = "BigPrimes"
+name = "big_primes"
 version = "0.1.0"
 authors = ["Craig Mayhew"]
 edition = "2018" #rust has two major editions, 2018 is the latest
