@@ -33,7 +33,7 @@ Build
 ===
 
  1. Compile rust into wasm `wasm-pack build`
- 2. Build web app `npm init wasm-app www`
+ 2. Build web app `cd www && npm install`
  3. 
  
 Deploy
