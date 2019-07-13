@@ -3,6 +3,8 @@ sudo: false
 
 cache: cargo
 
+#./www/node_modules/.bin/webpack    <--- build www
+
 matrix:
   include:
 
