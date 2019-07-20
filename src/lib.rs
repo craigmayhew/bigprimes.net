@@ -1,5 +1,6 @@
 mod route;
 mod utils;
+mod pages;
 
 use wasm_bindgen::prelude::*;
 
