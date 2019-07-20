@@ -9,6 +9,7 @@ matrix:
   - rust: nightly
     env: RUST_BACKTRACE=1
     before_script:
+      - curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
       - wasm-pack build && cd www && npm install
     script:
       - cargo check
@@ -23,6 +24,7 @@ matrix:
   - rust: beta
     env: RUST_BACKTRACE=1
     before_script:
+      - curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
       - wasm-pack build && cd www && npm install
     script:
       - cargo check
