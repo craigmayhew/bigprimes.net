@@ -1,6 +1,11 @@
-mod route;
-mod utils;
+#[macro_use]
+extern crate seed;
+use seed::prelude::*;
+
 mod pages;
+mod route;
+mod timestamp;
+mod utils;
 
 use wasm_bindgen::prelude::*;
 

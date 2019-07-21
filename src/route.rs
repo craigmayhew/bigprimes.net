@@ -1,5 +1,4 @@
-use seed::prelude::*;
-use std::{convert::TryFrom, fmt, borrow::Cow};
+use std::{convert::TryFrom, fmt};
 
 type Path<'a> = Vec<&'a str>;
 
