@@ -11,8 +11,8 @@ pub mod pages;
 pub enum Page {
     Home,
     ContactUs,
-    /*Faq,
-    Downloads,
+    Faq,
+    /*Downloads,
     Status,
     NumberCruncher,
     PrimalityChecker,
@@ -56,7 +56,8 @@ fn update(msg: Msg, model: &mut Model, _: &mut Orders<Msg>) {
 fn view(model: &Model) -> impl View<Msg> {
     match model.page {
         Page::Home => pages::home::render(),
-        Page::ContactUs => pages::contact::render()
+        Page::ContactUs => pages::contact::render(),
+        Page::Faq => pages::faq::render(),
     }
 }
 
@@ -66,6 +67,7 @@ impl ToString for Page {
         match self {
             Page::Home => "home".into(),
             Page::ContactUs => "contactus".into(),
+            Page::Faq => "faq".into(),
         }
     }
 }
@@ -84,6 +86,7 @@ fn routes(url: seed::Url) -> Msg {
             }
         },
         "contactus" => Msg::ChangePage(Page::ContactUs),
+        "faq" => Msg::ChangePage(Page::Faq),
         _ => Msg::ChangePage(Page::Home)
     }
 }
