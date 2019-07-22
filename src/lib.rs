@@ -8,7 +8,7 @@ use seed::prelude::*;
 pub mod pages;
 
 #[derive(Copy, Clone)]
-enum Page {
+pub enum Page {
     Home,
     ContactUs,
     /*Faq,
@@ -54,32 +54,9 @@ fn update(msg: Msg, model: &mut Model, _: &mut Orders<Msg>) {
 /// The top-level component we pass to the virtual dom. Must accept the model as its
 /// only argument, and output has to implement trait `ElContainer`.
 fn view(model: &Model) -> impl View<Msg> {
-
-    // Attrs, Style, Events, and children may be defined separately.
-    let outer_style = style! {
-            "display" => "flex",
-            "flex-direction" => "column",
-            "text-align" => "center",
-    };
-
     match model.page {
-        Page::Home => div![
-            outer_style,
-            h1!["The Grand Total"],
-            div![
-                style! {
-                    // Example of conditional logic in a style.
-                    "color" => "gray";
-                    "border" => "2px solid #004422";
-                    "padding" => unit!(20, px);
-                },
-                // We can use normal Rust code and comments in the view.
-                // Optionally-displaying an element, and lifecycle hooks
-            ],
-            a!["Contact Us", attrs!{At::Href => "/contactus/"} ]
-        ],
-        Page::ContactUs => pages::contact::render(),
-        _ => div![]
+        Page::Home => pages::home::render(),
+        Page::ContactUs => pages::contact::render()
     }
 }
 
