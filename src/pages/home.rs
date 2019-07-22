@@ -17,4 +17,7 @@ pub mod home {
         news_items
     }
 
+    pub fn render(){
+        
+    }
 }

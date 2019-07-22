@@ -5,7 +5,7 @@ extern crate seed;
 
 use seed::prelude::*;
 
-mod pages;
+pub mod pages;
 
 #[derive(Copy, Clone)]
 enum Page {
@@ -40,7 +40,7 @@ impl Default for Model {
 
 // Update
 #[derive(Clone)]
-enum Msg {
+pub enum Msg {
     ChangePage(Page),
 }
 
@@ -78,6 +78,7 @@ fn view(model: &Model) -> impl View<Msg> {
             ],
             a!["Contact Us", attrs!{At::Href => "/contactus/"} ]
         ],
+        Page::ContactUs => pages::contact::render(),
         _ => div![]
     }
 }
