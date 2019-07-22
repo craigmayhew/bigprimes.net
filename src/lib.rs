@@ -1,6 +1,3 @@
-//! A simple, cliché example demonstrating structure and syntax.
-
-
 #![allow(clippy::non_ascii_literal)]
 
 #[macro_use]
@@ -53,19 +50,6 @@ fn update(msg: Msg, model: &mut Model, _: &mut Orders<Msg>) {
         Msg::ChangePage(page) => model.page = page
     }
 }
-
-// View
-
-/// A simple component.
-/*fn success_level(clicks: i32) -> Node<Msg> {
-    let descrip = match clicks {
-        0..=5 => "Not very many 🙁",
-        6..=9 => "I got my first real six-string 😐",
-        10..=11 => "Spinal Tap 🙂",
-        _ => "Double pendulum 🙃",
-    };
-    p![descrip]
-}*/
 
 /// The top-level component we pass to the virtual dom. Must accept the model as its
 /// only argument, and output has to implement trait `ElContainer`.
