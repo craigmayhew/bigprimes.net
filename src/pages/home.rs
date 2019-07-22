@@ -1,4 +1,4 @@
-pub mod Home {
+pub mod home {
     use chrono::{NaiveDate};
 
     pub struct NewsItem {
