@@ -11,7 +11,7 @@ matrix:
   - rust: nightly
     env: RUST_BACKTRACE=1
     install:
-      - cargo install wasm-pack
+      - cargo install wasm-pack --force #todo improve this, it's very slow
     before_script:
       - wasm-pack build && cd www && npm install
     script:
@@ -27,7 +27,7 @@ matrix:
   - rust: beta
     env: RUST_BACKTRACE=1
     install:
-      - cargo install wasm-pack
+      - cargo install wasm-pack --force #todo improve this, it's very slow
     before_script:
       - wasm-pack build && cd www && npm install
     script:
@@ -43,7 +43,7 @@ matrix:
   - rust: stable
     env: RUST_BACKTRACE=1
     install:
-      - cargo install wasm-pack
+      - cargo install wasm-pack --force #todo improve this, it's very slow
     before_script:
       - wasm-pack build && cd www && npm install
     script:
