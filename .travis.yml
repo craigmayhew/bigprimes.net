@@ -10,8 +10,9 @@ matrix:
   # Builds on nightly.
   - rust: nightly
     env: RUST_BACKTRACE=1
+    install:
+      - cargo install wasm-pack
     before_script:
-      - curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
       - wasm-pack build && cd www && npm install
     script:
       - cargo check
@@ -25,8 +26,9 @@ matrix:
   # Builds on beta.
   - rust: beta
     env: RUST_BACKTRACE=1
+    install:
+      - cargo install wasm-pack
     before_script:
-      - curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
       - wasm-pack build && cd www && npm install
     script:
       - cargo check
@@ -40,8 +42,9 @@ matrix:
   # Builds on stable.
   - rust: stable
     env: RUST_BACKTRACE=1
+    install:
+      - cargo install wasm-pack
     before_script:
-      - curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
       - wasm-pack build && cd www && npm install
     script:
       - cargo check
