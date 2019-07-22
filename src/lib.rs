@@ -9,9 +9,9 @@ pub mod pages;
 
 #[derive(Copy, Clone)]
 pub enum Page {
-    Home,
     ContactUs,
     Faq,
+    Home,
     /*Downloads,
     Status,
     NumberCruncher,
@@ -55,9 +55,9 @@ fn update(msg: Msg, model: &mut Model, _: &mut Orders<Msg>) {
 /// only argument, and output has to implement trait `ElContainer`.
 fn view(model: &Model) -> impl View<Msg> {
     match model.page {
-        Page::Home => pages::home::render(),
         Page::ContactUs => pages::contact::render(),
         Page::Faq => pages::faq::render(),
+        Page::Home => pages::home::render(),
     }
 }
 
@@ -65,9 +65,9 @@ impl ToString for Page {
     fn to_string(&self) -> String {
         // Eg for url routing
         match self {
-            Page::Home => "home".into(),
             Page::ContactUs => "contactus".into(),
             Page::Faq => "faq".into(),
+            Page::Home => "home".into(),
         }
     }
 }
