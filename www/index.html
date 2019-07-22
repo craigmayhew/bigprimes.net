@@ -4,16 +4,6 @@
     <meta charset="utf-8" />
     <title>BigPrimes</title>
     <link href="/c.css" rel="stylesheet" type="text/css" />
-    <script src="/pkg/big_primes.js"></script>
-    <script>
-      const { render } = wasm_bindgen;
-      function run() {
-        render();
-      }
-      wasm_bindgen("/pkg/package_bg.wasm")
-        .then(run)
-        .catch(console.error);
-    </script>
   </head>
   <body>
     <script src="./bootstrap.js"></script>
