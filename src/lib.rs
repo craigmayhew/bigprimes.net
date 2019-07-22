@@ -79,7 +79,7 @@ fn routes(url: seed::Url) -> Msg {
         "guide" => {
             // Determine if we are at the main page, or a subpage
             match url.path.get(1).as_ref() {
-                Some(page) => Msg::ChangePage(Page::Home),
+                Some(_page) => Msg::ChangePage(Page::Home),
                 None => Msg::ChangePage(Page::Home)
             }
         },
