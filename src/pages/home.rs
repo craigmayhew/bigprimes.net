@@ -1,7 +1,7 @@
 pub mod home {
     use chrono::{NaiveDate};
 
-    pub struct NewsItem {
+    struct NewsItem {
         pub title: String,
         pub date: NaiveDate,
     }
