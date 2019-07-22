@@ -40,5 +40,11 @@ pub fn render() -> seed::dom_types::Node<Msg> {
         ];
     };
     
-    table![table_rows]
+    div![
+        h1!["News"],
+        br![],
+        br![],
+        br![],
+        table![table_rows]
+    ]
 }
