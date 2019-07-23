@@ -29,6 +29,7 @@ pub enum Page {
 // Model
 struct Model {
     page: Page,
+    slug: std::string::String,
 }
 
 // Setup a default here, for initialization later.
@@ -36,6 +37,7 @@ impl Default for Model {
     fn default() -> Self {
         Self {
             page: Page::Home,
+            slug: "".to_owned(),
         }
     }
 }
@@ -43,13 +45,13 @@ impl Default for Model {
 // Update
 #[derive(Clone)]
 pub enum Msg {
-    ChangePage(Page),
+    ChangePage(Page, std::string::String),
 }
 
 /// The sole source of updating the model
 fn update(msg: Msg, model: &mut Model, _: &mut Orders<Msg>) {
     match msg {
-        Msg::ChangePage(page) => model.page = page
+        Msg::ChangePage(page, slug) => {model.page = page; model.slug = slug}
     }
 }
 
@@ -61,7 +63,7 @@ fn view(model: &Model) -> impl View<Msg> {
         Page::Downloads => pages::downloads::render(),
         Page::Faq => pages::faq::render(),
         Page::FermatArchive => pages::archive::fermat::render(),
-        Page::FibonacciArchive => pages::archive::fibonacci::render(),
+        Page::FibonacciArchive => pages::archive::fibonacci::render(model.slug.to_owned()),
         Page::Home => pages::home::render(),
         Page::Status => pages::status::render(),
     }
@@ -75,7 +77,7 @@ impl ToString for Page {
             Page::Downloads => "downloads".into(),
             Page::Faq => "faq".into(),
             Page::FermatArchive => "fermat".into(),
-            Page::FibonacciArchive => "fibonacci".into(),
+            Page::FibonacciArchive => "fibonacci".into(),//TODO: check this is right, might need the archive/ prefix!
             Page::Home => "home".into(),
             Page::Status => "status".into(),
         }
@@ -83,24 +85,32 @@ impl ToString for Page {
 }
 
 fn routes(url: seed::Url) -> Msg {
+
+    let empty_string = "".to_owned();
+
     if url.path.is_empty() {
-        return Msg::ChangePage(Page::Home)
+        return Msg::ChangePage(Page::Home, empty_string)
     }
 
     match url.path[0].as_ref() {
         "archive" => {
             // Determine if we are at the archive page, or a subpage
             match url.path[1].as_ref() {
-                "fermat" => Msg::ChangePage(Page::FermatArchive),
-                "fibonacci" => Msg::ChangePage(Page::FibonacciArchive),
-                _ => Msg::ChangePage(Page::Home)//TODO: add archive page
+                "fermat" => Msg::ChangePage(Page::FermatArchive, empty_string),
+                "fibonacci" => {
+                    match url.path.get(2).as_ref() {
+                        Some(_slug) => Msg::ChangePage(Page::FibonacciArchive, url.path[2].to_owned()),
+                        None => Msg::ChangePage(Page::Home, empty_string),
+                    }
+                },
+                _ => Msg::ChangePage(Page::Home, empty_string)//TODO: add archive page
             }
         },
-        "contactus" => Msg::ChangePage(Page::ContactUs),
-        "downloads" => Msg::ChangePage(Page::Downloads),
-        "faq" => Msg::ChangePage(Page::Faq),
-        "status" => Msg::ChangePage(Page::Status),
-        _ => Msg::ChangePage(Page::Home)
+        "contactus" => Msg::ChangePage(Page::ContactUs, empty_string),
+        "downloads" => Msg::ChangePage(Page::Downloads, empty_string),
+        "faq" => Msg::ChangePage(Page::Faq, empty_string),
+        "status" => Msg::ChangePage(Page::Status, empty_string),
+        _ => Msg::ChangePage(Page::Home, empty_string)
     }
 }
 
