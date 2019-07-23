@@ -58,14 +58,6 @@ nav a:hover {
   width: 25%;
 }
 
-.sumOfDigits thead{font-weight: bold;}
-.sumOfDigits td   {padding:2px;}
-
-table td{
-  background-color: #E0FAED;
-  border:1px solid #000
-}
-
 body, .text {
  color: #000;
  font-family: 'Lucida Grande',Tahoma,Verdana,Helvetica,sans-serif;
