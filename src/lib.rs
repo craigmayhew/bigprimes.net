@@ -92,7 +92,6 @@ fn routes(url: seed::Url) -> Msg {
                 _ => Msg::ChangePage(Page::Home)//TODO: add archive page
             }
         },
-        "archive/fermat" => Msg::ChangePage(Page::FermatArchive),
         "contactus" => Msg::ChangePage(Page::ContactUs),
         "downloads" => Msg::ChangePage(Page::Downloads),
         "faq" => Msg::ChangePage(Page::Faq),
