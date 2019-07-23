@@ -2,5 +2,6 @@
 
 pub mod contact;
 pub mod cruncher;
+pub mod downloads;
 pub mod faq;
 pub mod home;

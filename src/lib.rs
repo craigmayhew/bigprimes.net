@@ -10,9 +10,10 @@ pub mod pages;
 #[derive(Copy, Clone)]
 pub enum Page {
     ContactUs,
+    Downloads,
     Faq,
     Home,
-    /*Downloads,
+    /*
     Status,
     NumberCruncher,
     PrimalityChecker,
@@ -56,6 +57,7 @@ fn update(msg: Msg, model: &mut Model, _: &mut Orders<Msg>) {
 fn view(model: &Model) -> impl View<Msg> {
     match model.page {
         Page::ContactUs => pages::contact::render(),
+        Page::Downloads => pages::downloads::render(),
         Page::Faq => pages::faq::render(),
         Page::Home => pages::home::render(),
     }
@@ -66,6 +68,7 @@ impl ToString for Page {
         // Eg for url routing
         match self {
             Page::ContactUs => "contactus".into(),
+            Page::Downloads => "downloads".into(),
             Page::Faq => "faq".into(),
             Page::Home => "home".into(),
         }
@@ -86,6 +89,7 @@ fn routes(url: seed::Url) -> Msg {
             }
         },
         "contactus" => Msg::ChangePage(Page::ContactUs),
+        "downloads" => Msg::ChangePage(Page::Downloads),
         "faq" => Msg::ChangePage(Page::Faq),
         _ => Msg::ChangePage(Page::Home)
     }
