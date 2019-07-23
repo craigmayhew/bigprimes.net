@@ -13,8 +13,8 @@ pub enum Page {
     Downloads,
     Faq,
     Home,
-    /*
     Status,
+    /*
     NumberCruncher,
     PrimalityChecker,
     PrimeNumbersArchive,
@@ -60,6 +60,7 @@ fn view(model: &Model) -> impl View<Msg> {
         Page::Downloads => pages::downloads::render(),
         Page::Faq => pages::faq::render(),
         Page::Home => pages::home::render(),
+        Page::Status => pages::status::render(),
     }
 }
 
@@ -71,6 +72,7 @@ impl ToString for Page {
             Page::Downloads => "downloads".into(),
             Page::Faq => "faq".into(),
             Page::Home => "home".into(),
+            Page::Status => "status".into(),
         }
     }
 }
@@ -91,6 +93,7 @@ fn routes(url: seed::Url) -> Msg {
         "contactus" => Msg::ChangePage(Page::ContactUs),
         "downloads" => Msg::ChangePage(Page::Downloads),
         "faq" => Msg::ChangePage(Page::Faq),
+        "status" => Msg::ChangePage(Page::Status),
         _ => Msg::ChangePage(Page::Home)
     }
 }
