@@ -15,13 +15,14 @@ pub enum Page {
     Home,
     Status,
     FermatArchive,
+    FibonacciArchive,
     /*
     NumberCruncher,
     PrimalityChecker,
     PrimeNumbersArchive,
     MersennePrimeArchive,
     PerfectArchive,
-    FibonacciArchive*/
+    */
     //Article(article::slug::Slug),
 }
 
@@ -60,6 +61,7 @@ fn view(model: &Model) -> impl View<Msg> {
         Page::Downloads => pages::downloads::render(),
         Page::Faq => pages::faq::render(),
         Page::FermatArchive => pages::archive::fermat::render(),
+        Page::FibonacciArchive => pages::archive::fibonacci::render(),
         Page::Home => pages::home::render(),
         Page::Status => pages::status::render(),
     }
@@ -73,6 +75,7 @@ impl ToString for Page {
             Page::Downloads => "downloads".into(),
             Page::Faq => "faq".into(),
             Page::FermatArchive => "fermat".into(),
+            Page::FibonacciArchive => "fibonacci".into(),
             Page::Home => "home".into(),
             Page::Status => "status".into(),
         }
@@ -89,6 +92,7 @@ fn routes(url: seed::Url) -> Msg {
             // Determine if we are at the archive page, or a subpage
             match url.path[1].as_ref() {
                 "fermat" => Msg::ChangePage(Page::FermatArchive),
+                "fibonacci" => Msg::ChangePage(Page::FibonacciArchive),
                 _ => Msg::ChangePage(Page::Home)//TODO: add archive page
             }
         },
