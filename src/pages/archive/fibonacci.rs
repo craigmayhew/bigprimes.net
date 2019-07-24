@@ -36,6 +36,9 @@ pub fn render(slug:String) -> seed::dom_types::Node<Msg> {
         fib_vec_formatted.push(br![]);
     }
 
+    let href_prev:String = vec!["/archive/fibonacci/",&(slug_int-numbers_per_page).to_string(),"/"].into_iter().collect();
+    let href_next:String = vec!["/archive/fibonacci/",&(slug_int+numbers_per_page).to_string(),"/"].into_iter().collect();
+
     div![
         h1!["The Fibonacci Numbers"],
         br![],
@@ -44,9 +47,9 @@ pub fn render(slug:String) -> seed::dom_types::Node<Msg> {
         br![],
         fib_vec_formatted,
         br![],
-        a!["previous ",numbers_per_page.to_string()," fibonacci numbers", attrs!{At::Class => "link", At::Href => "/archive/fibonacci/70332/"}],
+        a!["previous ",numbers_per_page.to_string()," fibonacci numbers", attrs!{At::Class => "link", At::Href => href_prev}],
         br![],
-        a!["next ",numbers_per_page.to_string()," fibonacci numbers", attrs!{At::Class => "link", At::Href => "/archive/fibonacci/70332/"}],
+        a!["next ",numbers_per_page.to_string()," fibonacci numbers", attrs!{At::Class => "link", At::Href => href_next}],
         br![],
         br![],
         a!["100th Fibonacci Number", attrs!{At::Class => "link", At::Href => "/archive/fibonacci/100/"}],
