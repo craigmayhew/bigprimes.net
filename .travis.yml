@@ -8,7 +8,8 @@ matrix:
     - rust: nightly
   include:
   # Builds on nightly.
-  - rust: nightly
+  - os: linux
+    rust: nightly
     env: RUST_BACKTRACE=1
     install:
       - cargo install wasm-pack --force #todo improve this, it's very slow
@@ -34,7 +35,8 @@ matrix:
         ./grcov ccov.zip -s . -t lcov --llvm --branch --ignore-not-existing --ignore-dir "/*" -o lcov.info;
         bash <(curl -s https://codecov.io/bash) -f lcov.info;
   # Builds on beta.
-  - rust: beta
+  - os: linux
+    rust: beta
     env: RUST_BACKTRACE=1
     install:
       - cargo install wasm-pack --force #todo improve this, it's very slow
@@ -51,7 +53,8 @@ matrix:
       # Note: no enabling the `wee_alloc` feature here because it requires
       # nightly for now.
   # Builds on stable.
-  - rust: stable
+  - os: linux
+    rust: stable
     env: RUST_BACKTRACE=1
     install:
       - cargo install wasm-pack --force #todo improve this, it's very slow
