@@ -12,6 +12,7 @@ fn nth(num: isize) -> String {
 }
 
 pub fn render(slug:String) -> seed::dom_types::Node<Msg> {
+    //TODO: what occurs if slug_int is an overflow? i.e. greater tha 64bits
     let slug_int:isize = slug.parse().unwrap();
 
     div![
@@ -28,4 +29,22 @@ pub fn render(slug:String) -> seed::dom_types::Node<Msg> {
         a!["1000th Fibonacci Number", attrs!{At::Class => "link", At::Href => "/archive/fibonacci/1000/"}],
         a!["10000th Fibonacci Number", attrs!{At::Class => "link", At::Href => "/archive/fibonacci/10000/"}],
     ]
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn nth_test() {
+        assert_eq!(nth(7), "7th");
+        assert_ne!(nth(7), "1st");
+        assert_eq!(nth(7000000000000000000), "7000000000000000000th");
+        assert_eq!(nth(7000000000000000001), "7000000000000000001st");
+        assert_eq!(nth(7000000000000000002), "7000000000000000002nd");
+        assert_eq!(nth(7000000000000000003), "7000000000000000003rd");
+        assert_eq!(nth(7000000000000000011), "7000000000000000011th");
+        assert_eq!(nth(7000000000000000012), "7000000000000000012th");
+        assert_eq!(nth(7000000000000000013), "7000000000000000013th");
+    }
 }
