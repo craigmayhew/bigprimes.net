@@ -6,4 +6,5 @@ pub mod cruncher;
 pub mod downloads;
 pub mod faq;
 pub mod home;
+pub mod primalitytest;
 pub mod status;

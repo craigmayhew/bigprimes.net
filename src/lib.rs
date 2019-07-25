@@ -18,9 +18,9 @@ pub enum Page {
     FibonacciArchive,
     MersenneArchive,
     PerfectArchive,
+    PrimalityChecker,
     /*
     NumberCruncher,
-    PrimalityChecker,
     PrimeNumbersArchive,
     */
 }
@@ -66,6 +66,7 @@ fn view(model: &Model) -> impl View<Msg> {
         Page::Home => pages::home::render(),
         Page::MersenneArchive => pages::archive::mersenne::render(),
         Page::PerfectArchive => pages::archive::perfect::render(),
+        Page::PrimalityChecker => pages::primalitytest::render(),
         Page::Status => pages::status::render(),
     }
 }
@@ -83,6 +84,7 @@ impl ToString for Page {
             Page::Status => "status".into(),
             Page::MersenneArchive => "mersenne".into(),
             Page::PerfectArchive => "perfect".into(),
+            Page::PrimalityChecker => "primalitytest".into(),
         }
     }
 }
@@ -114,6 +116,7 @@ fn routes(url: seed::Url) -> Msg {
         "contactus" => Msg::ChangePage(Page::ContactUs, empty_string),
         "downloads" => Msg::ChangePage(Page::Downloads, empty_string),
         "faq" => Msg::ChangePage(Page::Faq, empty_string),
+        "primalitytest" => Msg::ChangePage(Page::PrimalityChecker, empty_string),
         "status" => Msg::ChangePage(Page::Status, empty_string),
         _ => Msg::ChangePage(Page::Home, empty_string)
     }
