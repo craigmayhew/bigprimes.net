@@ -14,8 +14,10 @@ fn html_form() -> seed::dom_types::Node<Msg> {
     div![
         h1!["Number Cruncher"],
         "Welcome to the number cruncher.
-        Type in a number in the box below and we will crunch it for you.<br><br>
-        You will be taken to a page that tells you the following information about your number:",
+        Type in a number in the box below and we will crunch it for you.",
+        br![],
+        br![],
+        "You will be taken to a page that tells you the following information about your number:",
         ul![
             li!["Is it odd or even?"],
             li!["Is it a palindrome?"],
@@ -80,7 +82,14 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
             tbody![
                 tr![
                     td![
-                        "It is not a triangle number.<br>It is not a square number.<br>It is not a cube number.<br><br>It is not a factorial number.<br>",
+                        "It is not a triangle number.",
+                        br![],
+                        "It is not a square number.",
+                        br![],
+                        "It is not a cube number.",
+                        br![],
+                        br![],
+                        "It is not a factorial number.",
                     ],
                 ],
             ],
@@ -191,7 +200,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                         "Babylonian Numerals:",
                     ],
                     td![style!{"vertical-align" => "middle"; "background-color" => "#FFF"},
-                        "<img src=\"https://static.bigprimes.net/imgs/babnumbers/bab_7.gif\" alt=\"7\">",
+                        img![attrs!{At::Src => "https://static.bigprimes.net/imgs/babnumbers/bab_7.gif", At::Alt => "7"}],
                     ]
                 ],
             ],
