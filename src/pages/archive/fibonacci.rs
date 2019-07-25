@@ -37,7 +37,6 @@ fn nth_fibonacci(n: usize, count: usize) -> Vec<BigUint> {
 
 pub fn render(slug:String) -> seed::dom_types::Node<Msg> {
     let numbers_per_page:usize = 25;
-    //TODO: what occurs if slug_int is an overflow? i.e. greater tha 64bits
     let slug_int:usize = slug.parse().unwrap();
     let fib_vec = nth_fibonacci(slug_int, numbers_per_page);
 
