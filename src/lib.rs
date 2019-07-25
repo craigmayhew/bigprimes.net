@@ -22,9 +22,7 @@ pub enum Page {
     NumberCruncher,
     PrimalityChecker,
     PrimeNumbersArchive,
-    MersennePrimeArchive,
     */
-    //Article(article::slug::Slug),
 }
 
 // Model
