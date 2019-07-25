@@ -6,6 +6,7 @@ extern crate seed;
 use seed::prelude::*;
 
 pub mod pages;
+pub mod utils;
 
 #[derive(Copy, Clone)]
 pub enum Page {
