@@ -28,6 +28,7 @@ web-sys = { version = "0.3.25", features = [ "ScrollBehavior", "ScrollToOptions"
 
 num-bigint = "0.2"
 num-traits = "0.2"
+regex = "1"
 
 
 # The `console_error_panic_hook` crate provides better debugging of panics by

@@ -8,6 +8,7 @@ use num_traits::{Zero, One};
 use std::mem::replace;
 
 use crate::utils::nth;
+use regex::Regex;
 
 fn html_form() -> seed::dom_types::Node<Msg> {
     div![
@@ -48,6 +49,162 @@ fn html_form() -> seed::dom_types::Node<Msg> {
     ]
 }
 
+fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
+    let tableStyle = style!{"border" => "1px #000 solid"};
+    div![style!{"width" => "75%"; "padding" => "3px"},
+        br![],
+        br![],
+        b!["The number you submitted to be crunched was:"],
+        h1![slug.to_string()," -  seven"],
+        table![attrs!{At::Class => "text", At::Width => "100%"}, &tableStyle,
+            tbody![
+                tr![
+                    td![
+                        "It is an odd number.",
+                        br![],
+                        "It is the 4th prime number.",
+                        br![],
+                        "It is the 2nd ",a!["mersenne prime", attrs!{At::Class => "link", At::Href => "http://en.wikipedia.org/wiki/Mersenne_prime"}],".",
+                        br![],
+                        "It is not a ",a!["fermat prime", attrs!{At::Class => "link", At::Href => "https://www.fermatsearch.org/"}],".",
+                        br![],
+                        "It is not a ",a!["perfect number", attrs!{At::Class => "link", At::Href => "https://en.wikipedia.org/wiki/Perfect_number"}],".",
+                        br![],
+                    ],
+                ],
+            ],
+        ],
+        br![],
+        br![],
+        table![attrs!{At::Class => "text", At::Width => "100%"}, &tableStyle,
+            tbody![
+                tr![
+                    td![
+                        "It is not a triangle number.<br>It is not a square number.<br>It is not a cube number.<br><br>It is not a factorial number.<br>",
+                    ],
+                ],
+            ],
+        ],
+        br![],
+        br![],
+        table![attrs!{At::Class => "text", At::Width => "100%"}, &tableStyle,
+            tbody![
+                tr![
+                    td![
+                        "It it has no factors except itself and 1.",
+                    ],
+                ],
+            ],
+        ],
+        br![],
+        br![],
+        table![attrs!{At::Class => "text", At::Width => "100%"}, &tableStyle,
+            tbody![
+                tr![
+                    td![attrs!{At::Width => "200"},
+                        "Base 2 (Binary):",
+                    ],
+                    td![
+                        "111",
+                    ],
+                ],
+                tr![
+                    td![attrs!{At::Width => "200"},
+                        "Base 3 (Ternary):",
+                    ],
+                    td![
+                        "21",
+                    ],
+                ],
+                tr![
+                    td![attrs!{At::Width => "200"},
+                        "Base 4 (Quaternary):",
+                    ],
+                    td![
+                        "13",
+                    ],
+                ],
+                tr![
+                    td![attrs!{At::Width => "200"},
+                        "Base 5 (Quinary):",
+                    ],
+                    td![
+                        "12",
+                    ],
+                ],
+                tr![
+                    td![attrs!{At::Width => "200"},
+                        "Base 8 (Octal):",
+                    ],
+                    td![
+                        "7",
+                    ],
+                ],
+                tr![
+                    td![attrs!{At::Width => "200"},
+                        "Base 10 (Denary):",
+                    ],
+                    td![
+                        "7",
+                    ],
+                ],
+                tr![
+                    td![attrs!{At::Width => "200"},
+                        "Base 16 (Hexadecimal):",
+                    ],
+                    td![
+                        "7",
+                    ],
+                ],
+            ],
+        ],
+        br![],
+        br![],
+        table![attrs!{At::Class => "text", At::Width => "100%"}, &tableStyle,
+            tbody![
+                tr![
+                    td![attrs!{At::Width => "200"},
+                        "Roman Numerals:",
+                    ],
+                    td![attrs!{At::Width => "40"},
+                        "VII",
+                    ],
+                ],
+                tr![
+                    td![
+                        "Egyptian Numerals:",
+                    ],
+                    td![
+                        "𓐀",
+                    ]
+                ],
+                tr![
+                    td![
+                        "Chinese Numerals:",
+                    ],
+                    td![style!{"vertical-align" => "middle"; "background-color" => "#FFF"},
+                        "柒",
+                    ]
+                ],
+                tr![
+                    td![
+                        "Babylonian Numerals:",
+                    ],
+                    td![style!{"vertical-align" => "middle"; "background-color" => "#FFF"},
+                        "<img src=\"https://static.bigprimes.net/imgs/babnumbers/bab_7.gif\" alt=\"7\">",
+                    ]
+                ],
+            ],
+        ],
+    ]
+}
+
 pub fn render(slug:String) -> seed::dom_types::Node<Msg> {
-    html_form()
+    let rgx = Regex::new(r"^(0|[1-9][0-9]*)$").unwrap();
+
+    match rgx.is_match(&slug) {
+        true => html_crunched_number(slug),
+        false => html_crunched_number(slug),
+        _ => html_form()
+    }
 }

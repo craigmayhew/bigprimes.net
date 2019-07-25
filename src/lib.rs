@@ -117,7 +117,12 @@ fn routes(url: seed::Url) -> Msg {
             }
         },
         "contactus" => Msg::ChangePage(Page::ContactUs, empty_string),
-        "cruncher" => Msg::ChangePage(Page::NumberCruncher, empty_string),
+        "cruncher" => {
+            match url.path.get(1).as_ref() {
+                Some(_slug) => Msg::ChangePage(Page::NumberCruncher, url.path[1].to_owned()),
+                None => Msg::ChangePage(Page::NumberCruncher, empty_string),
+            }
+        },
         "downloads" => Msg::ChangePage(Page::Downloads, empty_string),
         "faq" => Msg::ChangePage(Page::Faq, empty_string),
         "primalitytest" => Msg::ChangePage(Page::PrimalityChecker, empty_string),
