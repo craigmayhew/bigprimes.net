@@ -9,6 +9,9 @@ nav {
   vertical-align: top;
   width: 14%;
 }
+nav div {
+  margin-bottom: 10px;
+}
 
 a:hover.link {
  color: #004400;
