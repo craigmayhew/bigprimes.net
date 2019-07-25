@@ -209,11 +209,10 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
 }
 
 pub fn render(slug:String) -> seed::dom_types::Node<Msg> {
-    let rgx = Regex::new(r"^(0|[1-9][0-9]*)$").unwrap();
+    let rgx = Regex::new(r"^([1-9]+[0-9]*)$").unwrap();
 
     match rgx.is_match(&slug) {
         true => html_crunched_number(slug),
-        false => html_crunched_number(slug),
         _ => html_form()
     }
 }
