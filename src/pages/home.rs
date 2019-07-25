@@ -9,7 +9,7 @@ struct NewsItem {
 
 const NUM_NEWS_ITEMS :usize = 2;
 fn get_news_items() -> [NewsItem; NUM_NEWS_ITEMS] {
-    let news_items: [NewsItem; NUM_NEWS_ITEMS] = [
+    [
         NewsItem{
             content: vec![
                 a!["Ethereum bounty contracts", attrs!{At::Class => "link", At::Href => "https://github.com/craigmayhew/ethereum-contracts"}],
@@ -25,8 +25,7 @@ fn get_news_items() -> [NewsItem; NUM_NEWS_ITEMS] {
             ],
             date: NaiveDate::from_ymd(2019, 1, 22)
         }
-    ];
-    news_items
+    ]
 }
 
 pub fn render() -> seed::dom_types::Node<Msg> {
