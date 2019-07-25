@@ -9,7 +9,7 @@ use std::mem::replace;
 
 use crate::utils::nth;
 
-pub fn render(slug:String) -> seed::dom_types::Node<Msg> {
+fn html_form() -> seed::dom_types::Node<Msg> {
     div![
         h1!["Number Cruncher"],
         "Welcome to the number cruncher.
@@ -46,4 +46,8 @@ pub fn render(slug:String) -> seed::dom_types::Node<Msg> {
             ],
         ],
     ]
+}
+
+pub fn render(slug:String) -> seed::dom_types::Node<Msg> {
+    html_form()
 }
