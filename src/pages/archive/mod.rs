@@ -2,3 +2,4 @@
 
 pub mod fermat;
 pub mod fibonacci;
+pub mod perfect;

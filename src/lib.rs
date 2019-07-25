@@ -16,12 +16,12 @@ pub enum Page {
     Status,
     FermatArchive,
     FibonacciArchive,
+    PerfectArchive,
     /*
     NumberCruncher,
     PrimalityChecker,
     PrimeNumbersArchive,
     MersennePrimeArchive,
-    PerfectArchive,
     */
     //Article(article::slug::Slug),
 }
@@ -65,6 +65,7 @@ fn view(model: &Model) -> impl View<Msg> {
         Page::FermatArchive => pages::archive::fermat::render(),
         Page::FibonacciArchive => pages::archive::fibonacci::render(model.slug.to_owned()),
         Page::Home => pages::home::render(),
+        Page::PerfectArchive => pages::archive::perfect::render(),
         Page::Status => pages::status::render(),
     }
 }
@@ -80,6 +81,7 @@ impl ToString for Page {
             Page::FibonacciArchive => "fibonacci".into(),//TODO: check this is right, might need the archive/ prefix!
             Page::Home => "home".into(),
             Page::Status => "status".into(),
+            Page::PerfectArchive => "perfect".into(),
         }
     }
 }
@@ -103,6 +105,7 @@ fn routes(url: seed::Url) -> Msg {
                         None => Msg::ChangePage(Page::FibonacciArchive, "1".to_owned()),
                     }
                 },
+                "perfect" => Msg::ChangePage(Page::PerfectArchive, empty_string),
                 _ => Msg::ChangePage(Page::Home, empty_string)//TODO: add archive page
             }
         },
