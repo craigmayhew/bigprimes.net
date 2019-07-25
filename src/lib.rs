@@ -100,7 +100,7 @@ fn routes(url: seed::Url) -> Msg {
                 "fibonacci" => {
                     match url.path.get(2).as_ref() {
                         Some(_slug) => Msg::ChangePage(Page::FibonacciArchive, url.path[2].to_owned()),
-                        None => Msg::ChangePage(Page::Home, empty_string),
+                        None => Msg::ChangePage(Page::FibonacciArchive, "1".to_owned()),
                     }
                 },
                 _ => Msg::ChangePage(Page::Home, empty_string)//TODO: add archive page
