@@ -93,7 +93,9 @@ mod numerics_to_text {
         ];
 
         let num:BigUint = num_bigint::BigUint::from_str_radix(&str_num, 10).unwrap();
-        convert_tri(num, Zero::zero(), units, tens, triplets)   
+        let string:String = convert_tri(num, Zero::zero(), units, tens, triplets);
+        //remove first character which is a space
+        string[1..].to_string()
     }
 
     fn convert_tri(num:BigUint, tri:usize, units:Vec<&str>, tens:Vec<&str>, triplets:Vec<&str>) -> String {
