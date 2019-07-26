@@ -200,12 +200,16 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                     td![
                         "It is an ",if numerics_to_text::is_odd(slug) {"odd"} else {"even"} ," number.",
                         br![],
+                        //TODO hardcoded example value
                         "It is the ",nth(4)," prime number.",
                         br![],
+                        //TODO hardcoded example value
                         "It is the 2nd ",a!["mersenne prime", attrs!{At::Class => "link", At::Href => "http://en.wikipedia.org/wiki/Mersenne_prime"}],".",
                         br![],
+                        //TODO hardcoded example value
                         "It is not a ",a!["fermat prime", attrs!{At::Class => "link", At::Href => "https://www.fermatsearch.org/"}],".",
                         br![],
+                        //TODO hardcoded example value
                         "It is not a ",a!["perfect number", attrs!{At::Class => "link", At::Href => "https://en.wikipedia.org/wiki/Perfect_number"}],".",
                         br![],
                     ],
@@ -218,13 +222,17 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
             tbody![
                 tr![
                     td![
+                        //TODO hardcoded example value
                         "It is not a triangle number.",
                         br![],
+                        //TODO hardcoded example value
                         "It is not a square number.",
                         br![],
+                        //TODO hardcoded example value
                         "It is not a cube number.",
                         br![],
                         br![],
+                        //TODO hardcoded example value
                         "It is not a factorial number.",
                     ],
                 ],
@@ -236,6 +244,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
             tbody![
                 tr![
                     td![
+                        //TODO hardcoded example value
                         "It it has no factors except itself and 1.",
                     ],
                 ],
@@ -250,6 +259,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                         "Base 2 (Binary):",
                     ],
                     td![
+                        //TODO hardcoded example value
                         "111",
                     ],
                 ],
@@ -258,6 +268,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                         "Base 3 (Ternary):",
                     ],
                     td![
+                        //TODO hardcoded example value
                         "21",
                     ],
                 ],
@@ -266,6 +277,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                         "Base 4 (Quaternary):",
                     ],
                     td![
+                        //TODO hardcoded example value
                         "13",
                     ],
                 ],
@@ -274,6 +286,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                         "Base 5 (Quinary):",
                     ],
                     td![
+                        //TODO hardcoded example value
                         "12",
                     ],
                 ],
@@ -282,6 +295,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                         "Base 8 (Octal):",
                     ],
                     td![
+                        //TODO hardcoded example value
                         "7",
                     ],
                 ],
@@ -290,6 +304,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                         "Base 10 (Denary):",
                     ],
                     td![
+                        //TODO hardcoded example value
                         "7",
                     ],
                 ],
@@ -298,6 +313,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                         "Base 16 (Hexadecimal):",
                     ],
                     td![
+                        //TODO hardcoded example value
                         "7",
                     ],
                 ],
@@ -312,6 +328,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                         "Roman Numerals:",
                     ],
                     td![attrs!{At::Width => "40"},
+                    //TODO hardcoded example value
                         "VII",
                     ],
                 ],
@@ -320,6 +337,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                         "Egyptian Numerals:",
                     ],
                     td![
+                        //TODO hardcoded example value
                         "𓐀",
                     ]
                 ],
@@ -328,6 +346,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                         "Chinese Numerals:",
                     ],
                     td![style!{"vertical-align" => "middle"; "background-color" => "#FFF"},
+                    //TODO hardcoded example value
                         "柒",
                     ]
                 ],
@@ -336,6 +355,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                         "Babylonian Numerals:",
                     ],
                     td![style!{"vertical-align" => "middle"; "background-color" => "#FFF"},
+                    //TODO hardcoded example value
                         img![attrs!{At::Src => "https://static.bigprimes.net/imgs/babnumbers/bab_7.gif", At::Alt => "7"}],
                     ]
                 ],
