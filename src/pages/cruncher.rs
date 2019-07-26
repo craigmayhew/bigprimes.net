@@ -354,5 +354,6 @@ mod tests {
     fn numerics_to_text_test() {
         assert_eq!(numerics_to_text::convert("170".to_string()), "one hundred seventy");
         assert_eq!(numerics_to_text::convert("90001".to_string()), "ninety thousand one");
+        assert_eq!(numerics_to_text::convert("1001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001000".to_string()), "one noventrigintillion one octotrigintillion one septentrigintillion one sestrigintillion one quinquatrigintillion one quattuortrigintillion one trestrigintillion one duotrigintillion one untrigintillion one trigintillion one novemvigintillion one octovigintillion one septemvigintillion one sesvigintillion one quinquavigintillion one quattuorvigintillion one tresvigintillion one duovigintillion one unvigintillion one vigintillion one novemdecillion one octodecillion one septendecillion one sexdecillion one quindecillion one quattuordecillion one tredecillion one duodecillion one undecillion one decillion one nonillion one octillion one septillion one sextillion one quintillion one quadrillion one trillion one billion one million one thousand");
     }
 }
