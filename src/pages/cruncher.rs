@@ -11,6 +11,13 @@ mod numerics_to_text {
     use num_traits::{Num,ToPrimitive,Zero};
     use num_bigint::{BigUint,ToBigUint};
 
+    pub fn is_odd(str_num: String) -> bool{
+        match str_num[str_num.len()-1..str_num.len()].as_ref() {
+           "1"|"3"|"5"|"7"|"9" => true,
+           _ => false,
+        }
+    }
+
     pub fn convert(str_num: String) -> String{
         let units:Vec<&str> = vec![
             "",
@@ -191,7 +198,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
             tbody![
                 tr![
                     td![
-                        "It is an odd number.",
+                        "It is an ",if numerics_to_text::is_odd(slug) {"odd"} else {"even"} ," number.",
                         br![],
                         "It is the ",nth(4)," prime number.",
                         br![],
@@ -355,5 +362,13 @@ mod tests {
         assert_eq!(numerics_to_text::convert("170".to_string()), "one hundred seventy");
         assert_eq!(numerics_to_text::convert("90001".to_string()), "ninety thousand one");
         assert_eq!(numerics_to_text::convert("1001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001000".to_string()), "one noventrigintillion one octotrigintillion one septentrigintillion one sestrigintillion one quinquatrigintillion one quattuortrigintillion one trestrigintillion one duotrigintillion one untrigintillion one trigintillion one novemvigintillion one octovigintillion one septemvigintillion one sesvigintillion one quinquavigintillion one quattuorvigintillion one tresvigintillion one duovigintillion one unvigintillion one vigintillion one novemdecillion one octodecillion one septendecillion one sexdecillion one quindecillion one quattuordecillion one tredecillion one duodecillion one undecillion one decillion one nonillion one octillion one septillion one sextillion one quintillion one quadrillion one trillion one billion one million one thousand");
+    }
+
+    #[test]
+    fn numerics_to_text_is_odd_test() {
+        assert_eq!(numerics_to_text::is_odd("170".to_string()), false);
+        assert_eq!(numerics_to_text::is_odd("90001".to_string()), true);
+        assert_eq!(numerics_to_text::is_odd("1001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001000".to_string()), false);
+        assert_eq!(numerics_to_text::is_odd("1001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001".to_string()), true);
     }
 }
