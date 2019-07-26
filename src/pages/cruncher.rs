@@ -3,12 +3,149 @@ use crate::Msg;
 
 extern crate num_bigint as bigint;
 extern crate num_traits;
-use num_bigint::BigUint;
-use num_traits::{Zero, One};
-use std::mem::replace;
 
 use crate::utils::nth;
 use regex::Regex;
+
+mod numerics_to_text {
+    use num_traits::{Num,ToPrimitive,Zero};
+    use num_bigint::{BigUint,ToBigUint};
+
+    pub fn convert(str_num: String) -> String{
+        let units:Vec<&str> = vec![
+            "",
+            " one",
+            " two",
+            " three",
+            " four",
+            " five",
+            " six",
+            " seven",
+            " eight",
+            " nine",
+            " ten",
+            " eleven",
+            " twelve",
+            " thirteen",
+            " fourteen",
+            " fifteen",
+            " sixteen",
+            " seventeen",
+            " eighteen",
+            " nineteen"
+        ];
+        let tens:Vec<&str> = vec![
+            "",
+            "",
+            " twenty",
+            " thirty",
+            " forty",
+            " fifty",
+            " sixty",
+            " seventy",
+            " eighty",
+            " ninety"
+        ];
+        let triplets:Vec<&str> = vec![
+            "",
+            " thousand",
+            " million",
+            " billion",
+            " trillion",
+            " quadrillion",
+            " quintillion",
+            " sextillion",
+            " septillion",
+            " octillion",
+            " nonillion",
+            " decillion",
+            " undecillion",
+            " duodecillion",
+            " tredecillion",
+            " quattuordecillion",
+            " quindecillion",
+            " sexdecillion",
+            " septendecillion",
+            " octodecillion",
+            " novemdecillion",
+            " vigintillion",
+            " unvigintillion",
+            " duovigintillion",
+            " tresvigintillion",
+            " quattuorvigintillion",
+            " quinquavigintillion",
+            " sesvigintillion",
+            " septemvigintillion",
+            " octovigintillion",
+            " novemvigintillion",
+            " trigintillion",
+            " untrigintillion",
+            " duotrigintillion",
+            " trestrigintillion",
+            " quattuortrigintillion",
+            " quinquatrigintillion",
+            " sestrigintillion",
+            " septentrigintillion",
+            " octotrigintillion",
+            " noventrigintillion",
+            " quadragintillion",
+            " ERROR ",
+        ];
+
+        let num:BigUint = num_bigint::BigUint::from_str_radix(&str_num, 10).unwrap();
+        convert_num(num, units, tens, triplets)
+    }
+
+    fn convert_num(num:BigUint, units:Vec<&str>, tens:Vec<&str>, triplets:Vec<&str>) -> String {
+        let mut string:String = "".to_owned();
+        if num != Zero::zero() {
+            string.push_str("zero");
+        } else {
+            string = convert_tri(num, Zero::zero(), units, tens, triplets);
+        }
+        string
+    }
+
+    fn convert_tri(num:BigUint, tri:usize, units:Vec<&str>, tens:Vec<&str>, triplets:Vec<&str>) -> String {
+        // chunk the number, ...rxyy
+        let ten:BigUint = 10.to_biguint().unwrap();
+        let hundred:BigUint = 100.to_biguint().unwrap();
+        let thousand:BigUint = 1000.to_biguint().unwrap();
+        let r = &num / &thousand; // this in theory is rounding down to an int
+        let x:usize = ((&num / &hundred) % &ten).to_usize().unwrap();
+        let y:usize = (&num % &hundred).to_usize().unwrap();
+        // init the output string
+        let mut string:String = "".to_owned();
+        // do hundreds
+        if x > 0 {
+            string.push_str(units[x]);
+            string.push_str(" hundred");
+        }
+        // do units and tens
+        if y < 20 {
+            string.push_str(units[y]);
+        } else {
+            string.push_str(tens[(y / 10)]);
+            string.push_str(units[(y / 10)]);
+        }
+        // add triplet modifier only if there
+        // is some output to be modified...
+        if string != "" {
+            match triplets[tri] {
+                _s => string.push_str(&triplets[tri].to_string()),
+            }
+        }
+        // continue recursing?
+        if r > Zero::zero() {
+            let mut string2:String = convert_tri(r, tri + 1, units, tens, triplets);
+            string2.push_str(&string);
+            string2
+        } else {
+            string
+        }
+    }
+
+}
 
 fn html_form() -> seed::dom_types::Node<Msg> {
     div![
@@ -57,7 +194,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
         br![],
         br![],
         b!["The number you submitted to be crunched was:"],
-        h1![slug.to_string()," -  seven"],
+        h1![slug.to_string()," - ",numerics_to_text::convert(slug.to_string())],
         table![attrs!{At::Class => "text", At::Width => "100%"}, &tableStyle,
             tbody![
                 tr![
