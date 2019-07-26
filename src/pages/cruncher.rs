@@ -343,3 +343,14 @@ pub fn render(slug:String) -> seed::dom_types::Node<Msg> {
         _ => html_form()
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn numerics_to_text_test() {
+        assert_eq!(numerics_to_text::convert("170".to_string()), "one hundred seventy");
+        assert_eq!(numerics_to_text::convert("90001".to_string()), "ninety thousand one");
+    }
+}
