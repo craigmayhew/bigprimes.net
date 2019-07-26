@@ -191,7 +191,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                     td![
                         "It is an odd number.",
                         br![],
-                        "It is the 4th prime number.",
+                        "It is the ",nth(4)," prime number.",
                         br![],
                         "It is the 2nd ",a!["mersenne prime", attrs!{At::Class => "link", At::Href => "http://en.wikipedia.org/wiki/Mersenne_prime"}],".",
                         br![],
