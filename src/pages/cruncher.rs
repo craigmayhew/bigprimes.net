@@ -116,7 +116,7 @@ mod numerics_to_text {
             string.push_str(units[y]);
         } else {
             string.push_str(tens[(y / 10)]);
-            string.push_str(units[(y / 10)]);
+            string.push_str(units[(y % 10)]);
         }
         // add triplet modifier only if there
         // is some output to be modified...
