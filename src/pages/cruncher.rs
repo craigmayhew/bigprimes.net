@@ -93,17 +93,7 @@ mod numerics_to_text {
         ];
 
         let num:BigUint = num_bigint::BigUint::from_str_radix(&str_num, 10).unwrap();
-        convert_num(num, units, tens, triplets)
-    }
-
-    fn convert_num(num:BigUint, units:Vec<&str>, tens:Vec<&str>, triplets:Vec<&str>) -> String {
-        let mut string:String = "".to_owned();
-        if num != Zero::zero() {
-            string.push_str("zero");
-        } else {
-            string = convert_tri(num, Zero::zero(), units, tens, triplets);
-        }
-        string
+        convert_tri(num, Zero::zero(), units, tens, triplets)   
     }
 
     fn convert_tri(num:BigUint, tri:usize, units:Vec<&str>, tens:Vec<&str>, triplets:Vec<&str>) -> String {
