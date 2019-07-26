@@ -179,13 +179,13 @@ fn html_form() -> seed::dom_types::Node<Msg> {
 }
 
 fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
-    let tableStyle = style!{"border" => "1px #000 solid"};
+    let table_style = style!{"border" => "1px #000 solid"};
     div![style!{"width" => "75%"; "padding" => "3px"},
         br![],
         br![],
         b!["The number you submitted to be crunched was:"],
         h1![slug.to_string()," - ",numerics_to_text::convert(slug.to_string())],
-        table![attrs!{At::Class => "text", At::Width => "100%"}, &tableStyle,
+        table![attrs!{At::Class => "text", At::Width => "100%"}, &table_style,
             tbody![
                 tr![
                     td![
@@ -205,7 +205,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
         ],
         br![],
         br![],
-        table![attrs!{At::Class => "text", At::Width => "100%"}, &tableStyle,
+        table![attrs!{At::Class => "text", At::Width => "100%"}, &table_style,
             tbody![
                 tr![
                     td![
@@ -223,7 +223,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
         ],
         br![],
         br![],
-        table![attrs!{At::Class => "text", At::Width => "100%"}, &tableStyle,
+        table![attrs!{At::Class => "text", At::Width => "100%"}, &table_style,
             tbody![
                 tr![
                     td![
@@ -234,7 +234,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
         ],
         br![],
         br![],
-        table![attrs!{At::Class => "text", At::Width => "100%"}, &tableStyle,
+        table![attrs!{At::Class => "text", At::Width => "100%"}, &table_style,
             tbody![
                 tr![
                     td![attrs!{At::Width => "200"},
@@ -296,7 +296,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
         ],
         br![],
         br![],
-        table![attrs!{At::Class => "text", At::Width => "100%"}, &tableStyle,
+        table![attrs!{At::Class => "text", At::Width => "100%"}, &table_style,
             tbody![
                 tr![
                     td![attrs!{At::Width => "200"},
