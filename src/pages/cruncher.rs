@@ -493,7 +493,7 @@ fn html_form() -> seed::dom_types::Node<Msg> {
 
 fn html_factors(slug:&str, slug_len:usize, max_len_factoring:usize) -> seed::dom_types::Node<Msg> {
     if slug_len <= max_len_factoring {
-        td![
+        td![attrs!{At::Width => "200"},
             "It it has factors:",
             br![],
             El::from_html(&numerics_to_text::list_factors(&slug, "<br>".to_owned()))
@@ -504,48 +504,48 @@ fn html_factors(slug:&str, slug_len:usize, max_len_factoring:usize) -> seed::dom
 }
 
 fn html_roman(slug:&str, max_len_roman:usize) -> seed::dom_types::Node<Msg> {
-    if slug.len() <= max_len_roman {
-        tr![
-            td![attrs!{At::Width => "200"},
-                "Roman Numerals:",
-            ],
-            td![attrs!{At::Width => "40"},
-                El::from_html(&numerics_to_text::den_to_roman(&slug)),
-            ],
-        ]
-    } else {
-        span![]
-    }
+    tr![
+        td![attrs!{At::Width => "200"},
+            "Roman Numerals:",
+        ],
+        td![attrs!{At::Width => "40"},
+            if slug.len() <= max_len_roman {
+                El::from_html(&numerics_to_text::den_to_roman(&slug))
+            } else {
+                El::from_html("")
+            }
+        ],
+    ]
 }
 
 fn html_chinese(slug:&str, max_len_chinese:usize) -> seed::dom_types::Node<Msg> {
-    if slug.len() <= max_len_chinese {
-        tr![
-            td![
-                "Chinese Numerals:",
-            ],
-            td![style!{"vertical-align" => "middle"; "background-color" => "#FFF"},
-                El::from_html(&numerics_to_text::den_to_chinese(&slug)),
-            ]
+    tr![
+        td![attrs!{At::Width => "200"},
+            "Chinese Numerals:",
+        ],
+        td![style!{"vertical-align" => "middle"; "background-color" => "#FFF"},
+            if slug.len() <= max_len_chinese {
+                El::from_html(&numerics_to_text::den_to_chinese(&slug))
+            } else {
+                El::from_html("")
+            }
         ]
-    } else {
-        span![]
-    }
+    ]
 }
 
 fn html_egyptian(slug:&str, max_len_egyptian:usize) -> seed::dom_types::Node<Msg> {
-    if slug.len() <= max_len_egyptian {
-        tr![
-            td![
-                "Egyptian Numerals:",
-            ],
-            td![
-                El::from_html(&numerics_to_text::den_to_egyptian(&slug)),
-            ]
+    tr![
+        td![attrs!{At::Width => "200"},
+            "Egyptian Numerals:",
+        ],
+        td![
+            if slug.len() <= max_len_egyptian {
+                El::from_html(&numerics_to_text::den_to_egyptian(&slug))
+            } else {
+                El::from_html("")
+            }
         ]
-    } else {
-        span![]
-    }
+    ]
 }
 
 fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
@@ -691,7 +691,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                 html_egyptian,
                 html_chinese,
                 tr![
-                    td![
+                    td![attrs!{At::Width => "200"},
                         "Babylonian Numerals:",
                     ],
                     td![style!{"vertical-align" => "middle"; "background-color" => "#FFF"},
