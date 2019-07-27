@@ -62,6 +62,10 @@ mod numerics_to_text {
         
     }
 
+    pub fn dec_to_base(str_num:&str, base:u32) -> String {
+        num_bigint::BigUint::from_str_radix(&str_num, 10).unwrap().to_str_radix(base)
+    }
+
     pub fn den_to_chinese(n:&str) -> String {
         let glyphs:Vec<Vec<&str>> = vec![
             vec![ //units
@@ -539,8 +543,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                         "Base 2 (Binary):",
                     ],
                     td![
-                        //TODO hardcoded example value
-                        "111",
+                        numerics_to_text::dec_to_base(&slug, 2),
                     ],
                 ],
                 tr![
@@ -548,8 +551,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                         "Base 3 (Ternary):",
                     ],
                     td![
-                        //TODO hardcoded example value
-                        "21",
+                        numerics_to_text::dec_to_base(&slug, 3),
                     ],
                 ],
                 tr![
@@ -557,8 +559,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                         "Base 4 (Quaternary):",
                     ],
                     td![
-                        //TODO hardcoded example value
-                        "13",
+                        numerics_to_text::dec_to_base(&slug, 4),
                     ],
                 ],
                 tr![
@@ -566,8 +567,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                         "Base 5 (Quinary):",
                     ],
                     td![
-                        //TODO hardcoded example value
-                        "12",
+                        numerics_to_text::dec_to_base(&slug, 5),
                     ],
                 ],
                 tr![
@@ -575,8 +575,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                         "Base 8 (Octal):",
                     ],
                     td![
-                        //TODO hardcoded example value
-                        "7",
+                        numerics_to_text::dec_to_base(&slug, 8),
                     ],
                 ],
                 tr![
@@ -584,8 +583,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                         "Base 10 (Denary):",
                     ],
                     td![
-                        //TODO hardcoded example value
-                        "7",
+                        numerics_to_text::dec_to_base(&slug, 10),
                     ],
                 ],
                 tr![
@@ -593,8 +591,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                         "Base 16 (Hexadecimal):",
                     ],
                     td![
-                        //TODO hardcoded example value
-                        "7",
+                        numerics_to_text::dec_to_base(&slug, 16).to_uppercase(),
                     ],
                 ],
             ],
@@ -666,6 +663,12 @@ mod tests {
         assert_eq!(numerics_to_text::is_odd("90001"), true);
         assert_eq!(numerics_to_text::is_odd("1001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001000"), false);
         assert_eq!(numerics_to_text::is_odd("1001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001"), true);
+    }
+
+    #[test]
+    fn dec_to_base_test() {
+        assert_eq!(numerics_to_text::dec_to_base("16",16), "10");
+        assert_eq!(numerics_to_text::dec_to_base("9003",5), "242003");
     }
 
     #[test]
