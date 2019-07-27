@@ -503,7 +503,26 @@ fn html_factors(slug:&str, slug_len:usize, max_len_factoring:usize) -> seed::dom
     }
 }
 
+fn html_roman(slug:&str, slug_len:usize, max_len_roman:usize) -> seed::dom_types::Node<Msg> {
+    if slug.len() <= max_len_roman {
+        tr![
+            td![attrs!{At::Width => "200"},
+                "Roman Numerals:",
+            ],
+            td![attrs!{At::Width => "40"},
+                El::from_html(&numerics_to_text::den_to_roman(&slug)),
+            ],
+        ]
+    } else {
+        span![]
+    }
+}
+
 fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
+
+    let max_len_roman = 6;
+    let html_roman = html_roman(&slug, slug.len(), max_len_roman);
+
     let max_len_factoring = 17;   
     let html_factors = html_factors(&slug, slug.len(), max_len_factoring);
 
@@ -633,14 +652,6 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
         table![attrs!{At::Class => "text", At::Width => "100%"}, &table_style,
             tbody![
                 tr![
-                    td![attrs!{At::Width => "200"},
-                        "Roman Numerals:",
-                    ],
-                    td![attrs!{At::Width => "40"},
-                        El::from_html(&numerics_to_text::den_to_roman(&slug)),
-                    ],
-                ],
-                tr![
                     td![
                         "Egyptian Numerals:",
                     ],
@@ -656,6 +667,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                        El::from_html(&numerics_to_text::den_to_chinese(&slug)),
                     ]
                 ],
+                html_roman,
                 tr![
                     td![
                         "Babylonian Numerals:",
