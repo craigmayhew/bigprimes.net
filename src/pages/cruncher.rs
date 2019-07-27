@@ -616,7 +616,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                         "Egyptian Numerals:",
                     ],
                     td![
-                        numerics_to_text::den_to_egyptian(&slug),
+                        El::from_html(&numerics_to_text::den_to_egyptian(&slug)),
                     ]
                 ],
                 tr![
