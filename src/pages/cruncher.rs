@@ -578,4 +578,9 @@ mod tests {
         assert_eq!(numerics_to_text::den_to_roman("57"), "LVII");
         assert_eq!(numerics_to_text::den_to_roman("2002"), "MMII");
     }
+
+    #[test]
+    fn den_to_egyptian_test() {
+        //TODO: egyptian tests
+    }
 }
