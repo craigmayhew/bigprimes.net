@@ -12,7 +12,7 @@ pub fn render() -> seed::dom_types::Node<Msg> {
         <table cellpadding=\"3\" cellspacing=\"0\" border=\"1\" class=\"text\" style=\"width:80%;\">
         <tbody>
         <tr><td width=\"100\">Date</td><td width=\"300\">News</td></tr>
-        <tr><td>28th July 2019</td><td>bigprimes.net has been rewritten from the ground up using rust!</td></tr>
+        <tr><td>28th July 2019</td><td>bigprimes.net has been rewritten from the ground up using rust!<br>All archives have been retired in favour of client side processing in web assembly.</td></tr>
         <tr><td>22nd January 2019</td><td><a class=\"link\" href=\"https://github.com/craigmayhew/ethereum-contracts\">Ethereum bounty contracts</a> have now been added for anyone that would like to try to push the boundaries of human knowledge. The first contract is a competition for the correct solution to a³+b³+c³ = 33. Tweet me if you need assistance using these contracts!</td></tr>
         <tr><td>10th March 2018</td><td>Added torrents for the <a class=\"link\" href=\"//static.bigprimes.net/archive/one-million-primes.7z.torrent\">first million primes</a> and <a class=\"link\" href=\"//static.bigprimes.net/archive/one-billion-primes.7z.torrent\">first billion prime numbers</a>.</td></tr>
         <tr><td>12th November 2017</td><td>Site is now running on AWS Lambda, but can still fallback to regular VM hosting if ever needed. Site is now ~40% covered by unit tests.</td></tr>
