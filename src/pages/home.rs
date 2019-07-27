@@ -1,5 +1,4 @@
 use crate::Msg;
-use chrono::{NaiveDate};
 use seed::prelude::*;
 
 pub fn render() -> seed::dom_types::Node<Msg> {
