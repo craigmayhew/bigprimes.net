@@ -11,11 +11,107 @@ mod numerics_to_text {
     use num_traits::{Num,ToPrimitive,Zero};
     use num_bigint::{BigUint,ToBigUint};
 
-    pub fn is_odd(str_num: String) -> bool{
+    pub fn is_odd(str_num: &str) -> bool{
         match str_num[str_num.len()-1..str_num.len()].as_ref() {
            "1"|"3"|"5"|"7"|"9" => true,
            _ => false,
         }
+    }
+
+    fn den2numerals(n:&str, glyphs:Vec<Vec<&str>>) -> String {
+        //this function converts a number in the form of a string
+        //to roman/egyptian/babylonian/chinese numerals
+        let mut numerals:String = "".to_owned();
+        let n_vec:Vec<char> = n.chars().collect();
+        for i in 0..n.len() {
+            let digit:String = n_vec[n.len()-1-i].to_string();
+            if digit != "0" {
+                let digit_usize:usize = digit.parse().unwrap();
+                let numerals_tmp:String = numerals;
+                numerals = glyphs[i][digit_usize-1].to_owned();
+                numerals.push_str(&numerals_tmp);
+            }
+        }
+        numerals
+    }
+
+    pub fn den_to_roman(n:&str) -> String {
+        let glyphs:Vec<Vec<&str>> = vec![
+            vec![ //units
+                "I",
+                "II",
+                "III",
+                "IV",
+                "V",
+                "VI",
+                "VII",
+                "VIII",
+                "IX",
+                "X"
+            ],
+            vec![ //tens
+                "X",
+                "XX",
+                "XXX",
+                "XL",
+                "L",
+                "LX",
+                "LXX",
+                "LXXX",
+                "XC",
+                "C"
+            ],
+            vec![ //hundreds
+                "C",
+                "CC",
+                "CCC",
+                "CD",
+                "D",
+                "DC",
+                "DCC",
+                "DCCC",
+                "CM",
+                "M"
+            ],
+            vec![ //THOUSANDS
+                "M",
+                "MM",
+                "MMM",
+                "M<u>V</u>",
+                "<u>V</u>",
+                "<u>V</u>M",
+                "<u>V</u>MM",
+                "<u>V</u>MMM",
+                "M<u>X</u>",
+                "<u>X</u>"
+            ],
+            vec![ //TEN THOUSANDS
+                "<u>X</u>",
+                "<u>X</u><u>X</u>",
+                "<u>X</u><u>X</u><u>X</u>",
+                "<u>X</u><span class=\"u\">L</span>",
+                "<span class=\"u\">L</span>",
+                "<span class=\"u\">L</span><u>X</u>",
+                "<span class=\"u\">L</span><u>X</u><u>X</u>",
+                "<span class=\"u\">L</span><u>X</u><u>X</u><u>X</u>",
+                "<u>X</u><u>C</u>",
+                "<u>C</u>"
+            ],
+            vec![ //HUNDRED THOUSANDS
+                "<u>C</u>",
+                "<u>C</u><u>C</u>",
+                "<u>C</u><u>C</u><u>C</u>",
+                "<u>C</u><u>D</u>",
+                "<u>D</u>",
+                "<u>D</u><u>C</u>",
+                "<u>D</u><u>C</u><u>C</u>",
+                "<u>D</u><u>C</u><u>D</u><u>C</u>",
+                "<u>C</u><u>M</u>",
+                "<u>M</u>"
+            ]
+        ];
+
+        den2numerals(&n, glyphs)
     }
 
     pub fn convert(str_num: String) -> String{
@@ -179,9 +275,9 @@ fn html_form() -> seed::dom_types::Node<Msg> {
 	    "Please type your number here:",
         form![attrs!{At::Name => "crunchy", At::Action => "/cruncher/", At::Method => "get", At::Target => "_top"},
             div![
-                textarea![attrs!{At::Name => "number", At::Cols => "85", At::Rows => "10", At::OnKeyDown => "if (event.keyCode == 13){document.location='/cruncher/'+crunchy.number.value+'/'}"}],
+                textarea![attrs!{At::Name => "number", At::Cols => "85", At::Rows => "10", At::OnKeyDown => "if (event.keyCode == 13){document.location='cruncher'+crunchy.number.value+'/'}"}],
                 br![],
-                input![attrs!{At::Type => "button", At::Value => "Crunch", At::OnClick => "document.location='/cruncher/'+crunchy.number.value+'/'"}],
+                input![attrs!{At::Type => "button", At::Value => "Crunch", At::OnClick => "document.location='cruncher'+crunchy.number.value+'/'"}],
             ],
         ],
     ]
@@ -198,7 +294,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
             tbody![
                 tr![
                     td![
-                        "It is an ",if numerics_to_text::is_odd(slug) {"odd"} else {"even"} ," number.",
+                        "It is an ",if numerics_to_text::is_odd(&slug) {"odd"} else {"even"} ," number.",
                         br![],
                         //TODO hardcoded example value
                         "It is the ",nth(4)," prime number.",
@@ -328,8 +424,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                         "Roman Numerals:",
                     ],
                     td![attrs!{At::Width => "40"},
-                    //TODO hardcoded example value
-                        "VII",
+                        El::from_html(&numerics_to_text::den_to_roman(&slug)),
                     ],
                 ],
                 tr![
@@ -386,9 +481,18 @@ mod tests {
 
     #[test]
     fn numerics_to_text_is_odd_test() {
-        assert_eq!(numerics_to_text::is_odd("170".to_string()), false);
-        assert_eq!(numerics_to_text::is_odd("90001".to_string()), true);
-        assert_eq!(numerics_to_text::is_odd("1001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001000".to_string()), false);
-        assert_eq!(numerics_to_text::is_odd("1001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001".to_string()), true);
+        assert_eq!(numerics_to_text::is_odd("170"), false);
+        assert_eq!(numerics_to_text::is_odd("90001"), true);
+        assert_eq!(numerics_to_text::is_odd("1001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001000"), false);
+        assert_eq!(numerics_to_text::is_odd("1001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001"), true);
+    }
+
+    #[test]
+    fn den_to_roman_test() {
+        assert_eq!(numerics_to_text::den_to_roman("5"), "V");
+        assert_eq!(numerics_to_text::den_to_roman("10"), "X");
+        assert_eq!(numerics_to_text::den_to_roman("12"), "XII");
+        assert_eq!(numerics_to_text::den_to_roman("57"), "LVII");
+        assert_eq!(numerics_to_text::den_to_roman("2002"), "MMII");
     }
 }
