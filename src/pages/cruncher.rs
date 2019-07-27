@@ -62,6 +62,79 @@ mod numerics_to_text {
         
     }
 
+    pub fn den_to_chinese(n:&str) -> String {
+        let glyphs:Vec<Vec<&str>> = vec![
+            vec![ //units
+                "&#22777;",
+                "&#36019;",
+                "&#21444;",
+                "&#32902;",
+                "&#20237;",
+                "&#38520;",
+                "&#26578;",
+                "&#25420;",
+                "&#29590;"
+            ],
+            vec![ //tens
+                "&#22777;&#25342;",
+                "&#36019;&#25342;",
+                "&#21444;&#25342;",
+                "&#32902;&#25342;",
+                "&#20237;&#25342;",
+                "&#38520;&#25342;",
+                "&#26578;&#25342;",
+                "&#25420;&#25342;",
+                "&#29590;&#25342;"
+            ],
+            vec![ //hundreds
+                "&#22777;&#20336;",
+                "&#36019;&#20336;",
+                "&#21444;&#20336;",
+                "&#32902;&#20336;",
+                "&#20237;&#20336;",
+                "&#38520;&#20336;",
+                "&#26578;&#20336;",
+                "&#25420;&#20336;",
+                "&#29590;&#20336;"
+            ],
+            vec![ //thousands
+                "&#22777;&#20191;",
+                "&#36019;&#20191;",
+                "&#21444;&#20191;",
+                "&#32902;&#20191;",
+                "&#20237;&#20191;",
+                "&#38520;&#20191;",
+                "&#26578;&#20191;",
+                "&#25420;&#20191;",
+                "&#29590;&#20191;"
+            ],
+            vec![ //tenthousands
+                "&#22777;&#33836;",
+                "&#36019;&#33836;",
+                "&#21444;&#33836;",
+                "&#32902;&#33836;",
+                "&#20237;&#33836;",
+                "&#38520;&#33836;",
+                "&#26578;&#33836;",
+                "&#25420;&#33836;",
+                "&#29590;&#33836;"
+            ],
+            vec![ //hundred thousands
+                "&#22777;&#25342;&#33836;",
+                "&#36019;&#25342;&#33836;",
+                "&#21444;&#25342;&#33836;",
+                "&#32902;&#25342;&#33836;",
+                "&#20237;&#25342;&#33836;",
+                "&#38520;&#25342;&#33836;",
+                "&#26578;&#25342;&#33836;",
+                "&#25420;&#25342;&#33836;",
+                "&#29590;&#25342;&#33836;"
+            ],
+        ];
+
+        den2numerals(&n, glyphs)
+    }
+
     pub fn den_to_egyptian(n:&str) -> String {
         let glyphs:Vec<Vec<&str>> = vec![
             vec![
@@ -551,8 +624,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                         "Chinese Numerals:",
                     ],
                     td![style!{"vertical-align" => "middle"; "background-color" => "#FFF"},
-                    //TODO hardcoded example value
-                        "柒",
+                       El::from_html(&numerics_to_text::den_to_chinese(&slug)),
                     ]
                 ],
                 tr![
@@ -613,5 +685,10 @@ mod tests {
     #[test]
     fn den_to_babylonian_test() {
         assert_eq!(numerics_to_text::den_to_babylonian("9003")," &nbsp; <img src=\"https://static.bigprimes.net/imgs/babnumbers/bab_2.gif\" alt=\"2\"> &nbsp; <img src=\"https://static.bigprimes.net/imgs/babnumbers/bab_30.gif\" alt=\"30\"> &nbsp; <img src=\"https://static.bigprimes.net/imgs/babnumbers/bab_3.gif\" alt=\"3\">");
+    }
+
+    #[test]
+    fn den_to_chinese_test() {
+        assert_eq!(numerics_to_text::den_to_chinese("20"), "&#36019;&#25342;");
     }
 }
