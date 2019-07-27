@@ -503,7 +503,7 @@ fn html_factors(slug:&str, slug_len:usize, max_len_factoring:usize) -> seed::dom
     }
 }
 
-fn html_roman(slug:&str, slug_len:usize, max_len_roman:usize) -> seed::dom_types::Node<Msg> {
+fn html_roman(slug:&str, max_len_roman:usize) -> seed::dom_types::Node<Msg> {
     if slug.len() <= max_len_roman {
         tr![
             td![attrs!{At::Width => "200"},
@@ -521,7 +521,7 @@ fn html_roman(slug:&str, slug_len:usize, max_len_roman:usize) -> seed::dom_types
 fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
 
     let max_len_roman = 6;
-    let html_roman = html_roman(&slug, slug.len(), max_len_roman);
+    let html_roman = html_roman(&slug, max_len_roman);
 
     let max_len_factoring = 17;   
     let html_factors = html_factors(&slug, slug.len(), max_len_factoring);
