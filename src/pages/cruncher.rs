@@ -533,6 +533,21 @@ fn html_chinese(slug:&str, max_len_chinese:usize) -> seed::dom_types::Node<Msg> 
     }
 }
 
+fn html_egyptian(slug:&str, max_len_egyptian:usize) -> seed::dom_types::Node<Msg> {
+    if slug.len() <= max_len_egyptian {
+        tr![
+            td![
+                "Egyptian Numerals:",
+            ],
+            td![
+                El::from_html(&numerics_to_text::den_to_egyptian(&slug)),
+            ]
+        ]
+    } else {
+        span![]
+    }
+}
+
 fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
 
     let max_len_roman = 6;
@@ -540,6 +555,9 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
 
     let max_len_chinese = 6;
     let html_chinese = html_chinese(&slug, max_len_chinese);
+
+    let max_len_egyptian = 7;
+    let html_egyptian = html_egyptian(&slug, max_len_egyptian);
 
     let max_len_factoring = 17;   
     let html_factors = html_factors(&slug, slug.len(), max_len_factoring);
@@ -669,15 +687,8 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
         br![],
         table![attrs!{At::Class => "text", At::Width => "100%"}, &table_style,
             tbody![
-                tr![
-                    td![
-                        "Egyptian Numerals:",
-                    ],
-                    td![
-                        El::from_html(&numerics_to_text::den_to_egyptian(&slug)),
-                    ]
-                ],
                 html_roman,
+                html_egyptian,
                 html_chinese,
                 tr![
                     td![
