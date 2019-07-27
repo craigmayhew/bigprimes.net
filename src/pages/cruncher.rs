@@ -735,6 +735,8 @@ mod tests {
     fn dec_to_base_test() {
         assert_eq!(numerics_to_text::dec_to_base("16",16), "10");
         assert_eq!(numerics_to_text::dec_to_base("9003",5), "242003");
+        assert_eq!(numerics_to_text::dec_to_base("2147483648",16), "80000000");//test for 32bit overflow
+        assert_eq!(numerics_to_text::dec_to_base("18446744073709551616",16), "10000000000000000");//test for 64bit overflow
     }
 
     #[test]
