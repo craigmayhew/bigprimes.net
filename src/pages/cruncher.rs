@@ -35,6 +35,33 @@ mod numerics_to_text {
         numerals
     }
 
+    pub fn den_to_babylonian(str_num:&str) -> String {
+        let mut glyphs:Vec<String> = vec!["".to_owned(); 60];
+        glyphs[0] = " &nbsp; &nbsp; &nbsp; ".to_owned();
+        for i in 1..59 {
+            //TODO: replace these with unicode or svgs
+            //e.g. if the license allows, replace with https://commons.wikimedia.org/wiki/File:Babylonian_numerals.svg
+            glyphs[i].push_str("<img src=\"https://static.bigprimes.net/imgs/babnumbers/bab_");
+            glyphs[i].push_str(&i.to_string());
+            glyphs[i].push_str(".gif\" alt=\"");
+            glyphs[i].push_str(&i.to_string());
+            glyphs[i].push_str("\">");
+        }
+        let mut val:Vec<&str> = vec![""; 1000];
+        let mut num:BigUint = num_bigint::BigUint::from_str_radix(&str_num, 10).unwrap();
+        let sixty:BigUint = 60.to_biguint().unwrap();
+        while num > Zero::zero() {
+            val.push(&glyphs[(&num % &sixty).to_usize().unwrap()]);
+            val.push(" &nbsp; ");
+            num /= &sixty;
+        }
+        //reverse the vector
+        val = val.iter().rev().cloned().collect();
+        //convert to String
+        val.into_iter().collect()
+        
+    }
+
     pub fn den_to_egyptian(n:&str) -> String {
         let glyphs:Vec<Vec<&str>> = vec![
             vec![
@@ -533,8 +560,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                         "Babylonian Numerals:",
                     ],
                     td![style!{"vertical-align" => "middle"; "background-color" => "#FFF"},
-                    //TODO hardcoded example value
-                        img![attrs!{At::Src => "https://static.bigprimes.net/imgs/babnumbers/bab_7.gif", At::Alt => "7"}],
+                        El::from_html(&numerics_to_text::den_to_babylonian(&slug)),
                     ]
                 ],
             ],
@@ -582,5 +608,10 @@ mod tests {
     #[test]
     fn den_to_egyptian_test() {
         //TODO: egyptian tests
+    }
+
+    #[test]
+    fn den_to_babylonian_test() {
+        assert_eq!(numerics_to_text::den_to_babylonian("9003")," &nbsp; <img src=\"https://static.bigprimes.net/imgs/babnumbers/bab_2.gif\" alt=\"2\"> &nbsp; <img src=\"https://static.bigprimes.net/imgs/babnumbers/bab_30.gif\" alt=\"30\"> &nbsp; <img src=\"https://static.bigprimes.net/imgs/babnumbers/bab_3.gif\" alt=\"3\">");
     }
 }
