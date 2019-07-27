@@ -428,6 +428,26 @@ mod numerics_to_text {
         }
     }
 
+    fn factor(n: u64) -> Vec<u64> {
+        let mut factors: Vec<u64> = Vec::new(); // creates a new vector for the factors of the number
+    
+        for i in 1..((n as f64).sqrt() as u64 + 1) { 
+            if n % i == 0 {
+                factors.push(i); // pushes smallest factor to factors
+                factors.push(n/i); // pushes largest factor to factors
+            }
+        }
+        factors.sort(); // sorts the factors into numerical order for viewing purposes
+        factors // returns the factors
+    }
+
+    pub fn list_factors(str_num: &str, glue: String) -> String {
+        let num:u64 = str_num.parse().unwrap();
+        let factors:Vec<u64> = factor(num);
+
+        //convert to String
+        factors.into_iter().map(|num: u64| {let mut string:String = glue.clone(); string.push_str(&num.to_string()); string}).collect()
+    }
 }
 
 fn html_form() -> seed::dom_types::Node<Msg> {
@@ -471,7 +491,22 @@ fn html_form() -> seed::dom_types::Node<Msg> {
     ]
 }
 
+fn html_factors(slug:&str, slug_len:usize, max_len_factoring:usize) -> seed::dom_types::Node<Msg> {
+    if slug_len <= max_len_factoring {
+        td![
+            "It it has factors:",
+            br![],
+            El::from_html(&numerics_to_text::list_factors(&slug, "<br>".to_owned()))
+        ]
+    } else {
+        td!["Number too large to factor"]
+    }
+}
+
 fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
+    let max_len_factoring = 17;   
+    let html_factors = html_factors(&slug, slug.len(), max_len_factoring);
+
     let table_style = style!{"border" => "1px #000 solid"};
     div![style!{"width" => "75%"; "padding" => "3px"},
         br![],
@@ -527,10 +562,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
         table![attrs!{At::Class => "text", At::Width => "100%"}, &table_style,
             tbody![
                 tr![
-                    td![
-                        //TODO hardcoded example value
-                        "It it has no factors except itself and 1.",
-                    ],
+                    html_factors,
                 ],
             ],
         ],
@@ -694,4 +726,11 @@ mod tests {
     fn den_to_chinese_test() {
         assert_eq!(numerics_to_text::den_to_chinese("20"), "&#36019;&#25342;");
     }
+
+    #[test]
+    fn list_factors_test() {
+        //todo: this test shows we have a comma prefix, tidier if that didn't happen
+        assert_eq!(numerics_to_text::list_factors("20",",".to_owned()), ",1,2,4,5,10,20");
+    }
 }
+
