@@ -568,7 +568,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
         br![],
         b!["The number you submitted to be crunched was:"],
         h1![slug.to_string()," - ",numerics_to_text::convert(slug.to_string())],
-        table![attrs!{At::Class => "text", At::Width => "100%"}, &table_style,
+        table![attrs!{At::Class => "crunchertable", At::Width => "100%"}, &table_style,
             tbody![
                 tr![
                     td![
@@ -592,7 +592,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
         ],
         br![],
         br![],
-        table![attrs!{At::Class => "text", At::Width => "100%"}, &table_style,
+        table![attrs!{At::Class => "crunchertable", At::Width => "100%"}, &table_style,
             tbody![
                 tr![
                     td![
@@ -614,7 +614,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
         ],
         br![],
         br![],
-        table![attrs!{At::Class => "text", At::Width => "100%"}, &table_style,
+        table![attrs!{At::Class => "crunchertable", At::Width => "100%"}, &table_style,
             tbody![
                 tr![
                     html_factors,
@@ -623,7 +623,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
         ],
         br![],
         br![],
-        table![attrs!{At::Class => "text", At::Width => "100%"}, &table_style,
+        table![attrs!{At::Class => "crunchertable", At::Width => "100%"}, &table_style,
             tbody![
                 tr![
                     td![attrs!{At::Width => "200"},
@@ -685,7 +685,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
         ],
         br![],
         br![],
-        table![attrs!{At::Class => "text", At::Width => "100%"}, &table_style,
+        table![attrs!{At::Class => "crunchertable", At::Width => "100%"}, &table_style,
             tbody![
                 html_roman,
                 html_egyptian,

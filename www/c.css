@@ -48,6 +48,12 @@ nav a:hover {
  text-decoration: none;
 }
 
+.crunchertable tr td {
+  background-color: inherit;
+  border: 1px solid #000;
+  padding: 2px;
+}
+
 .mersennetable tr td,
 .perfecttable tr td,
 .fermattable tr td,
