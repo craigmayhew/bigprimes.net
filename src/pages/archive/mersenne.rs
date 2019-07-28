@@ -8,6 +8,7 @@ pub fn render() -> seed::dom_types::Node<Msg> {
         br![],
         br![],
         br![],
+        //todo: replace with rust elements
         El::from_html("<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"mersennetable text\">
 <tbody><tr>
  <td width=\"70\"><b>No.</b></td>	
