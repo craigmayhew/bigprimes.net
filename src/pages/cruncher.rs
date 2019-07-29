@@ -511,9 +511,9 @@ fn html_form() -> seed::dom_types::Node<Msg> {
 	    "Please type your number here:",
         form![attrs!{At::Name => "crunchy", At::Action => "/cruncher/", At::Method => "get", At::Target => "_top"},
             div![
-                textarea![attrs!{At::Name => "number", At::Cols => "85", At::Rows => "10", At::OnKeyDown => "if (event.keyCode == 13){document.location='cruncher'+crunchy.number.value+'/'}"}],
+                textarea![attrs!{At::Name => "number", At::Cols => "85", At::Rows => "10", At::OnKeyDown => "if (event.keyCode == 13){document.location='cruncher/'+crunchy.number.value+'/'}"}],
                 br![],
-                input![attrs!{At::Type => "button", At::Value => "Crunch", At::OnClick => "document.location='cruncher'+crunchy.number.value+'/'"}],
+                input![attrs!{At::Type => "button", At::Value => "Crunch", At::OnClick => "document.location='cruncher/'+crunchy.number.value+'/'"}],
             ],
         ],
     ]
