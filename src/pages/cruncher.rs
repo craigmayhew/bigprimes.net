@@ -8,7 +8,8 @@ use crate::utils::nth;
 use regex::Regex;
 
 mod numerics_to_text {
-    use num_traits::{Num,ToPrimitive,Zero};
+    use crate::utils::{nth};
+    use num_traits::{Num,ToPrimitive,Zero,One};
     use num_bigint::{BigUint,ToBigUint};
 
     pub fn is_odd(str_num: &str) -> bool{
@@ -448,6 +449,33 @@ mod numerics_to_text {
         //convert to String
         factors.into_iter().map(|num: u64| {let mut string:String = glue.clone(); string.push_str(&num.to_string()); string}).collect()
     }
+
+    pub fn nth_factorial(str_num: &str) -> String {
+        let num:BigUint = num_bigint::BigUint::from_str_radix(&str_num, 10).unwrap();
+
+        let mut factorial_n:usize = 0;
+        let mut i:usize = 0;
+        let mut total:BigUint = One::one();
+        while total <= num {
+            i += 1;
+            total = total * i;
+            if total == num {
+                factorial_n = i;
+            }
+        }
+
+        if factorial_n != 0 {
+            let mut string:String = "".to_owned();
+            string.push_str("It is the ");
+            string.push_str(&nth(factorial_n));
+            string.push_str(" factorial number. (");
+            string.push_str(&factorial_n.to_string());
+            string.push_str("!)");
+            string
+        } else {
+            "It is not a factorial number.".to_owned()
+        }
+    }
 }
 
 fn html_form() -> seed::dom_types::Node<Msg> {
@@ -606,8 +634,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                         "It is not a cube number.",
                         br![],
                         br![],
-                        //TODO hardcoded example value
-                        "It is not a factorial number.",
+                        numerics_to_text::nth_factorial(&slug),
                     ],
                 ],
             ],
