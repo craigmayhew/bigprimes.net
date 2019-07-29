@@ -476,6 +476,11 @@ mod numerics_to_text {
             "It is not a factorial number.".to_owned()
         }
     }
+
+    pub fn is_palindrome(string: &str) -> bool {
+        let half_len = string.len()/2;
+        string.chars().take(half_len).eq(string.chars().rev().take(half_len))
+    }
 }
 
 fn html_form() -> seed::dom_types::Node<Msg> {
@@ -604,6 +609,10 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                         br![],
                         //TODO hardcoded example value
                         "It is the ",nth(4)," prime number.",
+                        br![],
+                        "It is ",
+                        if numerics_to_text::is_palindrome(&slug) { "" } else { "not " },
+                        "palindromic.",
                         br![],
                         //TODO hardcoded example value
                         "It is the 2nd ",a!["mersenne prime", attrs!{At::Class => "link", At::Href => "http://en.wikipedia.org/wiki/Mersenne_prime"}],".",
