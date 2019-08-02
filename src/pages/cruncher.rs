@@ -9,7 +9,7 @@ use regex::Regex;
 
 mod numerics_to_text {
     use crate::utils::{nth};
-    use num_traits::{Num,ToPrimitive,Zero,One};
+    use num_traits::{Num,ToPrimitive,Zero,One,pow};
     use num_bigint::{BigUint,ToBigUint};
 
     pub fn is_odd(str_num: &str) -> bool{
@@ -481,6 +481,19 @@ mod numerics_to_text {
         let half_len = string.len()/2;
         string.chars().take(half_len).eq(string.chars().rev().take(half_len))
     }
+
+    pub fn nth_root(str_num: &str, n:usize) -> String {
+        let number:BigUint = num_bigint::BigUint::from_str_radix(&str_num, 10).unwrap();
+        let answer = number.nth_root(n.to_u32().unwrap()).to_owned();
+
+        if pow(answer.to_owned(),n) == number {
+            let mut string:String = "".to_owned();
+            string.push_str(&answer.to_string());
+            string
+        } else{
+            "0".to_owned()
+        }
+    }
 }
 
 fn html_form() -> seed::dom_types::Node<Msg> {
@@ -635,12 +648,9 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                     td![
                         //TODO hardcoded example value
                         "It is not a triangle number.",
+                        if numerics_to_text::nth_root(&slug, 2) != "0" { format!("It is the {} square number.",&nth(numerics_to_text::nth_root(&slug, 2).parse::<usize>().unwrap())) } else { "It is not a square number.".to_owned() },
                         br![],
-                        //TODO hardcoded example value
-                        "It is not a square number.",
-                        br![],
-                        //TODO hardcoded example value
-                        "It is not a cube number.",
+                        if numerics_to_text::nth_root(&slug, 3) != "0" { format!("It is the {} cube number.",&nth(numerics_to_text::nth_root(&slug, 3).parse::<usize>().unwrap())) } else { "It is not a cube number.".to_owned() },
                         br![],
                         br![],
                         numerics_to_text::nth_factorial(&slug),
