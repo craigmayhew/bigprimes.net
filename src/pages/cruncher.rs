@@ -628,14 +628,14 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                         "palindromic.",
                         br![],
                         //TODO hardcoded example value
-                        "It is the 2nd ",a!["mersenne prime", attrs!{At::Class => "link", At::Href => "http://en.wikipedia.org/wiki/Mersenne_prime"}],".",
-                        br![],
+                        //"It is the 2nd ",a!["mersenne prime", attrs!{At::Class => "link", At::Href => "http://en.wikipedia.org/wiki/Mersenne_prime"}],".",
+                        //br![],
                         //TODO hardcoded example value
-                        "It is not a ",a!["fermat prime", attrs!{At::Class => "link", At::Href => "https://www.fermatsearch.org/"}],".",
-                        br![],
+                        //"It is not a ",a!["fermat prime", attrs!{At::Class => "link", At::Href => "https://www.fermatsearch.org/"}],".",
+                        //br![],
                         //TODO hardcoded example value
-                        "It is not a ",a!["perfect number", attrs!{At::Class => "link", At::Href => "https://en.wikipedia.org/wiki/Perfect_number"}],".",
-                        br![],
+                        //"It is not a ",a!["perfect number", attrs!{At::Class => "link", At::Href => "https://en.wikipedia.org/wiki/Perfect_number"}],".",
+                        //br![],
                     ],
                 ],
             ],
@@ -647,7 +647,8 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                 tr![
                     td![
                         //TODO hardcoded example value
-                        "It is not a triangle number.",
+                        //"It is not a triangle number.",
+                        //br![],
                         if numerics_to_text::nth_root(&slug, 2) != "0" { format!("It is the {} square number.",&nth(numerics_to_text::nth_root(&slug, 2).parse::<usize>().unwrap())) } else { "It is not a square number.".to_owned() },
                         br![],
                         if numerics_to_text::nth_root(&slug, 3) != "0" { format!("It is the {} cube number.",&nth(numerics_to_text::nth_root(&slug, 3).parse::<usize>().unwrap())) } else { "It is not a cube number.".to_owned() },
