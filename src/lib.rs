@@ -20,10 +20,8 @@ pub enum Page {
     MersenneArchive,
     PerfectArchive,
     PrimalityChecker,
-    NumberCruncher,
-    /*
     PrimeNumbersArchive,
-    */
+    NumberCruncher,
 }
 
 // Model
@@ -69,6 +67,7 @@ fn view(model: &Model) -> impl View<Msg> {
         Page::NumberCruncher => pages::cruncher::render(model.slug.to_owned()),
         Page::PerfectArchive => pages::archive::perfect::render(),
         Page::PrimalityChecker => pages::primalitytest::render(),
+        Page::PrimeNumbersArchive => pages::archive::prime::render(model.slug.to_owned()),
         Page::Status => pages::status::render(),
     }
 }
@@ -88,6 +87,7 @@ impl ToString for Page {
             Page::NumberCruncher => "cruncher".into(),
             Page::PerfectArchive => "perfect".into(),
             Page::PrimalityChecker => "primalitytest".into(),
+            Page::PrimeNumbersArchive => "primes".into(),//TODO: check this is right, might need the archive/ prefix!
         }
     }
 }
@@ -113,6 +113,12 @@ fn routes(url: seed::Url) -> Msg {
                 },
                 "mersenne" => Msg::ChangePage(Page::MersenneArchive, empty_string),
                 "perfect" => Msg::ChangePage(Page::PerfectArchive, empty_string),
+                "prime" => {
+                    match url.path.get(2).as_ref() {
+                        Some(_slug) => Msg::ChangePage(Page::PrimeNumbersArchive, url.path[2].to_owned()),
+                        None => Msg::ChangePage(Page::PrimeNumbersArchive, "1".to_owned()),
+                    }
+                },
                 _ => Msg::ChangePage(Page::Home, empty_string)//TODO: add archive page
             }
         },
