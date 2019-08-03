@@ -11,13 +11,17 @@ pub fn render() -> seed::dom_types::Node<Msg> {
             attrs!{At::Class => "text"},
             tbody![
                 tr![
-                    //TODO: change this to styles 
+                    //TODO: change this to styles
                     td![attrs!{At::Width => "100"},"Date"],
                     td![attrs!{At::Width => "300"},"News"],
                 ],
                 tr![
                     td!["28th July 2019"],
                     td![El::from_html("bigprimes.net has been rewritten from the ground up using rust!<br>All archives have been retired in favour of client side processing in web assembly.")],
+                ],
+                tr![
+                    td!["28th July 2019"],
+                    td![El::from_html("Shout out to Gavin, who took the time to memorise all the news entries on the website!")],
                 ],
                 tr![
                     td!["22nd January 2019"],
