@@ -23,20 +23,24 @@ fn n100_prime(n: usize, count: usize) -> Vec<usize> {
 pub fn render(slug:String) -> seed::dom_types::Node<Msg> {
     let numbers_per_page:usize = 100;
     let col_count = 4;
+    let numbers_per_col = numbers_per_page / col_count;
     let mut slug_int:usize = slug.parse().unwrap();
     if slug_int < 1 {slug_int = 1};
     let primes = n100_prime(slug_int, numbers_per_page);
 
     let mut prime_vec_formatted = vec![];
-    for col in 1..col_count {
-        for i in 0..numbers_per_page/col_count {
+    for col in 1..col_count+1 {
+        let mut prime_vec = vec![];
+        for i in numbers_per_col*(col-1)..numbers_per_col*col {
             let mut href:String = "/cruncher/".to_owned();
             href.push_str(&primes[i].to_string());
-            prime_vec_formatted.push(
+            prime_vec.push(
                 a![primes[i].to_string(), attrs!{At::Class => "link", At::Href => href}]
             );
-            prime_vec_formatted.push(br![]);
+            prime_vec.push(br![]);
         }
+        
+        prime_vec_formatted.push(div![prime_vec, attrs!{At::Class => "prime_archive_div"}]);
     }
 
     let href_prev:String;
@@ -59,6 +63,7 @@ pub fn render(slug:String) -> seed::dom_types::Node<Msg> {
         br![],
         br![],
         prime_vec_formatted,
+        br![],
         br![],
         prev_link,
         br![],
