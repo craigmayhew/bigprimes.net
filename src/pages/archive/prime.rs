@@ -17,26 +17,36 @@ fn n100_prime(n: usize, count: usize) -> Vec<usize> {
         list_primes = first1000primes[n-1..n+count-1].to_vec();
     } else {//7919 ^ 2 = 62710561
         //start trying from the 1000th hardcoded prime
-        let mut last_integer_tried:usize = largest_of_first_primes;
+        let mut last_integer_tried:f64 = largest_of_first_primes as f64;
         let start_at_nth = first1000primes.len();
+        let mut is_prime:bool;
+        let mut square_root_of_last_integer_tried:f64;
+        let first1000primes_f64s:Vec<f64> = first1000primes.into_iter().map(|i| i as f64).collect();
 
         //loop until we have n+99 primes
-        for i in start_at_nth+1..n+100 {
-            loop {
-                //try two more than the last attempt to find a prime
-                last_integer_tried += 2;
-                let mut is_prime:bool = true;
-                for p in first1000primes.clone().into_iter() {
-                    if last_integer_tried % p == 0 {
+        for i in start_at_nth..n+100 {
+            'inf_loopy: loop {
+                is_prime = true;
+                square_root_of_last_integer_tried = last_integer_tried.sqrt();
+                'checkisprime: for p in first1000primes_f64s.clone().into_iter() {
+                    //only check up to the square root
+                    if p > square_root_of_last_integer_tried {
+                        break 'checkisprime;
+                    } else if last_integer_tried % p == 0.0 {
                         is_prime = false;
+                        break 'checkisprime;
                     }
                 }
+
                 if is_prime {
                     if i >= n {
-                        list_primes[i-n] = last_integer_tried;
+                        list_primes[i-n] = last_integer_tried as usize;
                     }
+                    last_integer_tried += 2.0;
                     //break out of the while loop as we found a prime!
-                    break;
+                    break 'inf_loopy;
+                } else {
+                     last_integer_tried += 2.0;
                 }
             }
         }
