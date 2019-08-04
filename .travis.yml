@@ -4,8 +4,6 @@ sudo: false
 cache: cargo
 
 matrix:
-  allow_failures:
-    - rust: nightly
   include:
   # Builds on nightly.
   - os: linux
