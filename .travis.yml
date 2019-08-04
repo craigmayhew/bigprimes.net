@@ -47,8 +47,9 @@ matrix:
       - cargo check --target wasm32-unknown-unknown --no-default-features
       - cargo check                                 --no-default-features --features console_error_panic_hook
       - cargo check --target wasm32-unknown-unknown --no-default-features --features console_error_panic_hook
-      # Note: no enabling the `wee_alloc` feature here because it requires
-      # nightly for now.
+      # Note: no enabling the `wee_alloc` feature here because it requires nightly for now.
+      - cargo build
+      - cargo test
   # Builds on stable.
   - os: linux
     rust: stable
@@ -65,8 +66,9 @@ matrix:
       - cargo check --target wasm32-unknown-unknown --no-default-features
       - cargo check                                 --no-default-features --features console_error_panic_hook
       - cargo check --target wasm32-unknown-unknown --no-default-features --features console_error_panic_hook
-      # Note: no enabling the `wee_alloc` feature here because it requires
-      # nightly for now.
+      # Note: no enabling the `wee_alloc` feature here because it requires nightly for now.
+      - cargo build
+      - cargo test
 
 after_success:
   - #TODO: Deploy!
