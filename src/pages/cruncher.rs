@@ -802,7 +802,7 @@ mod tests {
 
     #[test]
     fn den_to_babylonian_test() {
-        assert_eq!(numerics_to_text::den_to_babylonian("9003")," &nbsp; <img src=\"https://static.bigprimes.net/imgs/babnumbers/bab_2.gif\" alt=\"2\"> &nbsp; <img src=\"https://static.bigprimes.net/imgs/babnumbers/bab_30.gif\" alt=\"30\"> &nbsp; <img src=\"https://static.bigprimes.net/imgs/babnumbers/bab_3.gif\" alt=\"3\">");
+        assert_eq!(numerics_to_text::den_to_babylonian("9003")," &nbsp; <img height=\"15\" src=\"https://static.bigprimes.net/imgs/babnumbers/bab_2.gif\" alt=\"2\"> &nbsp; <img height=\"15\" src=\"https://static.bigprimes.net/imgs/babnumbers/bab_30.gif\" alt=\"30\"> &nbsp; <img height=\"15\" src=\"https://static.bigprimes.net/imgs/babnumbers/bab_3.gif\" alt=\"3\">");
     }
 
     #[test]
