@@ -23,6 +23,9 @@ fn n100_prime(n: usize, count: usize) -> Vec<usize> {
         let mut square_root_of_last_integer_tried:f64;
         let first1000primes_f64s:Vec<f64> = first1000primes.into_iter().map(|i| i as f64).collect();
 
+        //TODO we may need to either speed this up significantly, or use hardcoded waypoints with a hashmap
+        //https://doc.rust-lang.org/std/collections/struct.HashMap.html
+
         //loop until we have n+99 primes
         for i in start_at_nth..n+100 {
             'inf_loopy: loop {
