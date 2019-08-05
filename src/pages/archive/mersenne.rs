@@ -1,8 +1,89 @@
 use seed::prelude::*;
 use crate::Msg;
 
-pub fn render() -> seed::dom_types::Node<Msg> {
+mod mersenne_utils {
+    extern crate num_bigint as bigint;
+    extern crate num_traits;
     
+    use num_traits::{Pow};
+    use num_bigint::{BigInt,ToBigInt};
+
+    fn mersennes_discovery_dates(n:usize) -> String {
+        let mersennes_discovery_dates:Vec<Vec<&str>> = vec![
+            //TODO: Complete this list all the way upto 50
+            //TODO: We could include download links etc
+            vec![""],//faux zero entry to make things easier when reading this vector
+            vec!["500BC"],	
+            vec!["500BC"],	
+            vec!["275BC"],
+            vec!["275BC"],
+            vec!["1456"],	
+            vec!["1588"],	
+            vec!["1588"],	
+            vec!["1772"],	
+            vec!["1883"],	
+            vec!["1911"],
+            vec!["1914"],
+            vec!["1876"],
+            vec!["30-Jan-1952"],
+            vec!["30-Jan-1952"],	
+            vec!["26-Jun-1952"],
+            vec!["7-Oct-1952"],
+            vec!["9-Oct-1952"],
+            vec!["8-Sep-1957"],		
+            vec!["3-Nov-1961"],
+            vec!["3-Nov-1961"],
+        ];
+
+        mersennes_discovery_dates[n][0].to_owned()
+    }
+
+    pub fn nth_mersenne_prime (candidate:u64) -> u64 {
+        let big_candidate:BigInt = BigInt::from(candidate);
+        let mersennes:Vec<Vec<usize>> = vec![
+            //TODO: Complete this list all the way upto 50
+            //vec![p,digits]
+            vec![0,      0],//faux zero entry to make things easier when reading this vector
+            vec![22,     1],	
+            vec![23,     1],	
+            vec![25,     2],
+            vec![27,     3],
+            vec![213,    4],	
+            vec![217,    6],
+            vec![219,    6],	
+            vec![231,   10],	
+            vec![261,   19],	
+            vec![289,   27],
+            vec![2107,  33],
+            vec![2127,  39],
+            vec![2521,  157],
+            vec![2607,  183],	
+            vec![21279, 386],
+            vec![22203, 664],
+            vec![22281, 687],
+            vec![23217, 969],		
+            vec![24253,1281],
+            vec![24423,1332],	
+        ];
+
+        let mut answer:u64 = 0;
+        let big_two:BigInt = 2.to_bigint().unwrap();
+        for n in 1..mersennes.len() {
+            let mprime:BigInt = big_two.pow(mersennes[n][0]) - 1;
+            if big_candidate == mprime {
+                answer = n as u64;
+                break
+            } else if big_candidate < mprime {
+                break
+            }
+        }
+
+        answer
+    }
+}
+
+pub fn render() -> seed::dom_types::Node<Msg> {
+
     div![
         h1!["The Mersenne Numbers"],
         br![],
