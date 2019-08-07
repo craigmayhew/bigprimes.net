@@ -1,11 +1,11 @@
 use seed::prelude::*;
 use crate::Msg;
 
-mod mersenne_utils {
-    extern crate num_bigint as bigint;
+pub mod mersenne_utils {
+    extern crate num_bigint;
     extern crate num_traits;
     
-    use num_traits::{Pow};
+    use num_traits::{Pow,Num};
     use num_bigint::{BigInt,ToBigInt};
 
     fn mersennes_discovery_dates(n:usize) -> String {
@@ -38,8 +38,8 @@ mod mersenne_utils {
         mersennes_discovery_dates[n][0].to_owned()
     }
 
-    pub fn nth_mersenne_prime (candidate:u64) -> u64 {
-        let big_candidate:BigInt = BigInt::from(candidate);
+    pub fn nth_mersenne_prime (candidate:&str) -> u64 {
+        let big_candidate:BigInt = num_bigint::BigInt::from_str_radix(&candidate, 10).unwrap();
         let mersennes:Vec<Vec<usize>> = vec![
             //TODO: Complete this list all the way upto 50
             //vec![p,digits]

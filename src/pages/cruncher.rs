@@ -4,7 +4,8 @@ use crate::Msg;
 extern crate num_bigint as bigint;
 extern crate num_traits;
 
-use crate::utils::nth;
+use crate::utils::{nth};
+use crate::pages::archive::mersenne::mersenne_utils as mersenne;
 use regex::Regex;
 
 mod numerics_to_text {
@@ -594,6 +595,16 @@ fn html_egyptian(slug:&str, max_len_egyptian:usize) -> seed::dom_types::Node<Msg
     ]
 }
 
+fn html_mersenne_prime(str_num:&str) -> seed::dom_types::Node<Msg> {
+    let n = mersenne::nth_mersenne_prime(str_num) as usize;
+
+    if n == 0 {
+        span!["It is not a ",a!["mersenne prime", attrs!{At::Class => "link", At::Href => "http://en.wikipedia.org/wiki/Mersenne_prime"}],"."] 
+    } else {
+        span!["It is the ",nth(n)," ",a!["mersenne prime", attrs!{At::Class => "link", At::Href => "http://en.wikipedia.org/wiki/Mersenne_prime"}],"."]     
+    }
+}
+
 fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
 
     let max_len_roman = 6;
@@ -627,9 +638,8 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                         if numerics_to_text::is_palindrome(&slug) { "" } else { "not " },
                         "palindromic.",
                         br![],
-                        //TODO hardcoded example value
-                        //"It is the 2nd ",a!["mersenne prime", attrs!{At::Class => "link", At::Href => "http://en.wikipedia.org/wiki/Mersenne_prime"}],".",
-                        //br![],
+                        html_mersenne_prime(&slug),
+                        br![],
                         //TODO hardcoded example value
                         //"It is not a ",a!["fermat prime", attrs!{At::Class => "link", At::Href => "https://www.fermatsearch.org/"}],".",
                         //br![],
