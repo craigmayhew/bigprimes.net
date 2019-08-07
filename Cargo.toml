@@ -12,18 +12,7 @@ default = ["console_error_panic_hook"]
 
 [dependencies]
 seed = { git = "https://github.com/David-OConnor/seed", rev = "c8b3b5d00897e7485e9c0aedbf9eb095d6eb8e96" } # we need version 0.4, which isn't release as of 21-07-2019
-serde = "^1.0.92"
-serde_json = "1.0.39"
 wasm-bindgen = "0.2"
-
-tool = "0.2.1"
-indexmap = { version = "1.0.2", features = [ "serde-1" ] }
-futures = "^0.1.27"
-unicode-segmentation = "1.3.0"
-strum = "0.15.0"
-strum_macros = "0.15.0"
-num-integer = "0.1.41"
-web-sys = { version = "0.3.25", features = [ "ScrollBehavior", "ScrollToOptions" ] }
 
 num-bigint = "0.2"
 num-traits = "0.2"
