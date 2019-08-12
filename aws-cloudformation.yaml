@@ -5,7 +5,6 @@ Parameters:
     Description: SSL Certificate for CloudFront
     Type: String
     Default: 'arn:aws:acm:us-east-1:ACCOUNT_ID_HERE:certificate/CERTIFICATE_ID'
-  
 
 Resources:
   CloudFrontDistribution:
