@@ -77,10 +77,5 @@ matrix:
       - cargo build
       - cargo test
 
-after_success:
-  - #TODO: Deploy!
-  - #aws s3 sync htdocs/. s3://frontend.bigprimes.net --exact-timestamps --delete --exclude ".git/*"
-  - #aws cloudfront create-invalidation --distribution-id xxxxxxxxxx --paths "/*"
-
 notifications:
   email: false
