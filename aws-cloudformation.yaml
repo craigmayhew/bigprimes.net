@@ -88,6 +88,10 @@ Resources:
               Resource: 
               - !Sub 'arn:aws:s3:::${S3Bucket}'
               - !Sub 'arn:aws:s3:::${S3Bucket}/*'
+            - Action: 'cloudfront:CreateInvalidation'
+              Effect: Allow
+              Resource:
+              - !Sub 'arn:aws:cloudfront:::distribution/${CloudFrontDistribution}'
 
   PublishCredentials:
     Type: AWS::IAM::AccessKey
