@@ -12,7 +12,7 @@ Resources:
     Properties:
       DistributionConfig:
         Origins:
-        - DomainName: !GetAtt 'S3Bucket.DomainName'
+        - DomainName: !GetAtt 'S3Bucket.RegionalDomainName'
           Id: bigprimesCustomOrigin
           S3OriginConfig:
             OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}'
@@ -32,7 +32,7 @@ Resources:
           ViewerProtocolPolicy: allow-all
         CustomErrorResponses:
         - ErrorCode: '404'
-          ResponsePagePath: "/404.html"
+          ResponsePagePath: "/index.html"
           ResponseCode: '200'
           ErrorCachingMinTTL: '30'
         PriceClass: PriceClass_100
@@ -63,6 +63,26 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: bigprimes
+      AccessControl: PublicRead
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: index.html
+    DeletionPolicy: Retain
+
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref S3Bucket
+      PolicyDocument:
+        Id: MyPolicy
+        Version: 2012-10-17
+        Statement:
+          - Sid: PublicReadForGetBucketObjects
+            Effect: Allow
+            Principal: '*'
+            Action: 's3:GetObject'
+            Resource:
+              - !Sub 'arn:aws:s3:::${S3Bucket}/*'
 
   ReadPolicy:
     Type: AWS::S3::BucketPolicy
