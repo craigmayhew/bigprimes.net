@@ -91,7 +91,7 @@ Resources:
             - Action: 'cloudfront:CreateInvalidation'
               Effect: Allow
               Resource:
-              - !Sub 'arn:aws:cloudfront:::distribution/${CloudFrontDistribution}'
+              - !Sub 'arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}'
 
   PublishCredentials:
     Type: AWS::IAM::AccessKey
