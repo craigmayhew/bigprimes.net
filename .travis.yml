@@ -38,7 +38,8 @@ matrix:
       - |
         if([ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_PULL_REQUEST == "false" ])
         then
-          sudo aws s3 sync www/. s3://bigprimes --exact-timestamps --delete && echo 'S3 sync complete.'
+          cd www && npm build && cd ../
+          sudo aws s3 sync www/dist/. s3://bigprimes --exact-timestamps --delete && echo 'S3 sync complete.'
           sudo aws cloudfront create-invalidation --distribution-id $AWS_CF_DISTRIBUTION_ID --paths "/*" && echo 'CloudFront cache invalidated.'
         fi
   # Builds on beta.
