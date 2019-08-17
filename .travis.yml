@@ -40,6 +40,7 @@ matrix:
         then
           cd www && npm run-script build && cd ../
           sudo aws s3 sync www/dist/. s3://bigprimes --exact-timestamps --delete && echo 'S3 sync complete.'
+          sudo aws s3 cp www/dist/*.wasm --content-type application/wasm --acl public-read
           sudo aws cloudfront create-invalidation --distribution-id $AWS_CF_DISTRIBUTION_ID --paths "/*" && echo 'CloudFront cache invalidated.'
         fi
   # Builds on beta.
