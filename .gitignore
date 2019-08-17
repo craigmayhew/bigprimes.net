@@ -1,3 +1,4 @@
 .idea
 target
+www/dist
 www/node_modules
