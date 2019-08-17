@@ -40,7 +40,7 @@ matrix:
         then
           cd www && npm run-script build && cd ../
           #TODO: This is not an atomic deploy!
-          sudo aws s3 rm s3://bigprimes/*
+          sudo aws s3 rm s3://bigprimes/* --recursive
           sudo aws s3 cp www/dist/. s3://bigprimes/ --exclude "*" --include "*.wasm" --content-type application/wasm --acl public-read && echo 'S3 wasm sync complete.'
           sudo aws s3 cp www/dist/. s3://bigprimes/ --exclude "*" --include "*.html" --include "*.js" && echo 'S3 index+js sync complete.'
           sudo aws s3 cp www/       s3://bigprimes/ --exclude "*" --include "*.css" && echo 'S3 css sync complete.'
