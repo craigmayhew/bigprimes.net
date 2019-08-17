@@ -41,11 +41,11 @@ matrix:
           cd www && npm run-script build && cd ../
           #TODO: This is not an atomic deploy!
           sudo aws s3 rm s3://bigprimes/* --recursive
-          sudo aws s3 cp www/dist/*.wasm s3://bigprimes/ --content-type application/wasm --acl public-read && echo 'S3 wasm sync complete.'
-          sudo aws s3 cp www/dist/*.html s3://bigprimes/ && echo 'S3 html sync complete.'
-          sudo aws s3 cp www/*.css       s3://bigprimes/ && echo 'S3 css sync complete.'
-          sudo aws s3 cp www/favicon.ico s3://bigprimes/ && echo 'S3 favicon sync complete.'
+          sudo aws s3 cp www/dist/*.wasm         s3://bigprimes/ --content-type application/wasm --acl public-read && echo 'S3 wasm sync complete.'
+          sudo aws s3 cp www/dist/*.html         s3://bigprimes/ && echo 'S3 html sync complete.'
           sudo aws s3 cp www/dist/bootstrap.js   s3://bigprimes/ && echo 'S3 js sync complete.'
+          sudo aws s3 cp www/*.css               s3://bigprimes/ && echo 'S3 css sync complete.'
+          sudo aws s3 cp www/favicon.ico         s3://bigprimes/ && echo 'S3 favicon sync complete.'
           #TODO: create and copy a favicon, currently cloudfront will serve the index.html as favicon!
           sudo aws cloudfront create-invalidation --distribution-id $AWS_CF_DISTRIBUTION_ID --paths "/*" && echo 'CloudFront cache invalidated.'
         fi
