@@ -39,8 +39,10 @@ matrix:
         if([ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_PULL_REQUEST == "false" ])
         then
           cd www && npm run-script build && cd ../
-          sudo aws s3 sync www/dist/. s3://bigprimes --exact-timestamps --delete && echo 'S3 sync complete.'
           sudo aws s3 cp www/dist/. s3://bigprimes/ --exclude "*" --include "*.wasm" --content-type application/wasm --acl public-read && echo 'S3 wasm sync complete.'
+          sudo aws s3 sync www/dist/. s3://bigprimes --exact-timestamps --delete && echo 'S3 index+js sync complete.'
+          sudo aws s3 sync www/*.css s3://bigprimes --exact-timestamps --delete && echo 'S3 css sync complete.'
+          #TODO: create and sync a favicon, currently cloudfront will serve the index.html as favicon!
           sudo aws cloudfront create-invalidation --distribution-id $AWS_CF_DISTRIBUTION_ID --paths "/*" && echo 'CloudFront cache invalidated.'
         fi
   # Builds on beta.
