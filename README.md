@@ -10,11 +10,12 @@ Serverless Rust with Web Assmebly.
 Setup your local dev environment
 ===
 
- 1. Install cargo rustc, rustup `curl https://sh.rustup.rs -sSf | sh`
- 2. Install wasm-pack `curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh`
- 3. If developing on Ubuntu, `apt-get install libssl-dev pkg-config`
- 4. Use a cargo template `cargo install cargo-generate`
- 5. Install npm `npm install npm@latest -g`
+ 1. clone bigprimes.net `git clone https://github.com/craigmayhew/bigprimes.net.git`
+ 2. Install cargo rustc, rustup `curl https://sh.rustup.rs -sSf | sh`
+ 3. Install wasm-pack `curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh`
+ 4. If developing on Ubuntu, `apt-get install libssl-dev pkg-config`
+ 5. Use a cargo template `cargo install cargo-generate`
+ 6. Install npm `npm install npm@latest -g`
 
 Setup project for the first time
 ===
