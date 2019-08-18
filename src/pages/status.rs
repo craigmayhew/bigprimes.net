@@ -17,7 +17,7 @@ pub fn render() -> seed::dom_types::Node<Msg> {
                 tr![
                     td!["Website build status:"],
                     td![
-                        img![attrs!{At::Src => "https://travis-ci.org/craigmayhew/bigprimes.net-rust-wasm.svg?branch=master"}],
+                        img![attrs!{At::Src => "https://travis-ci.org/craigmayhew/bigprimes.net.svg?branch=master"}],
                     ],
                 ]
             ]
