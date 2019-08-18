@@ -38,6 +38,7 @@ Resources:
         PriceClass: PriceClass_100
         ViewerCertificate:
           AcmCertificateArn: !Ref ParamCertificateARN
+          MinimumProtocolVersion: TLSv1.1_2016
           SslSupportMethod: sni-only
       Tags:
         - Key: application
