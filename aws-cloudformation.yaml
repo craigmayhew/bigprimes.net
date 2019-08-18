@@ -21,6 +21,7 @@ Resources:
         DefaultRootObject: index.html
         Aliases:
         - "www.bigprimes.net"
+        HttpVersion: http2
         DefaultCacheBehavior:
           TargetOriginId: bigprimesCustomOrigin
           SmoothStreaming: 'false'
