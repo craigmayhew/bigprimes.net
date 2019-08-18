@@ -74,7 +74,7 @@ jobs:
       env: RUST_BACKTRACE=1
       before_install:
         #todo: Can these package installs be cached?
-        - apt-get install python python-pip
+        - sudo apt-get install python python-pip
         - pip install awscli
       install:
         - cargo install wasm-pack --force #todo improve this, it's very slow
