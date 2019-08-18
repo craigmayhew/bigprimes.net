@@ -10,7 +10,6 @@ jobs:
   include:
     - stage: "Tests"
     # Builds on nightly.
-    matrix:
     - os: linux
       rust: nightly
       env: RUST_BACKTRACE=1
