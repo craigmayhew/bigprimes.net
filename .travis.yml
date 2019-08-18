@@ -14,9 +14,6 @@ jobs:
     - os: linux
       rust: nightly
       env: RUST_BACKTRACE=1
-      before_install:
-        - sudo apt-get install python python-pip
-        - sudo pip install awscli
       install:
         - cargo install wasm-pack --force #todo improve this, it's very slow
       before_script:
@@ -31,30 +28,8 @@ jobs:
         - cargo check --target wasm32-unknown-unknown --no-default-features --features console_error_panic_hook
         - cargo check                                 --no-default-features --features "console_error_panic_hook wee_alloc"
         - cargo check --target wasm32-unknown-unknown --no-default-features --features "console_error_panic_hook wee_alloc"
-        - export CARGO_INCREMENTAL=0
-        - export RUSTFLAGS="-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Zno-landing-pads"
-        - cargo build --verbose $CARGO_OPTIONS
-        - cargo test --verbose $CARGO_OPTIONS
-        - |
-          zip -0 ccov.zip `find . \( -name "big_primes*.gc*" \) -print`;
-          ./grcov ccov.zip -s . -t lcov --llvm --branch --ignore-not-existing --ignore-dir "/*" -o lcov.info;
-          bash <(curl -s https://codecov.io/bash) -f lcov.info;
-      after_success:
-        - |
-          if([ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_PULL_REQUEST == "false" ])
-          then
-            cd www && npm run-script build && cd ../
-            #TODO: This is not an atomic deploy!
-            sudo aws s3 rm s3://bigprimes/* --recursive
-            sudo aws s3 cp www/dist/*.wasm         s3://bigprimes/ --content-type application/wasm --acl public-read && echo 'S3 wasm sync complete.'
-            sudo aws s3 cp www/dist/*.html         s3://bigprimes/ && echo 'S3 html sync complete.'
-            sudo aws s3 cp www/dist/bootstrap.js   s3://bigprimes/
-            sudo aws s3 cp www/dist/0.bootstrap.js s3://bigprimes/ && echo 'S3 js sync complete.'
-            sudo aws s3 cp www/*.css               s3://bigprimes/ && echo 'S3 css sync complete.'
-            sudo aws s3 cp www/favicon.ico         s3://bigprimes/ && echo 'S3 favicon sync complete.'
-            #TODO: create and copy a favicon, currently cloudfront will serve the index.html as favicon!
-            sudo aws cloudfront create-invalidation --distribution-id $AWS_CF_DISTRIBUTION_ID --paths "/*" && echo 'CloudFront cache invalidated.'
-          fi
+        - cargo build
+        - cargo test
     # Builds on beta.
     - os: linux
       rust: beta
@@ -95,6 +70,43 @@ jobs:
         - cargo test
     
     - stage: "Deploy"
+    - os: linux
+      rust: nightly
+      env: RUST_BACKTRACE=1
+      before_install:
+        #todo: Can these package installs be cached?
+        - sudo apt-get install python python-pip
+        - sudo pip install awscli
+      install:
+        - cargo install wasm-pack --force #todo improve this, it's very slow
+      before_script:
+        - curl -L https://github.com/mozilla/grcov/releases/latest/download/grcov-linux-x86_64.tar.bz2 | tar jxf -
+        - wasm-pack build && cd www && cp -r ../pkg/ . && npm install && cd ../
+      script:
+        - export CARGO_INCREMENTAL=0
+        - export RUSTFLAGS="-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Zno-landing-pads"
+        - cargo build --verbose $CARGO_OPTIONS
+        - cargo test --verbose $CARGO_OPTIONS
+        - |
+          zip -0 ccov.zip `find . \( -name "big_primes*.gc*" \) -print`;
+          ./grcov ccov.zip -s . -t lcov --llvm --branch --ignore-not-existing --ignore-dir "/*" -o lcov.info;
+          bash <(curl -s https://codecov.io/bash) -f lcov.info;
+      after_success:
+        - |
+          if([ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_PULL_REQUEST == "false" ])
+          then
+            cd www && npm run-script build && cd ../
+            #TODO: This is not an atomic deploy!
+            sudo aws s3 rm s3://bigprimes/* --recursive
+            sudo aws s3 cp www/dist/*.wasm         s3://bigprimes/ --content-type application/wasm --acl public-read && echo 'S3 wasm sync complete.'
+            sudo aws s3 cp www/dist/*.html         s3://bigprimes/ && echo 'S3 html sync complete.'
+            sudo aws s3 cp www/dist/bootstrap.js   s3://bigprimes/
+            sudo aws s3 cp www/dist/0.bootstrap.js s3://bigprimes/ && echo 'S3 js sync complete.'
+            sudo aws s3 cp www/*.css               s3://bigprimes/ && echo 'S3 css sync complete.'
+            sudo aws s3 cp www/favicon.ico         s3://bigprimes/ && echo 'S3 favicon sync complete.'
+            #TODO: create and copy a favicon, currently cloudfront will serve the index.html as favicon!
+            sudo aws cloudfront create-invalidation --distribution-id $AWS_CF_DISTRIBUTION_ID --paths "/*" && echo 'CloudFront cache invalidated.'
+          fi
 
 notifications:
   email: false
