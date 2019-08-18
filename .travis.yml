@@ -9,8 +9,7 @@ stages:
 
 jobs:
   include:
-    - stage: "Tests"                # naming the Tests stage
-      name: "Unit Tests"            # names the first Tests stage job
+    - stage: "Tests"
     # Builds on nightly.
     - os: linux
       rust: nightly
@@ -94,8 +93,8 @@ jobs:
         # Note: no enabling the `wee_alloc` feature here because it requires nightly for now.
         - cargo build
         - cargo test
-    - stage: "Deploy"                # naming the Tests stage
-      name: "Deploy to S3+CF"        # names the first Tests stage job
+    
+    - stage: "Deploy"
 
 notifications:
   email: false
