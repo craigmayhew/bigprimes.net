@@ -97,7 +97,7 @@ pub fn render() -> seed::dom_types::Node<Msg> {
         html.push(
             tr![
                 td![n.to_string()],
-                td![mersennes[n][0].to_string()],
+                td!["2",sup![mersennes[n][0].to_string()],"-1"],
                 td![mersennes[n][1].to_string()],
                 td![mersenne_utils::mersennes_discovery_dates(n)],
                 if n >= 30 {a![attrs!{At::Href => download_zip},"ZIP"]} else {a![attrs!{At::Href => download_txt},"TXT"]}
