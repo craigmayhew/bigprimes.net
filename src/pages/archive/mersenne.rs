@@ -120,6 +120,7 @@ pub fn render() -> seed::dom_types::Node<Msg> {
     let mersennes = mersenne_utils::mersennes();
 
     for n in 1..mersennes.len() {
+        let download_txt:String = vec!["https://static.bigprimes.net/archive/mersenne/M",&n.to_string(),".txt"].into_iter().collect();
         let download_zip:String = vec!["https://static.bigprimes.net/archive/mersenne/M",&n.to_string(),".zip"].into_iter().collect();
         html.push(
             tr![
@@ -127,7 +128,7 @@ pub fn render() -> seed::dom_types::Node<Msg> {
                 td![mersennes[n][0].to_string()],
                 td![mersennes[n][1].to_string()],
                 td![mersenne_utils::mersennes_discovery_dates(n)],
-                if n >= 30 {a![attrs!{At::Href => download_zip},"ZIP"]} else {span![]}
+                if n >= 30 {a![attrs!{At::Href => download_zip},"ZIP"]} else {a![attrs!{At::Href => download_txt},"TXT"]}
             ]
         );
     }
