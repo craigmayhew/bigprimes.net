@@ -8,7 +8,7 @@ pub mod mersenne_utils {
     use num_traits::{Pow,Num};
     use num_bigint::{BigInt,ToBigInt};
 
-    fn mersennes_discovery_dates(n:usize) -> String {
+    pub fn mersennes_discovery_dates(n:usize) -> String {
         let mersennes_discovery_dates:Vec<Vec<&str>> = vec![
             //TODO: Complete this list all the way upto 50
             //TODO: We could include download links etc
@@ -36,6 +36,36 @@ pub mod mersenne_utils {
         ];
 
         mersennes_discovery_dates[n][0].to_owned()
+    }
+
+    pub fn mersennes() -> Vec<Vec<usize>> {
+        let mersennes:Vec<Vec<usize>> = vec![
+            //TODO: Complete this list all the way upto 50
+            //vec![p,digits]
+            vec![0,      0],//faux zero entry to make things easier when reading this vector
+            vec![2,     1],	
+            vec![3,     1],	
+            vec![5,     2],
+            vec![7,     3],
+            vec![13,    4],	
+            vec![17,    6],
+            vec![19,    6],	
+            vec![31,   10],	
+            vec![61,   19],	
+            vec![89,   27],
+            vec![107,  33],
+            vec![127,  39],
+            vec![521,  157],
+            vec![607,  183],
+            vec![1279, 386],
+            vec![2203, 664],
+            vec![2281, 687],
+            vec![3217, 969],		
+            vec![4253,1281],
+            vec![4423,1332],	
+        ];
+
+        mersennes.to_owned()
     }
 
     pub fn nth_mersenne_prime (candidate:&str) -> u64 {
@@ -84,20 +114,53 @@ pub mod mersenne_utils {
 
 pub fn render() -> seed::dom_types::Node<Msg> {
 
+    //let mut html:seed::prelude::Node = div![];
+    let mut html = vec![];
+
+    let mersennes = mersenne_utils::mersennes();
+
+    for n in 1..mersennes.len() {
+        html.push(
+            tr![
+                td![n.to_string()],
+                td![mersennes[n][0].to_string()],
+                td![mersennes[n][1].to_string()],
+                td![mersenne_utils::mersennes_discovery_dates(n)]
+            ]
+        );
+    }
+
     div![
         h1!["The Mersenne Numbers"],
         br![],
         br![],
         br![],
-        //todo: replace with rust elements
-        El::from_html("<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"mersennetable text\">
-<tbody><tr>
- <td width=\"70\"><b>No.</b></td>	
- <td width=\"130\"><b>Prime</b></td>
- <td width=\"90\"><b>Digits</b></td>
- <td width=\"130\"><b>Discovered</b></td>
- <td colspan=\"3\" align=\"center\"><b>Download</b></td>
-</tr>
+        table![
+            attrs!{At::Class => "mersennetable text"},
+            tbody![
+                tr![
+                    td![
+                        b!["No."]
+                    ],
+                    td![
+                        b!["Prime"]
+                    ],	
+                    td![
+                        b!["Digits"]
+                    ],	
+                    td![
+                        b!["Discovered"]
+                    ],
+                    td![
+                        b!["Download"]
+                    ]
+                ],
+                html
+            ]
+        ]
+    ]
+
+    /*div![
 <tr>
  <td>50</td>
  <td>2<sup>77232917</sup>-1</td>
@@ -550,5 +613,5 @@ pub fn render() -> seed::dom_types::Node<Msg> {
  <td width=\"30\"></td>
 </tr>
 </tbody></table>"),
-    ]
+    ]*/
 }
