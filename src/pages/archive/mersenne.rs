@@ -39,7 +39,7 @@ pub mod mersenne_utils {
     }
 
     pub fn mersennes() -> Vec<Vec<usize>> {
-        let mersennes:Vec<Vec<usize>> = vec![
+        vec![
             //TODO: Complete this list all the way upto 50
             //vec![p,digits]
             vec![0,      0],//faux zero entry to make things easier when reading this vector
@@ -63,9 +63,7 @@ pub mod mersenne_utils {
             vec![3217, 969],		
             vec![4253,1281],
             vec![4423,1332],	
-        ];
-
-        mersennes.to_owned()
+        ]
     }
 
     pub fn nth_mersenne_prime (candidate:&str) -> u64 {
