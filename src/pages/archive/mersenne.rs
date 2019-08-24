@@ -70,31 +70,7 @@ pub mod mersenne_utils {
 
     pub fn nth_mersenne_prime (candidate:&str) -> u64 {
         let big_candidate:BigInt = num_bigint::BigInt::from_str_radix(&candidate, 10).unwrap();
-        let mersennes:Vec<Vec<usize>> = vec![
-            //TODO: Complete this list all the way upto 50
-            //vec![p,digits]
-            vec![0,      0],//faux zero entry to make things easier when reading this vector
-            vec![2,     1],	
-            vec![3,     1],	
-            vec![5,     2],
-            vec![7,     3],
-            vec![13,    4],	
-            vec![17,    6],
-            vec![19,    6],	
-            vec![31,   10],	
-            vec![61,   19],	
-            vec![89,   27],
-            vec![107,  33],
-            vec![127,  39],
-            vec![521,  157],
-            vec![607,  183],	
-            vec![1279, 386],
-            vec![2203, 664],
-            vec![2281, 687],
-            vec![3217, 969],		
-            vec![4253,1281],
-            vec![4423,1332],	
-        ];
+        let mersennes:Vec<Vec<usize>> = mersennes();
 
         let mut answer:u64 = 0;
         let big_two:BigInt = 2.to_bigint().unwrap();
