@@ -113,8 +113,6 @@ pub mod mersenne_utils {
 }
 
 pub fn render() -> seed::dom_types::Node<Msg> {
-
-    //let mut html:seed::prelude::Node = div![];
     let mut html = vec![];
 
     let mersennes = mersenne_utils::mersennes();
