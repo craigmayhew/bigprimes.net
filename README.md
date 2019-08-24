@@ -36,12 +36,6 @@ Build
  2. Build web app `cd www && npm install`
  3. 
  
-Deploy
-===
-
- -
- -
-
 Fun Facts
 ===
 - there are 1.4\*10<sup>297</sup> primes smaller than 300 digits
