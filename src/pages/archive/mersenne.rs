@@ -130,6 +130,8 @@ pub fn render() -> seed::dom_types::Node<Msg> {
         );
     }
 
+    html.reverse();
+
     div![
         h1!["The Mersenne Numbers"],
         br![],
