@@ -58,7 +58,7 @@ jobs:
         - wasm-pack build && cd www && npm install
       before_cache:
         #todo: added this to compare build times to beta
-        #todo: check if each of these lines is actually needed
+        #todo: check if each of these lines is actually needed: https://gist.github.com/jkcclemens/000456ca646bd502cac0dbddcb8fa307
         - rm -rfv target/debug/incremental/{big_primes,build_script_build}-*
         - rm -rfv target/debug/.fingerprint/big_primes-*
         - rm -rfv target/debug/build/big_primes-*
