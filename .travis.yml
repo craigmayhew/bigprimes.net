@@ -4,7 +4,6 @@ cache: cargo
 
 jobs:
   include:
-    - stage: Tests
       if: NOT branch = master
       if: type = pull_request
     # Builds on nightly.
@@ -77,7 +76,7 @@ jobs:
         - cargo build
         - cargo test
     
-    - stage: Deploy
+    
       if: branch = master
       if: NOT type = pull_request
     - os: linux
