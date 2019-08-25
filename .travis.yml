@@ -2,25 +2,19 @@ language: rust
 
 cache: cargo
 
-stages:
-  - stage: tests
-  - name: Tests
-    if: NOT branch = master
-    if: type = pull_request
-  - stage: deploy
-  - name: Deploy
-    if: branch = master
-    if: NOT type = pull_request
-
 jobs:
   include:
     - stage: "Tests"
+    - name: Tests
+      if: NOT branch = master
+      if: type = pull_request
     # Builds on nightly.
     - os: linux
       rust: nightly
       env: RUST_BACKTRACE=1
       install:
-        - cargo install wasm-pack --force #todo improve this, it's very slow
+        # Force overwriting existing crates or binaries. This can be used to reinstall or upgrade a crate.
+        - cargo install wasm-pack --force #todo improve this, it's very slow. 
       before_script:
         - curl -L https://github.com/mozilla/grcov/releases/latest/download/grcov-linux-x86_64.tar.bz2 | tar jxf -
         - wasm-pack build && cd www && cp -r ../pkg/ . && npm install && cd ../
@@ -85,6 +79,9 @@ jobs:
         - cargo test
     
     - stage: "Deploy"
+    - name: Deploy
+      if: branch = master
+      if: NOT type = pull_request
     - os: linux
       rust: nightly
       env: RUST_BACKTRACE=1
