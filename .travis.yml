@@ -86,6 +86,8 @@ jobs:
       if: branch = master
       if: NOT type = pull_request
     - os: linux
+      if: branch = master
+      if: NOT type = pull_request
       rust: nightly
       env: RUST_BACKTRACE=1
       before_install:
