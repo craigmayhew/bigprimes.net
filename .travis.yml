@@ -63,6 +63,16 @@ jobs:
       before_script:
         - curl -L https://github.com/mozilla/grcov/releases/latest/download/grcov-linux-x86_64.tar.bz2 | tar jxf -
         - wasm-pack build && cd www && npm install
+      before_cache:
+        #todo: added this to compare build times to beta
+        #todo: check if each of these lines is actually needed
+        - rm -rfv target/debug/incremental/{big_primes,build_script_build}-*
+        - rm -rfv target/debug/.fingerprint/big_primes-*
+        - rm -rfv target/debug/build/big_primes-*
+        - rm -rfv target/debug/deps/libbig_primes-*
+        - rm -rfv target/debug/deps/big_primes-*
+        - rm -rfv target/debug/{big_primes,libbig_primes}.d
+        - cargo clean -p big_primes
       script:
         - cargo check
         - cargo check --target wasm32-unknown-unknown
