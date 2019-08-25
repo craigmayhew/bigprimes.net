@@ -3,9 +3,11 @@ language: rust
 cache: cargo
 
 stages:
+  - stage: tests
   - name: Tests
     if: NOT branch = master
     if: type = pull_request
+  - stage: deploy
   - name: Deploy
     if: branch = master
     if: NOT type = pull_request
