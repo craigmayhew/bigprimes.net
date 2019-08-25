@@ -70,9 +70,8 @@ pub mod mersenne_utils {
 
     pub fn mersennes() -> Vec<Vec<usize>> {
         vec![
-            //TODO: Complete this list all the way upto 50
             //vec![p,digits]
-            vec![0,      0],//faux zero entry to make things easier when reading this vector
+            vec![0,     0],//faux zero entry to make things easier when reading this vector
             vec![2,     1],	
             vec![3,     1],	
             vec![5,     2],
