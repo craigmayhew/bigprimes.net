@@ -34,7 +34,7 @@ Build
 
  1. Compile rust into wasm `wasm-pack build`
  2. Build web app `cd www && npm install`
- 3. 
+ 3. Build command Craig has been using: `cd /mnt/c/Users/user/Documents/GitHub/bigprimes.net/ && RUST_BACKTRACE=1 wasm-pack build --release && cp pkg/* www/pkg/ && cd www && npm install && npm start`
  
 Fun Facts
 ===
