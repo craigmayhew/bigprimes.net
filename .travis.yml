@@ -12,8 +12,7 @@ jobs:
       rust: nightly
       env: RUST_BACKTRACE=1
       install:
-        # Force overwriting existing crates or binaries. This can be used to reinstall or upgrade a crate.
-        - cargo install wasm-pack --force #todo improve this, it's very slow. 
+        - cargo install wasm-pack
       before_script:
         - curl -L https://github.com/mozilla/grcov/releases/latest/download/grcov-linux-x86_64.tar.bz2 | tar jxf -
         - wasm-pack build && cd www && cp -r ../pkg/ . && npm install && cd ../
@@ -33,7 +32,7 @@ jobs:
       rust: beta
       env: RUST_BACKTRACE=1
       install:
-        - cargo install wasm-pack --force #todo improve this, it's very slow
+        - cargo install wasm-pack
       before_script:
         - curl -L https://github.com/mozilla/grcov/releases/latest/download/grcov-linux-x86_64.tar.bz2 | tar jxf -
         - wasm-pack build && cd www && npm install
@@ -52,7 +51,7 @@ jobs:
       rust: stable
       env: RUST_BACKTRACE=1
       install:
-        - cargo install wasm-pack --force #todo improve this, it's very slow
+        - cargo install wasm-pack
       before_script:
         - curl -L https://github.com/mozilla/grcov/releases/latest/download/grcov-linux-x86_64.tar.bz2 | tar jxf -
         - wasm-pack build && cd www && npm install
@@ -88,7 +87,7 @@ jobs:
         - sudo apt-get install python python-pip
         - sudo pip install awscli
       install:
-        - cargo install wasm-pack --force #todo improve this, it's very slow
+        - cargo install wasm-pack
       before_script:
         - curl -L https://github.com/mozilla/grcov/releases/latest/download/grcov-linux-x86_64.tar.bz2 | tar jxf -
         - wasm-pack build && cd www && cp -r ../pkg/ . && npm install && cd ../
