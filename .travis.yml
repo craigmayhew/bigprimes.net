@@ -102,8 +102,8 @@ jobs:
       script:
         - export CARGO_INCREMENTAL=0
         - export RUSTFLAGS="-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Zno-landing-pads"
-        - cargo build --verbose $CARGO_OPTIONS
-        - cargo test --verbose $CARGO_OPTIONS
+        - cargo build --verbose
+        - cargo test --verbose
         - |
           zip -0 ccov.zip `find . \( -name "big_primes*.gc*" \) -print`;
           ./grcov ccov.zip -s . -t lcov --llvm --branch --ignore-not-existing --ignore-dir "/*" -o lcov.info;
