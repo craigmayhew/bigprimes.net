@@ -2,6 +2,11 @@ language: rust
 
 cache: cargo
 
+stages:
+  - name: Deploy
+    # require the branch name to be master (note for PRs this is the base branch name)
+    if: branch = master and type != pull_request
+
 jobs:
   include:
     - stage: Tests
