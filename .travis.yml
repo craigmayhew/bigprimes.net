@@ -5,6 +5,7 @@ cache: cargo
 stages:
   - name: Tests
     if: type = pull_request
+  - name: PR CodeCov
   - name: Deploy
     # require the branch name to be master (note for PRs this is the base branch name)
     if: branch = master and type != pull_request
@@ -86,6 +87,27 @@ jobs:
         # Note: no enabling the `wee_alloc` feature here because it requires nightly for now.
         - cargo build
         - cargo test
+    - stage: PR CodeCov
+    - os: linux
+      rust: nightly
+      env: RUST_BACKTRACE=1
+      before_install:
+        #todo: Can these package installs be cached?
+        - sudo apt-get install python python-pip
+        - sudo pip install awscli
+      install:
+        # If caching is working then this binary will already be installed, and this throws an error
+        # We prevent the error from stopping travisci via || true
+        - cargo install wasm-pack || true
+      script:
+        - export CARGO_INCREMENTAL=0
+        - export RUSTFLAGS="-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Zno-landing-pads"
+        - cargo build
+        - cargo test
+        - |
+          zip -0 ccov.zip `find . \( -name "big_primes*.gc*" \) -print`;
+          ./grcov ccov.zip -s . -t lcov --llvm --branch --ignore-not-existing --ignore-dir "/*" -o lcov.info;
+          bash <(curl -s https://codecov.io/bash) -f lcov.info;
     
     - stage: Deploy
     - os: linux
@@ -100,17 +122,12 @@ jobs:
         # We prevent the error from stopping travisci via || true
         - cargo install wasm-pack || true
       before_script:
-        - curl -L https://github.com/mozilla/grcov/releases/latest/download/grcov-linux-x86_64.tar.bz2 | tar jxf -
         - wasm-pack build && cd www && cp -r ../pkg/ . && npm install && cd ../
       script:
         - export CARGO_INCREMENTAL=0
         - export RUSTFLAGS="-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Zno-landing-pads"
         - cargo build
         - cargo test
-        - |
-          zip -0 ccov.zip `find . \( -name "big_primes*.gc*" \) -print`;
-          ./grcov ccov.zip -s . -t lcov --llvm --branch --ignore-not-existing --ignore-dir "/*" -o lcov.info;
-          bash <(curl -s https://codecov.io/bash) -f lcov.info;
       after_success:
         - |
           if([ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_PULL_REQUEST == "false" ])
