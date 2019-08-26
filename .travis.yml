@@ -108,7 +108,7 @@ jobs:
       before_install:
         #todo: Can these package installs be cached?
         - sudo apt-get install python python-pip
-        - sudo pip install awscli
+        - sudo -H $HOME pip install awscli
       install:
         # If caching is working then this binary will already be installed, and this throws an error
         # We prevent the error from stopping travisci via || true
