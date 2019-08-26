@@ -206,4 +206,10 @@ mod tests {
         assert_eq!(mersenne_utils::mersennes_discovery_dates(0), "");
         assert_eq!(mersenne_utils::mersennes_discovery_dates(50), "26-Dec-2017");
     }
+
+    #[test]
+    fn nth_mersenne_prime_test() {
+        assert_eq!(mersenne_utils::nth_mersenne_prime("127"), 4);
+        assert_eq!(mersenne_utils::nth_mersenne_prime("9"), 0);
+    }
 }
