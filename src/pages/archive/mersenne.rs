@@ -196,3 +196,14 @@ pub fn render() -> seed::dom_types::Node<Msg> {
         ]
     ]
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn mersennes_discovery_dates_test() {
+        assert_eq!(mersenne_utils::mersennes_discovery_dates(0), "");
+        assert_eq!(mersenne_utils::mersennes_discovery_dates(50), "26-Dec-2017");
+    }
+}
