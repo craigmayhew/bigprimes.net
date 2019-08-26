@@ -22,7 +22,6 @@ jobs:
         # We prevent the error from stopping travisci via || true
         - cargo install wasm-pack || true
       before_script:
-        - curl -L https://github.com/mozilla/grcov/releases/latest/download/grcov-linux-x86_64.tar.bz2 | tar jxf -
         - wasm-pack build && cd www && cp -r ../pkg/ . && npm install && cd ../
       before_cache:
         #todo: check if each of these lines is actually needed: https://gist.github.com/jkcclemens/000456ca646bd502cac0dbddcb8fa307
@@ -53,7 +52,6 @@ jobs:
         # We prevent the error from stopping travisci via || true
         - cargo install wasm-pack || true
       before_script:
-        - curl -L https://github.com/mozilla/grcov/releases/latest/download/grcov-linux-x86_64.tar.bz2 | tar jxf -
         - wasm-pack build && cd www && npm install
       before_cache:
         #todo: check if each of these lines is actually needed: https://gist.github.com/jkcclemens/000456ca646bd502cac0dbddcb8fa307
@@ -83,7 +81,6 @@ jobs:
         # We prevent the error from stopping travisci via || true
         - cargo install wasm-pack || true
       before_script:
-        - curl -L https://github.com/mozilla/grcov/releases/latest/download/grcov-linux-x86_64.tar.bz2 | tar jxf -
         - wasm-pack build && cd www && npm install
       before_cache:
         #todo: check if each of these lines is actually needed: https://gist.github.com/jkcclemens/000456ca646bd502cac0dbddcb8fa307
@@ -125,6 +122,8 @@ jobs:
         - rm -rfv target/debug/deps/big_primes-*
         - rm -rfv target/debug/{big_primes,libbig_primes}.d
         - cargo clean -p big_primes
+      before_script:
+        - curl -L https://github.com/mozilla/grcov/releases/latest/download/grcov-linux-x86_64.tar.bz2 | tar jxf -
       script:
         - export CARGO_INCREMENTAL=0
         - export RUSTFLAGS="-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Zno-landing-pads"
