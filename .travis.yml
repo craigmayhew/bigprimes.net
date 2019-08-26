@@ -10,7 +10,6 @@ stages:
 jobs:
   include:
     - stage: Tests
-      if: branch = master AND type != pull_request
     # Builds on nightly.
     - os: linux
       rust: nightly
@@ -88,7 +87,6 @@ jobs:
     
     - stage: Deploy
     - os: linux
-      if: branch = master and type != pull_request
       rust: nightly
       env: RUST_BACKTRACE=1
       before_install:
