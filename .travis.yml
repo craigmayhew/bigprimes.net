@@ -175,6 +175,7 @@ jobs:
             aws s3 cp www/dist/0.bootstrap.js s3://bigprimes/ && echo 'S3 js sync complete.'
             aws s3 cp www/*.css               s3://bigprimes/ && echo 'S3 css sync complete.'
             aws s3 cp www/favicon.ico         s3://bigprimes/ && echo 'S3 favicon sync complete.'
+            aws s3 cp www/robots.txt         s3://bigprimes/ && echo 'S3 robots.txt sync complete.'
             #TODO: create and copy a favicon, currently cloudfront will serve the index.html as favicon!
             aws cloudfront create-invalidation --distribution-id $AWS_CF_DISTRIBUTION_ID --paths "/*" && echo 'CloudFront cache invalidated.'
           fi
