@@ -18,7 +18,7 @@ jobs:
   include:
     - stage: Tests
     # Builds on nightly.
-      rust: nightly
+    - rust: nightly
       env: RUST_BACKTRACE=1
       install:
         # If caching is working then this binary will already be installed, and this throws an error
@@ -47,7 +47,7 @@ jobs:
         - cargo build
         - cargo test
     # Builds on beta.
-      rust: beta
+    - rust: beta
       env: RUST_BACKTRACE=1
       install:
         # If caching is working then this binary will already be installed, and this throws an error
@@ -75,7 +75,7 @@ jobs:
         - cargo build
         - cargo test
     # Builds on stable.
-      rust: stable
+    - rust: stable
       env: RUST_BACKTRACE=1
       install:
         # If caching is working then this binary will already be installed, and this throws an error
@@ -103,7 +103,7 @@ jobs:
         - cargo build
         - cargo test
     - stage: PR CodeCov
-      rust: nightly
+    - rust: nightly
       env: RUST_BACKTRACE=1
       before_install:
         #todo: Can these package installs be cached?
@@ -135,7 +135,7 @@ jobs:
           bash <(curl -s https://codecov.io/bash) -f lcov.info;
     
     - stage: Deploy
-      rust: nightly
+    - rust: nightly
       env: RUST_BACKTRACE=1
       before_install:
         #todo: Can these package installs be cached?
