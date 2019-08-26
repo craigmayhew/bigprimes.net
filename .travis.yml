@@ -4,6 +4,8 @@ cache:
   cargo: true
   pip: true
 
+env: RUST_BACKTRACE=1
+
 os: linux
 
 stages:
@@ -19,7 +21,6 @@ jobs:
     - stage: Tests
     # Builds on nightly.
     - rust: nightly
-      env: RUST_BACKTRACE=1
       install:
         # If caching is working then this binary will already be installed, and this throws an error
         # We prevent the error from stopping travisci via || true
@@ -48,7 +49,6 @@ jobs:
         - cargo test
     # Builds on beta.
     - rust: beta
-      env: RUST_BACKTRACE=1
       install:
         # If caching is working then this binary will already be installed, and this throws an error
         # We prevent the error from stopping travisci via || true
@@ -76,7 +76,6 @@ jobs:
         - cargo test
     # Builds on stable.
     - rust: stable
-      env: RUST_BACKTRACE=1
       install:
         # If caching is working then this binary will already be installed, and this throws an error
         # We prevent the error from stopping travisci via || true
@@ -104,7 +103,6 @@ jobs:
         - cargo test
     - stage: PR CodeCov
     - rust: nightly
-      env: RUST_BACKTRACE=1
       before_install:
         #todo: Can these package installs be cached?
         - sudo apt-get install python python-pip
@@ -136,7 +134,6 @@ jobs:
     
     - stage: Deploy
     - rust: nightly
-      env: RUST_BACKTRACE=1
       before_install:
         #todo: Can these package installs be cached?
         - sudo apt-get install python python-pip
