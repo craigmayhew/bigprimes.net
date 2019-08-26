@@ -5,8 +5,7 @@ cache: cargo
 jobs:
   include:
     - stage: Tests
-      if: NOT branch = master
-      if: type = pull_request
+      if: branch = master AND type != pull_request
     # Builds on nightly.
     - os: linux
       rust: nightly
