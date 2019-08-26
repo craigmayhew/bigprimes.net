@@ -212,4 +212,14 @@ mod tests {
         assert_eq!(mersenne_utils::nth_mersenne_prime("127"), 4);
         assert_eq!(mersenne_utils::nth_mersenne_prime("9"), 0);
     }
+
+    #[test]
+    fn mersenne_test() {
+        let mersennes:Vec<Vec<usize>> = mersenne_utils::mersennes();
+        assert_eq!(mersennes[0][0], 0);
+        assert_eq!(mersennes[0][1], 0);
+
+        assert_eq!(mersennes[2][0], 3);
+        assert_eq!(mersennes[2][1], 1);
+    }
 }
