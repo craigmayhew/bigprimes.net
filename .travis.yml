@@ -156,8 +156,6 @@ jobs:
         - rm -rfv $TRAVIS_BUILD_DIR/target/debug/{big_primes,libbig_primes}.d
         - cargo clean -p big_primes
       script:
-        - export CARGO_INCREMENTAL=0
-        - export RUSTFLAGS="-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Zno-landing-pads"
         - cargo build
         - cargo test
       after_success:
