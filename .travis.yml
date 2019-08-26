@@ -20,7 +20,7 @@ jobs:
   include:
     - stage: Tests
     # Builds on nightly.
-    - rust: nightly
+      rust: nightly
       install:
         # If caching is working then this binary will already be installed, and this throws an error
         # We prevent the error from stopping travisci via || true
@@ -48,7 +48,8 @@ jobs:
         - cargo build
         - cargo test
     # Builds on beta.
-    - rust: beta
+    - 
+      rust: beta
       install:
         # If caching is working then this binary will already be installed, and this throws an error
         # We prevent the error from stopping travisci via || true
@@ -75,7 +76,8 @@ jobs:
         - cargo build
         - cargo test
     # Builds on stable.
-    - rust: stable
+    -
+      rust: stable
       install:
         # If caching is working then this binary will already be installed, and this throws an error
         # We prevent the error from stopping travisci via || true
@@ -102,7 +104,7 @@ jobs:
         - cargo build
         - cargo test
     - stage: PR CodeCov
-    - rust: nightly
+      rust: nightly
       before_install:
         #todo: Can these package installs be cached?
         - sudo apt-get install python python-pip
@@ -133,7 +135,7 @@ jobs:
           bash <(curl -s https://codecov.io/bash) -f lcov.info;
     
     - stage: Deploy
-    - rust: nightly
+      rust: nightly
       before_install:
         #todo: Can these package installs be cached?
         - sudo apt-get install python python-pip
