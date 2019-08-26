@@ -4,6 +4,10 @@ cache:
   cargo: true
   pip: true
 
+env: RUST_BACKTRACE=1
+
+os: linux
+
 stages:
   - name: Tests
     if: type = pull_request
@@ -16,9 +20,7 @@ jobs:
   include:
     - stage: Tests
     # Builds on nightly.
-    - os: linux
       rust: nightly
-      env: RUST_BACKTRACE=1
       install:
         # If caching is working then this binary will already be installed, and this throws an error
         # We prevent the error from stopping travisci via || true
@@ -46,9 +48,8 @@ jobs:
         - cargo build
         - cargo test
     # Builds on beta.
-    - os: linux
+    - 
       rust: beta
-      env: RUST_BACKTRACE=1
       install:
         # If caching is working then this binary will already be installed, and this throws an error
         # We prevent the error from stopping travisci via || true
@@ -75,9 +76,8 @@ jobs:
         - cargo build
         - cargo test
     # Builds on stable.
-    - os: linux
+    -
       rust: stable
-      env: RUST_BACKTRACE=1
       install:
         # If caching is working then this binary will already be installed, and this throws an error
         # We prevent the error from stopping travisci via || true
@@ -104,13 +104,7 @@ jobs:
         - cargo build
         - cargo test
     - stage: PR CodeCov
-    - os: linux
       rust: nightly
-      env: RUST_BACKTRACE=1
-      before_install:
-        #todo: Can these package installs be cached?
-        - sudo apt-get install python python-pip
-        - sudo pip install awscli
       install:
         # If caching is working then this binary will already be installed, and this throws an error
         # We prevent the error from stopping travisci via || true
@@ -137,13 +131,11 @@ jobs:
           bash <(curl -s https://codecov.io/bash) -f lcov.info;
     
     - stage: Deploy
-    - os: linux
       rust: nightly
-      env: RUST_BACKTRACE=1
       before_install:
         #todo: Can these package installs be cached?
         - sudo apt-get install python python-pip
-        - sudo pip install awscli
+        - sudo -H $HOME pip install awscli
       install:
         # If caching is working then this binary will already be installed, and this throws an error
         # We prevent the error from stopping travisci via || true
@@ -160,8 +152,6 @@ jobs:
         - rm -rfv $TRAVIS_BUILD_DIR/target/debug/{big_primes,libbig_primes}.d
         - cargo clean -p big_primes
       script:
-        - export CARGO_INCREMENTAL=0
-        - export RUSTFLAGS="-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Zno-landing-pads"
         - cargo build
         - cargo test
       after_success:
@@ -177,8 +167,7 @@ jobs:
             aws s3 cp www/dist/0.bootstrap.js s3://bigprimes/ && echo 'S3 js sync complete.'
             aws s3 cp www/*.css               s3://bigprimes/ && echo 'S3 css sync complete.'
             aws s3 cp www/favicon.ico         s3://bigprimes/ && echo 'S3 favicon sync complete.'
-            aws s3 cp www/robots.txt         s3://bigprimes/ && echo 'S3 robots.txt sync complete.'
-            #TODO: create and copy a favicon, currently cloudfront will serve the index.html as favicon!
+            aws s3 cp www/robots.txt          s3://bigprimes/ && echo 'S3 robots.txt sync complete.'
             aws cloudfront create-invalidation --distribution-id $AWS_CF_DISTRIBUTION_ID --paths "/*" && echo 'CloudFront cache invalidated.'
           fi
 
