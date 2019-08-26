@@ -22,16 +22,15 @@ jobs:
         # We prevent the error from stopping travisci via || true
         - cargo install wasm-pack || true
       before_script:
-        - curl -L https://github.com/mozilla/grcov/releases/latest/download/grcov-linux-x86_64.tar.bz2 | tar jxf -
         - wasm-pack build && cd www && cp -r ../pkg/ . && npm install && cd ../
       before_cache:
         #todo: check if each of these lines is actually needed: https://gist.github.com/jkcclemens/000456ca646bd502cac0dbddcb8fa307
-        - rm -rfv target/debug/incremental/{big_primes,build_script_build}-*
-        - rm -rfv target/debug/.fingerprint/big_primes-*
-        - rm -rfv target/debug/build/big_primes-*
-        - rm -rfv target/debug/deps/libbig_primes-*
-        - rm -rfv target/debug/deps/big_primes-*
-        - rm -rfv target/debug/{big_primes,libbig_primes}.d
+        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/incremental/{big_primes,build_script_build}-*
+        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/.fingerprint/big_primes-*
+        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/build/big_primes-*
+        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/deps/libbig_primes-*
+        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/deps/big_primes-*
+        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/{big_primes,libbig_primes}.d
         - cargo clean -p big_primes
       script:
         - cargo check
@@ -53,16 +52,15 @@ jobs:
         # We prevent the error from stopping travisci via || true
         - cargo install wasm-pack || true
       before_script:
-        - curl -L https://github.com/mozilla/grcov/releases/latest/download/grcov-linux-x86_64.tar.bz2 | tar jxf -
         - wasm-pack build && cd www && npm install
       before_cache:
         #todo: check if each of these lines is actually needed: https://gist.github.com/jkcclemens/000456ca646bd502cac0dbddcb8fa307
-        - rm -rfv target/debug/incremental/{big_primes,build_script_build}-*
-        - rm -rfv target/debug/.fingerprint/big_primes-*
-        - rm -rfv target/debug/build/big_primes-*
-        - rm -rfv target/debug/deps/libbig_primes-*
-        - rm -rfv target/debug/deps/big_primes-*
-        - rm -rfv target/debug/{big_primes,libbig_primes}.d
+        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/incremental/{big_primes,build_script_build}-*
+        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/.fingerprint/big_primes-*
+        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/build/big_primes-*
+        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/deps/libbig_primes-*
+        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/deps/big_primes-*
+        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/{big_primes,libbig_primes}.d
         - cargo clean -p big_primes
       script:
         - cargo check
@@ -83,16 +81,15 @@ jobs:
         # We prevent the error from stopping travisci via || true
         - cargo install wasm-pack || true
       before_script:
-        - curl -L https://github.com/mozilla/grcov/releases/latest/download/grcov-linux-x86_64.tar.bz2 | tar jxf -
         - wasm-pack build && cd www && npm install
       before_cache:
         #todo: check if each of these lines is actually needed: https://gist.github.com/jkcclemens/000456ca646bd502cac0dbddcb8fa307
-        - rm -rfv target/debug/incremental/{big_primes,build_script_build}-*
-        - rm -rfv target/debug/.fingerprint/big_primes-*
-        - rm -rfv target/debug/build/big_primes-*
-        - rm -rfv target/debug/deps/libbig_primes-*
-        - rm -rfv target/debug/deps/big_primes-*
-        - rm -rfv target/debug/{big_primes,libbig_primes}.d
+        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/incremental/{big_primes,build_script_build}-*
+        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/.fingerprint/big_primes-*
+        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/build/big_primes-*
+        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/deps/libbig_primes-*
+        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/deps/big_primes-*
+        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/{big_primes,libbig_primes}.d
         - cargo clean -p big_primes
       script:
         - cargo check
@@ -118,18 +115,20 @@ jobs:
         - cargo install wasm-pack || true
       before_cache:
         #todo: check if each of these lines is actually needed: https://gist.github.com/jkcclemens/000456ca646bd502cac0dbddcb8fa307
-        - rm -rfv target/debug/incremental/{big_primes,build_script_build}-*
-        - rm -rfv target/debug/.fingerprint/big_primes-*
-        - rm -rfv target/debug/build/big_primes-*
-        - rm -rfv target/debug/deps/libbig_primes-*
-        - rm -rfv target/debug/deps/big_primes-*
-        - rm -rfv target/debug/{big_primes,libbig_primes}.d
+        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/incremental/{big_primes,build_script_build}-*
+        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/.fingerprint/big_primes-*
+        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/build/big_primes-*
+        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/deps/libbig_primes-*
+        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/deps/big_primes-*
+        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/{big_primes,libbig_primes}.d
         - cargo clean -p big_primes
+      before_script:
+        - curl -L https://github.com/mozilla/grcov/releases/latest/download/grcov-linux-x86_64.tar.bz2 | tar jxf -
       script:
         - export CARGO_INCREMENTAL=0
         - export RUSTFLAGS="-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Zno-landing-pads"
-        - cargo build
-        - cargo test
+        - cargo build --verbose $CARGO_OPTIONS
+        - cargo test --verbose $CARGO_OPTIONS
         - |
           zip -0 ccov.zip `find . \( -name "big_primes*.gc*" \) -print`;
           ./grcov ccov.zip -s . -t lcov --llvm --branch --ignore-not-existing --ignore-dir "/*" -o lcov.info;
@@ -151,12 +150,12 @@ jobs:
         - wasm-pack build && cd www && cp -r ../pkg/ . && npm install && cd ../
       before_cache:
         #todo: check if each of these lines is actually needed: https://gist.github.com/jkcclemens/000456ca646bd502cac0dbddcb8fa307
-        - rm -rfv target/debug/incremental/{big_primes,build_script_build}-*
-        - rm -rfv target/debug/.fingerprint/big_primes-*
-        - rm -rfv target/debug/build/big_primes-*
-        - rm -rfv target/debug/deps/libbig_primes-*
-        - rm -rfv target/debug/deps/big_primes-*
-        - rm -rfv target/debug/{big_primes,libbig_primes}.d
+        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/incremental/{big_primes,build_script_build}-*
+        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/.fingerprint/big_primes-*
+        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/build/big_primes-*
+        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/deps/libbig_primes-*
+        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/deps/big_primes-*
+        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/{big_primes,libbig_primes}.d
         - cargo clean -p big_primes
       script:
         - export CARGO_INCREMENTAL=0
