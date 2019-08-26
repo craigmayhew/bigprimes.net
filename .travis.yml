@@ -83,7 +83,7 @@ jobs:
         - cargo test
     
     - stage: Deploy
-      if: branch = master and NOT type != pull_request
+      if: branch = master and type != pull_request
     - os: linux
       rust: nightly
       env: RUST_BACKTRACE=1
