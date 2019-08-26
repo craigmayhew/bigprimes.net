@@ -10,15 +10,15 @@ Serverless Rust with Web Assmebly.
 Setup your local dev environment
 ===
 
- 1. Install cargo rustc, rustup `curl https://sh.rustup.rs -sSf | sh`
- 2. Install wasm-pack `curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh`
- 3. If developing on Ubuntu, `apt-get install libssl-dev pkg-config`
- 4. Use a cargo template `cargo install cargo-generate`
+ 1. Clone bigprimes.net `git clone https://github.com/craigmayhew/bigprimes.net.git`
+ 2. Install cargo rustc, rustup `curl https://sh.rustup.rs -sSf | sh`
+ 3. Install wasm-pack `curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh`
+ 4. If developing on Ubuntu, `apt-get update && apt-get install libssl-dev npm pkg-config`
  5. Install npm `npm install npm@latest -g`
 
 Setup project for the first time
 ===
-You almost certainly do not need to do these!
+Unless you are the author of this repo, you almost certainly do not need to do these!
  1. `npm init wasm-app www`
  2. `cd www && npm install && npm audit fix`
 
@@ -34,14 +34,8 @@ Build
 
  1. Compile rust into wasm `wasm-pack build`
  2. Build web app `cd www && npm install`
- 3. 
+ 3. Build command Craig has been using: `cd /mnt/c/Users/user/Documents/GitHub/bigprimes.net/ && RUST_BACKTRACE=1 wasm-pack build --release && cp pkg/* www/pkg/ && cd www && npm install && npm start`
  
-Deploy
-===
-
- -
- -
-
 Fun Facts
 ===
 - there are 1.4\*10<sup>297</sup> primes smaller than 300 digits
