@@ -153,7 +153,6 @@ jobs:
         - cargo clean -p big_primes
       script:
         - cargo build
-        - cargo test
       after_success:
         - |
           if([ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_PULL_REQUEST == "false" ])
