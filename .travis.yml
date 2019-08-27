@@ -11,7 +11,7 @@ os: linux
 stages:
   - name: Tests
     if: type = pull_request
-  - name: PR CodeCov
+  - name: CodeCov
   - name: Deploy
     # require the branch name to be master (note for PRs this is the base branch name)
     if: branch = master and type != pull_request
@@ -103,7 +103,7 @@ jobs:
         # Note: no enabling the `wee_alloc` feature here because it requires nightly for now.
         - cargo build
         - cargo test
-    - stage: PR CodeCov
+    - stage: CodeCov
       rust: nightly
       install:
         # If caching is working then this binary will already be installed, and this throws an error
