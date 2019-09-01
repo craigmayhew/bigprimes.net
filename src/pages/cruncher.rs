@@ -859,6 +859,15 @@ mod tests {
         //todo: this test shows we have a comma prefix, tidier if that didn't happen
         assert_eq!(numerics_to_text::list_factors("20",",".to_owned()), ",1,2,4,5,10,20");
     }
+
+    #[test]
+    fn nth_prime_test() {
+        assert_eq!(nth_prime("2",10), 1);
+        assert_eq!(nth_prime("3",10), 2);
+        assert_eq!(nth_prime("4",10), 0);
+        assert_eq!(nth_prime("5",10), 3);
+        assert_eq!(nth_prime("5555555555555555555555555555555555555555555555555555555",10), 0);
+    }
 }
 
 //todo: this file is vast, break it up!
