@@ -25,8 +25,13 @@ jobs:
         # If caching is working then this binary will already be installed, and this throws an error
         # We prevent the error from stopping travisci via || true
         - cargo install wasm-pack || true
+        # binaryen is used to compress wasm files for a ~20% size reduction
+        - git clone https://github.com/WebAssembly/binaryen.git && cd binaryen && cmake . && make && cd ../
       before_script:
-        - wasm-pack build && cd www && cp -r ../pkg/ . && npm install && cd ../
+        - wasm-pack build
+        # compile
+        - cd binaryen && ./bin/wasm-opt pkg/big_primes_bg.wasm -O4 -o pkg/big_primes_bg.wasm && cd ../
+        - cd www && cp -r ../pkg/ . && npm install && cd ../
       before_cache:
         #todo: check if each of these lines is actually needed: https://gist.github.com/jkcclemens/000456ca646bd502cac0dbddcb8fa307
         - rm -rfv $TRAVIS_BUILD_DIR/target/debug/incremental/{big_primes,build_script_build}-*
