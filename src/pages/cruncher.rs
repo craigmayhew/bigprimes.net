@@ -9,6 +9,8 @@ use crate::pages::archive::mersenne::mersenne_utils as mersenne;
 use crate::pages::archive::prime::prime as prime;
 use regex::Regex;
 
+const MAX_LEN_PRIME_CHECK: usize = 2;
+
 mod numerics_to_text {
     use crate::utils::{nth};
     use num_traits::{Num,ToPrimitive,Zero,One,pow};
@@ -509,7 +511,7 @@ fn html_form() -> seed::dom_types::Node<Msg> {
         ul![
             li!["Is it odd or even?"],
             li!["Is it a palindrome?"],
-            li!["Is it a prime number? (Checks numbers upto 11 digits in length)"],
+            li!["Is it a prime number? (Checks numbers upto ",MAX_LEN_PRIME_CHECK.to_string()," digits in length)"],
             li!["Is it a ",a!["mersenne prime", attrs!{At::Class => "link", At::Href => "https://en.wikipedia.org/wiki/Mersenne_prime"}],"? (Checks numbers upto 2993 digits in length)"],
             li!["Is it a ",a!["fermat prime", attrs!{At::Class => "link", At::Href => "https://www.fermatsearch.org/"}],"? (Checks numbers upto 155 digits in length"],
             li!["Is it a ",a!["perfect number", attrs!{At::Class => "link", At::Href => "https://en.wikipedia.org/wiki/Perfect_number"}],"? (Checks numbers upto 12003 digits in length)"],
@@ -632,11 +634,15 @@ fn nth_prime(str_num:&str, max_prime_nth_check:usize) -> usize {
 }
 
 fn html_nth_prime(str_num:&str) -> seed::dom_types::Node<Msg> {
-    let nth_prime_result = nth_prime(&str_num,50);
-    if nth_prime_result > 0 {
-        span!["It is the ",nth(nth_prime_result)," prime number."]
+    if MAX_LEN_PRIME_CHECK < str_num.len() {
+        span!["It is too large to check primality."]
     } else {
-        span!["It is not a prime number."]
+        let nth_prime_result = nth_prime(&str_num,50);
+        if nth_prime_result > 0 {
+            span!["It is the ",nth(nth_prime_result)," prime number."]
+        } else {
+            span!["It is not a prime number."]
+        }
     }
 }
 
