@@ -102,9 +102,11 @@ pub fn render(slug:String) -> seed::dom_types::Node<Msg> {
 
         let href_prev:String;
         let prev_link:Vec<seed::dom_types::Node<_>>;
+        // we are on the first page of primes so don't display a previous button
         if slug_int <= 1 {
             prev_link = vec![];
-        } else if slug_int <= 25 {
+        //display a link with text "back to 1st prime numbers"
+        } else if slug_int as isize - numbers_per_page as isize <= 0 {
             href_prev = "/archive/prime/1/".to_string();
             prev_link = vec![a!["back to 1st prime numbers", attrs!{At::Class => "link", At::Href => href_prev}]];
         } else {
