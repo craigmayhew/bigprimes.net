@@ -6,6 +6,7 @@ extern crate num_traits;
 
 use crate::utils::{nth};
 use crate::pages::archive::mersenne::mersenne_utils as mersenne;
+use crate::pages::archive::prime::prime as prime;
 use regex::Regex;
 
 mod numerics_to_text {
@@ -605,6 +606,40 @@ fn html_mersenne_prime(str_num:&str) -> seed::dom_types::Node<Msg> {
     }
 }
 
+fn nth_prime(str_num:&str, max_prime_nth_check:usize) -> usize {
+    let mut answer:usize = 0;
+
+    //if number is larger than 64bits capacity then return 0
+    let check_fits_in_64bits = match str_num.parse::<usize>() {
+        Ok(_v) => true,
+        Err(_e) => false
+    };
+
+    if !check_fits_in_64bits {
+        answer
+    } else {
+        let num:usize = str_num.parse().unwrap();
+        let primes_list:Vec<usize> = prime::n100_prime(1,max_prime_nth_check);
+        
+        for n in 0..(max_prime_nth_check-1) {
+            if num == primes_list[n] {
+                answer = n+1;
+                break;
+            }
+        }
+        answer
+    }
+}
+
+fn html_nth_prime(str_num:&str) -> seed::dom_types::Node<Msg> {
+    let nth_prime_result = nth_prime(&str_num,50);
+    if nth_prime_result > 0 {
+        span!["It is the ",nth(nth_prime_result)," prime number."]
+    } else {
+        span!["It is not a prime number."]
+    }
+}
+
 fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
 
     let max_len_roman = 6;
@@ -631,8 +666,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
                     td![
                         "It is an ",if numerics_to_text::is_odd(&slug) {"odd"} else {"even"} ," number.",
                         br![],
-                        //TODO hardcoded example value
-                        "It is the ",nth(4)," prime number.",
+                        html_nth_prime(&slug),
                         br![],
                         "It is ",
                         if numerics_to_text::is_palindrome(&slug) { "" } else { "not " },
