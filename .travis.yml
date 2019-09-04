@@ -148,7 +148,11 @@ jobs:
           tar -zxvf binaryen-$BINARYEN_VERSION-aarch64-linux.tar.gz binaryen-$BINARYEN_VERSION/wasm-opt
           mv binaryen-$BINARYEN_VERSION/wasm-opt wasm-opt
       before_script:
-        - wasm-pack build && cd www && cp -r ../pkg/ . && npm install && cd ../
+        - wasm-pack build
+        - #optimize wasm file
+        - ./wasm-opt pkg/big_primes_bg.wasm -O4 -o pkg/big_primes_bg.wasm
+        - gzip -9c pkg/big_primes_bg.wasm > pkg/big_primes_bg.wasm
+        - cd www && cp -r ../pkg/ . && npm install && cd ../
       before_cache:
         #todo: check if each of these lines is actually needed: https://gist.github.com/jkcclemens/000456ca646bd502cac0dbddcb8fa307
         - rm -rfv $TRAVIS_BUILD_DIR/target/debug/incremental/{big_primes,build_script_build}-*
@@ -164,9 +168,6 @@ jobs:
           if([ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_PULL_REQUEST == "false" ])
           then
             cd www && npm run-script build && cd ../
-            #optimize wasm file
-            ./wasm-opt $(find www/dist/*.wasm) -O4 -o $(find www/dist/*.wasm)
-            gzip -9c $(find www/dist/*.wasm) > $(find www/dist/*.wasm)
             #TODO: This is not an atomic deploy!
             aws s3 rm s3://bigprimes/* --recursive
             aws s3 cp www/dist/*.wasm         s3://bigprimes/ --content-type application/wasm --content-encoding gzip --acl public-read && echo 'S3 wasm sync complete.'
