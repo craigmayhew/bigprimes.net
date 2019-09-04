@@ -163,9 +163,10 @@ jobs:
           if([ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_PULL_REQUEST == "false" ])
           then
             cd www && npm run-script build && cd ../
+            gzip -9c $(find www/dist/*.wasm) > $(find www/dist/*.wasm)
             #TODO: This is not an atomic deploy!
             aws s3 rm s3://bigprimes/* --recursive
-            aws s3 cp www/dist/*.wasm         s3://bigprimes/ --content-type application/wasm --acl public-read && echo 'S3 wasm sync complete.'
+            aws s3 cp www/dist/*.wasm         s3://bigprimes/ --content-type application/wasm --content-encoding gzip --acl public-read && echo 'S3 wasm sync complete.'
             aws s3 cp www/dist/*.html         s3://bigprimes/ && echo 'S3 html sync complete.'
             aws s3 cp www/dist/bootstrap.js   s3://bigprimes/
             aws s3 cp www/dist/0.bootstrap.js s3://bigprimes/ && echo 'S3 js sync complete.'
