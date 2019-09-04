@@ -26,7 +26,8 @@ jobs:
         # We prevent the error from stopping travisci via || true
         - cargo install wasm-pack || true
       before_script:
-        - wasm-pack build && cd www && cp -r ../pkg/ . && npm install && cd ../
+        - wasm-pack build
+        - cd www && cp -r ../pkg/ . && npm install && cd ../
       before_cache:
         #todo: check if each of these lines is actually needed: https://gist.github.com/jkcclemens/000456ca646bd502cac0dbddcb8fa307
         - rm -rfv $TRAVIS_BUILD_DIR/target/debug/incremental/{big_primes,build_script_build}-*
@@ -140,6 +141,12 @@ jobs:
         # If caching is working then this binary will already be installed, and this throws an error
         # We prevent the error from stopping travisci via || true
         - cargo install wasm-pack || true
+        # binaryen is used to optimize wasm files for a ~20% size reduction and some extra speed
+        - |
+          BINARYEN_VERSION=$(curl --silent "https://api.github.com/repos/WebAssembly/binaryen/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
+          wget https://github.com/WebAssembly/binaryen/releases/download/$BINARYEN_VERSION/binaryen-$BINARYEN_VERSION-aarch64-linux.tar.gz
+          tar -zxvf binaryen-$BINARYEN_VERSION-aarch64-linux.tar.gz binaryen-$BINARYEN_VERSION/wasm-opt
+          mv binaryen-$BINARYEN_VERSION/wasm-opt wasm-opt
       before_script:
         - wasm-pack build && cd www && cp -r ../pkg/ . && npm install && cd ../
       before_cache:
@@ -152,15 +159,17 @@ jobs:
         - rm -rfv $TRAVIS_BUILD_DIR/target/debug/{big_primes,libbig_primes}.d
         - cargo clean -p big_primes
       script:
-        - cargo build
-      after_success:
         - |
+          cargo build
           if([ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_PULL_REQUEST == "false" ])
           then
             cd www && npm run-script build && cd ../
+            #optimize wasm file
+            ./wasm-opt $(find www/dist/*.wasm) -O4 -o $(find www/dist/*.wasm)
+            gzip -9c $(find www/dist/*.wasm) > $(find www/dist/*.wasm)
             #TODO: This is not an atomic deploy!
             aws s3 rm s3://bigprimes/* --recursive
-            aws s3 cp www/dist/*.wasm         s3://bigprimes/ --content-type application/wasm --acl public-read && echo 'S3 wasm sync complete.'
+            aws s3 cp www/dist/*.wasm         s3://bigprimes/ --content-type application/wasm --content-encoding gzip --acl public-read && echo 'S3 wasm sync complete.'
             aws s3 cp www/dist/*.html         s3://bigprimes/ && echo 'S3 html sync complete.'
             aws s3 cp www/dist/bootstrap.js   s3://bigprimes/
             aws s3 cp www/dist/0.bootstrap.js s3://bigprimes/ && echo 'S3 js sync complete.'

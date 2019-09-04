@@ -23,6 +23,7 @@ Resources:
         - "www.bigprimes.net"
         HttpVersion: http2
         DefaultCacheBehavior:
+          Compress: 'true'
           TargetOriginId: bigprimesCustomOrigin
           SmoothStreaming: 'false'
           ForwardedValues:
