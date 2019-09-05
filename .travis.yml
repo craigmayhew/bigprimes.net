@@ -29,13 +29,11 @@ jobs:
         - wasm-pack build
         - cd www && cp -r ../pkg/ . && npm install && cd ../
       before_cache:
-        #todo: check if each of these lines is actually needed: https://gist.github.com/jkcclemens/000456ca646bd502cac0dbddcb8fa307
-        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/incremental/{big_primes,build_script_build}-*
-        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/.fingerprint/big_primes-*
-        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/build/big_primes-*
-        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/deps/libbig_primes-*
-        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/deps/big_primes-*
-        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/{big_primes,libbig_primes}.d
+        # this following line is recommended by travis docs if one overrides before_cache
+        - rm -rf "$TRAVIS_HOME/.cargo/registry/src"
+        # for builds using rust nightly, we may aswell not attempt to cache target directory
+        # as every night, this cache is no longer useful
+        - rm -rfv $TRAVIS_BUILD_DIR/target/
         - cargo clean -p big_primes
       script:
         - cargo check
@@ -58,6 +56,8 @@ jobs:
       before_script:
         - wasm-pack build && cd www && npm install
       before_cache:
+        # this following line is recommended by travis docs if one overrides before_cache
+        - rm -rf "$TRAVIS_HOME/.cargo/registry/src"
         #todo: check if each of these lines is actually needed: https://gist.github.com/jkcclemens/000456ca646bd502cac0dbddcb8fa307
         - rm -rfv $TRAVIS_BUILD_DIR/target/debug/incremental/{big_primes,build_script_build}-*
         - rm -rfv $TRAVIS_BUILD_DIR/target/debug/.fingerprint/big_primes-*
@@ -86,6 +86,8 @@ jobs:
       before_script:
         - wasm-pack build && cd www && npm install
       before_cache:
+        # this following line is recommended by travis docs if one overrides before_cache
+        - rm -rf "$TRAVIS_HOME/.cargo/registry/src"
         #todo: check if each of these lines is actually needed: https://gist.github.com/jkcclemens/000456ca646bd502cac0dbddcb8fa307
         - rm -rfv $TRAVIS_BUILD_DIR/target/debug/incremental/{big_primes,build_script_build}-*
         - rm -rfv $TRAVIS_BUILD_DIR/target/debug/.fingerprint/big_primes-*
@@ -111,6 +113,8 @@ jobs:
         # We prevent the error from stopping travisci via || true
         - cargo install wasm-pack || true
       before_cache:
+        # this following line is recommended by travis docs if one overrides before_cache
+        - rm -rf "$TRAVIS_HOME/.cargo/registry/src"
         #todo: check if each of these lines is actually needed: https://gist.github.com/jkcclemens/000456ca646bd502cac0dbddcb8fa307
         - rm -rfv $TRAVIS_BUILD_DIR/target/debug/incremental/{big_primes,build_script_build}-*
         - rm -rfv $TRAVIS_BUILD_DIR/target/debug/.fingerprint/big_primes-*
@@ -153,13 +157,11 @@ jobs:
         - ./wasm-opt pkg/big_primes_bg.wasm -O4 -o pkg/big_primes_bg.wasm
         - cd www && cp -r ../pkg/ . && npm install && cd ../
       before_cache:
-        #todo: check if each of these lines is actually needed: https://gist.github.com/jkcclemens/000456ca646bd502cac0dbddcb8fa307
-        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/incremental/{big_primes,build_script_build}-*
-        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/.fingerprint/big_primes-*
-        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/build/big_primes-*
-        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/deps/libbig_primes-*
-        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/deps/big_primes-*
-        - rm -rfv $TRAVIS_BUILD_DIR/target/debug/{big_primes,libbig_primes}.d
+        # this following line is recommended by travis docs if one overrides before_cache
+        - rm -rf "$TRAVIS_HOME/.cargo/registry/src"
+        # for builds using rust nightly, we may aswell not attempt to cache target directory
+        # as every night, this cache is no longer useful
+        - rm -rfv $TRAVIS_BUILD_DIR/target/
         - cargo clean -p big_primes
       script:
         - |
