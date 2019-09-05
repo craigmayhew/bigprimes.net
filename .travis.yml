@@ -163,6 +163,8 @@ jobs:
         # as every night, this cache is no longer useful
         - rm -rfv $TRAVIS_BUILD_DIR/target/
         - cargo clean -p big_primes
+        # wipe out the old www files or we end up with loads of wasm files in the cache
+        - rm -rfv $TRAVIS_BUILD_DIR/www/dist/*
       script:
         - |
           cargo build
