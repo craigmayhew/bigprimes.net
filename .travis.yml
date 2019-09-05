@@ -151,7 +151,6 @@ jobs:
         - wasm-pack build
         - #optimize wasm file
         - ./wasm-opt pkg/big_primes_bg.wasm -O4 -o pkg/big_primes_bg.wasm
-        - gzip -9c pkg/big_primes_bg.wasm > pkg/big_primes_bg.wasm
         - cd www && cp -r ../pkg/ . && npm install && cd ../
       before_cache:
         #todo: check if each of these lines is actually needed: https://gist.github.com/jkcclemens/000456ca646bd502cac0dbddcb8fa307
@@ -170,7 +169,7 @@ jobs:
             cd www && npm run-script build && cd ../
             #TODO: This is not an atomic deploy!
             aws s3 rm s3://bigprimes/* --recursive
-            aws s3 cp www/dist/*.wasm         s3://bigprimes/ --content-type application/wasm --content-encoding gzip --acl public-read && echo 'S3 wasm sync complete.'
+            aws s3 cp www/dist/*.wasm         s3://bigprimes/ --content-type application/wasm --acl public-read && echo 'S3 wasm sync complete.'
             aws s3 cp www/dist/*.html         s3://bigprimes/ && echo 'S3 html sync complete.'
             aws s3 cp www/dist/bootstrap.js   s3://bigprimes/
             aws s3 cp www/dist/0.bootstrap.js s3://bigprimes/ && echo 'S3 js sync complete.'
