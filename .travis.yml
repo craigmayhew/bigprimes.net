@@ -163,15 +163,19 @@ jobs:
         # as every night, this cache is no longer useful
         - rm -rfv $TRAVIS_BUILD_DIR/target/
         - cargo clean -p big_primes
+        # wipe out the old www files or we end up with loads of wasm files in the cache
+        - rm -rfv $TRAVIS_BUILD_DIR/www/dist/*
       script:
         - |
           cargo build
           if([ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_PULL_REQUEST == "false" ])
           then
             cd www && npm run-script build && cd ../
+            #compress wasm with gzip
+            for f in www/*.wasm; do gzip -9c $f > $f; done
             #TODO: This is not an atomic deploy!
             aws s3 rm s3://bigprimes/* --recursive
-            aws s3 cp www/dist/*.wasm         s3://bigprimes/ --content-type application/wasm --acl public-read && echo 'S3 wasm sync complete.'
+            aws s3 cp www/dist/*.wasm         s3://bigprimes/ --content-type application/wasm --content-encoding gzip --acl public-read && echo 'S3 wasm sync complete.'
             aws s3 cp www/dist/*.html         s3://bigprimes/ && echo 'S3 html sync complete.'
             aws s3 cp www/dist/bootstrap.js   s3://bigprimes/
             aws s3 cp www/dist/0.bootstrap.js s3://bigprimes/ && echo 'S3 js sync complete.'
