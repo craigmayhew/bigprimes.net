@@ -143,10 +143,10 @@ jobs:
         - cargo install wasm-pack || true
         # binaryen is used to optimize wasm files for a ~20% size reduction and some extra speed
         - |
-          BINARYEN_VERSION=$(curl --silent "https://api.github.com/repos/WebAssembly/binaryen/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
-          wget https://github.com/WebAssembly/binaryen/releases/download/$BINARYEN_VERSION/binaryen-$BINARYEN_VERSION-aarch64-linux.tar.gz
-          tar -zxvf binaryen-$BINARYEN_VERSION-aarch64-linux.tar.gz binaryen-$BINARYEN_VERSION/wasm-opt
-          mv binaryen-$BINARYEN_VERSION/wasm-opt wasm-opt
+          BINARYENVERSION=$(curl --silent "https://api.github.com/repos/WebAssembly/binaryen/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
+          wget https://github.com/WebAssembly/binaryen/releases/download/$BINARYENVERSION/binaryen-$BINARYENVERSION-aarch64-linux.tar.gz
+          tar -zxvf binaryen-$BINARYENVERSION-aarch64-linux.tar.gz binaryen-$BINARYENVERSION/wasm-opt
+          mv binaryen-$BINARYENVERSION/wasm-opt wasm-opt
       before_script:
         - wasm-pack build
         - #optimize wasm file
