@@ -664,11 +664,18 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
     let html_factors = html_factors(&slug, slug.len(), max_len_factoring);
 
     let table_style = style!{"border" => "1px #000 solid"};
+
+    let spoken_version_of_number:String = numerics_to_text::convert(slug.to_string());
+    let title:String = match spoken_version_of_number.as_ref() {
+        "Error" => slug.to_string(),//just number
+        _ => vec![slug.to_string()," - ".to_string(),spoken_version_of_number].into_iter().collect()//number and text version of number e.g. 1 => one
+    };
+
     div![style!{"width" => "75%"; "padding" => "3px"},
         br![],
         br![],
         b!["The number you submitted to be crunched was:"],
-        h1![slug.to_string()," - ",numerics_to_text::convert(slug.to_string())],
+        h1![title],
         table![attrs!{At::Class => "crunchertable", At::Width => "100%"}, &table_style,
             tbody![
                 tr![
