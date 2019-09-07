@@ -308,90 +308,94 @@ mod numerics_to_text {
     }
 
     pub fn convert(str_num: String) -> String{
-        let units:Vec<&str> = vec![
-            "",
-            " one",
-            " two",
-            " three",
-            " four",
-            " five",
-            " six",
-            " seven",
-            " eight",
-            " nine",
-            " ten",
-            " eleven",
-            " twelve",
-            " thirteen",
-            " fourteen",
-            " fifteen",
-            " sixteen",
-            " seventeen",
-            " eighteen",
-            " nineteen"
-        ];
-        let tens:Vec<&str> = vec![
-            "",
-            "",
-            " twenty",
-            " thirty",
-            " forty",
-            " fifty",
-            " sixty",
-            " seventy",
-            " eighty",
-            " ninety"
-        ];
-        let triplets:Vec<&str> = vec![
-            "",
-            " thousand",
-            " million",
-            " billion",
-            " trillion",
-            " quadrillion",
-            " quintillion",
-            " sextillion",
-            " septillion",
-            " octillion",
-            " nonillion",
-            " decillion",
-            " undecillion",
-            " duodecillion",
-            " tredecillion",
-            " quattuordecillion",
-            " quindecillion",
-            " sexdecillion",
-            " septendecillion",
-            " octodecillion",
-            " novemdecillion",
-            " vigintillion",
-            " unvigintillion",
-            " duovigintillion",
-            " tresvigintillion",
-            " quattuorvigintillion",
-            " quinquavigintillion",
-            " sesvigintillion",
-            " septemvigintillion",
-            " octovigintillion",
-            " novemvigintillion",
-            " trigintillion",
-            " untrigintillion",
-            " duotrigintillion",
-            " trestrigintillion",
-            " quattuortrigintillion",
-            " quinquatrigintillion",
-            " sestrigintillion",
-            " septentrigintillion",
-            " octotrigintillion",
-            " noventrigintillion",
-            " quadragintillion",
-            " ERROR ",
-        ];
+        if str_num.len() >= 127 {
+            "Error".to_string()
+        } else {
+            let units:Vec<&str> = vec![
+                "",
+                " one",
+                " two",
+                " three",
+                " four",
+                " five",
+                " six",
+                " seven",
+                " eight",
+                " nine",
+                " ten",
+                " eleven",
+                " twelve",
+                " thirteen",
+                " fourteen",
+                " fifteen",
+                " sixteen",
+                " seventeen",
+                " eighteen",
+                " nineteen"
+            ];
+            let tens:Vec<&str> = vec![
+                "",
+                "",
+                " twenty",
+                " thirty",
+                " forty",
+                " fifty",
+                " sixty",
+                " seventy",
+                " eighty",
+                " ninety"
+            ];
+            let triplets:Vec<&str> = vec![
+                "",
+                " thousand",
+                " million",
+                " billion",
+                " trillion",
+                " quadrillion",
+                " quintillion",
+                " sextillion",
+                " septillion",
+                " octillion",
+                " nonillion",
+                " decillion",
+                " undecillion",
+                " duodecillion",
+                " tredecillion",
+                " quattuordecillion",
+                " quindecillion",
+                " sexdecillion",
+                " septendecillion",
+                " octodecillion",
+                " novemdecillion",
+                " vigintillion",
+                " unvigintillion",
+                " duovigintillion",
+                " tresvigintillion",
+                " quattuorvigintillion",
+                " quinquavigintillion",
+                " sesvigintillion",
+                " septemvigintillion",
+                " octovigintillion",
+                " novemvigintillion",
+                " trigintillion",
+                " untrigintillion",
+                " duotrigintillion",
+                " trestrigintillion",
+                " quattuortrigintillion",
+                " quinquatrigintillion",
+                " sestrigintillion",
+                " septentrigintillion",
+                " octotrigintillion",
+                " noventrigintillion",
+                " quadragintillion",
+                " ERROR ",
+            ];
 
-        let num:BigUint = num_bigint::BigUint::from_str_radix(&str_num, 10).unwrap();
-        let string:String = convert_tri(num, Zero::zero(), units, tens, triplets);
-        //remove first character which is a space
-        string[1..].to_string()
+            let num:BigUint = num_bigint::BigUint::from_str_radix(&str_num, 10).unwrap();
+            let string:String = convert_tri(num, Zero::zero(), units, tens, triplets);
+            //remove first character which is a space
+            string[1..].to_string()
+        }
     }
 
     fn convert_tri(num:BigUint, tri:usize, units:Vec<&str>, tens:Vec<&str>, triplets:Vec<&str>) -> String {
@@ -818,6 +822,8 @@ mod tests {
         assert_eq!(numerics_to_text::convert("170".to_string()), "one hundred seventy");
         assert_eq!(numerics_to_text::convert("90001".to_string()), "ninety thousand one");
         assert_eq!(numerics_to_text::convert("1001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001000".to_string()), "one noventrigintillion one octotrigintillion one septentrigintillion one sestrigintillion one quinquatrigintillion one quattuortrigintillion one trestrigintillion one duotrigintillion one untrigintillion one trigintillion one novemvigintillion one octovigintillion one septemvigintillion one sesvigintillion one quinquavigintillion one quattuorvigintillion one tresvigintillion one duovigintillion one unvigintillion one vigintillion one novemdecillion one octodecillion one septendecillion one sexdecillion one quindecillion one quattuordecillion one tredecillion one duodecillion one undecillion one decillion one nonillion one octillion one septillion one sextillion one quintillion one quadrillion one trillion one billion one million one thousand");
+        // test anything over 126 characters returns "Error", and if you want to extend this limit, then more definitions should be added to triplets within convert()
+        assert_eq!(numerics_to_text::convert("1999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999".to_string()), "Error");
     }
 
     #[test]
