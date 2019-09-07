@@ -1,6 +1,12 @@
 use seed::prelude::*;
 use crate::Msg;
 
+struct Perfect<'a> {
+    p: u64,
+    digits: u64,
+	discovery: &'a str,
+}
+
 mod perfects_utils {
 	pub fn perfects() -> Vec<Vec<usize>> {
         vec![
