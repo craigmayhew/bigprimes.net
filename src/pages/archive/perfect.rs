@@ -3,6 +3,7 @@ use crate::Msg;
 
 mod perfects_utils {
 	pub struct Perfect<'a> {
+		pub n: u64,
 		pub p: u64,
 		pub digits: u64,
 		pub discovery: &'a str,
@@ -10,7 +11,8 @@ mod perfects_utils {
 
 	pub fn perfects<'a>() -> Vec<Perfect<'a>> {
         vec![
-			Perfect {p: 0, digits: 0, discovery: "Discovered" },
+			Perfect {n: 1, p: 0, digits: 0, discovery: "Discovered" },
+			Perfect {n: 2, p: 0, digits: 0, discovery: "Discovered" },
 		]
 	}
 }
@@ -20,15 +22,15 @@ pub fn render() -> seed::dom_types::Node<Msg> {
 
     let perfects = perfects_utils::perfects();
 
-    for n in 1..perfects.len() {
-        let download_txt:String = vec!["https://static.bigprimes.net/archive/perfect/M",&n.to_string(),".txt"].into_iter().collect();
-        let download_zip:String = vec!["https://static.bigprimes.net/archive/perfect/M",&n.to_string(),".zip"].into_iter().collect();
+    for n in 0..perfects.len() {
+        let download_txt:String = vec!["https://static.bigprimes.net/archive/perfect/M",&perfects[n].n.to_string(),".txt"].into_iter().collect();
+        let download_zip:String = vec!["https://static.bigprimes.net/archive/perfect/M",&perfects[n].n.to_string(),".zip"].into_iter().collect();
         html.push(
             tr![
-                td![n.to_string()],//rank
+                td![perfects[n].n.to_string()],//rank
                 td!["2",sup![perfects[n].p.to_string()],"-1"],//perfect number as a formula
                 td![perfects[n].digits.to_string()],//digits in length
-                //td![perfects_utils::perfects_discovery_dates(n)],//disocvery
+                td![perfects[n].discovery],//disocvery
                 if n >= 30 {a![attrs!{At::Href => download_zip},"ZIP"]} else {a![attrs!{At::Href => download_txt},"TXT"]}//downloads
             ]
         );
