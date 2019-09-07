@@ -71,15 +71,15 @@ pub fn render() -> seed::dom_types::Node<Msg> {
     let perfects = perfects_utils::perfects();
 
     for n in 0..perfects.len() {
-        let download_txt:String = vec!["https://static.bigprimes.net/archive/perfect/M",&perfects[n].n.to_string(),".txt"].into_iter().collect();
-        let download_zip:String = vec!["https://static.bigprimes.net/archive/perfect/M",&perfects[n].n.to_string(),".zip"].into_iter().collect();
+        let download_txt:String = vec!["https://static.bigprimes.net/archive/perfect/",&perfects[n].n.to_string(),".txt"].into_iter().collect();
+        let download_zip:String = vec!["https://static.bigprimes.net/archive/perfect/",&perfects[n].n.to_string(),".zip"].into_iter().collect();
         html.push(
             tr![
                 td![perfects[n].n.to_string()],//rank
                 td![El::from_html(perfects[n].p)],//perfect number as a formula
                 td![perfects[n].digits.to_string()],//digits in length
                 td![perfects[n].discovery],//disocvery
-                if n >= 30 {a![attrs!{At::Href => download_zip},"ZIP"]} else {a![attrs!{At::Href => download_txt},"TXT"]}//downloads
+                if perfects[n].n >= 25 {a![attrs!{At::Href => download_zip},"ZIP"]} else {a![attrs!{At::Href => download_txt},"TXT"]}//downloads
             ]
         );
     }
