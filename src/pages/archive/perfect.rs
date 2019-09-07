@@ -1,6 +1,68 @@
 use seed::prelude::*;
 use crate::Msg;
 
+mod perfects_utils {
+	pub fn perfects() -> Vec<Vec<usize>> {
+        vec![
+            //vec![p,digits]
+            vec![0,     0],//faux zero entry to make things easier when reading this vector
+            vec![2,     1],
+		]
+	}
+}
+
+pub fn render() -> seed::dom_types::Node<Msg> {
+    let mut html = vec![];
+
+    let perfects = perfects_utils::perfects();
+
+    for n in 1..perfects.len() {
+        let download_txt:String = vec!["https://static.bigprimes.net/archive/perfect/M",&n.to_string(),".txt"].into_iter().collect();
+        let download_zip:String = vec!["https://static.bigprimes.net/archive/perfect/M",&n.to_string(),".zip"].into_iter().collect();
+        html.push(
+            tr![
+                td![n.to_string()],//rank
+                td!["2",sup![perfects[n][0].to_string()],"-1"],//perfect number as a formula
+                td![perfects[n][1].to_string()],//digits in length
+                td![perfects_utils::perfects_discovery_dates(n)],//disocvery
+                if n >= 30 {a![attrs!{At::Href => download_zip},"ZIP"]} else {a![attrs!{At::Href => download_txt},"TXT"]}//downloads
+            ]
+        );
+    }
+
+    html.reverse();
+
+    div![
+        h1!["The Mersenne Numbers"],
+        br![],
+        br![],
+        br![],
+        table![
+            attrs!{At::Class => "mersennetable text"},
+            tbody![
+                tr![
+                    td![
+                        b!["No."]
+                    ],
+                    td![
+                        b!["Prime"]
+                    ],	
+                    td![
+                        b!["Digits"]
+                    ],	
+                    td![
+                        b!["Discovered"]
+                    ],
+                    td![
+                        b!["Download"]
+                    ]
+                ],
+                html
+            ]
+        ]
+    ]
+}
+
 pub fn render() -> seed::dom_types::Node<Msg> {
     
     div![
