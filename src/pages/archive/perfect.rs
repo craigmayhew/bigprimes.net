@@ -76,7 +76,7 @@ pub fn render() -> seed::dom_types::Node<Msg> {
         html.push(
             tr![
                 td![perfects[n].n.to_string()],//rank
-                td!["2",sup![perfects[n].p.to_string()],"-1"],//perfect number as a formula
+                td![El::from_html(perfects[n].p)],//perfect number as a formula
                 td![perfects[n].digits.to_string()],//digits in length
                 td![perfects[n].discovery],//disocvery
                 if n >= 30 {a![attrs!{At::Href => download_zip},"ZIP"]} else {a![attrs!{At::Href => download_txt},"TXT"]}//downloads
