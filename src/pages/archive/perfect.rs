@@ -11,6 +11,7 @@ mod perfects_utils {
 
 	pub fn perfects<'a>() -> Vec<Perfect<'a>> {
         vec![
+			Perfect {n: 51, p: "2<sup>82589933</sup> × (2<sup>82589934</sup>-1)", digits: 49724095, discovery: "2018 Laroche, Woltman, Kurowski, Blosser, et al."},
 			Perfect {n: 50, p: "2<sup>77232916</sup> × (2<sup>77232917</sup>-1)", digits: 46498850, discovery: "2017 Jonathan Pace, George Woltman, Scott Kurowski, Aaron Blosser, et al.." },
 			Perfect {n: 49, p: "2<sup>74207280</sup> × (2<sup>74207281</sup>-1)", digits: 44677235, discovery: "2016 Cooper, Woltman, Kurowski, Blosser et al." },
 			Perfect {n: 48, p: "2<sup>57885160</sup> × (2<sup>57885161</sup>-1)", digits: 34850340, discovery: "2013 Cooper, Woltman, Kurowski, et al." },
@@ -121,8 +122,9 @@ mod tests {
 
     #[test]
     fn perfect_test<'a>() {
-        let perfects:Vec<perfects_utils::Perfect<'a>> = perfects_utils::perfects();
-        assert_eq!(perfects[0].digits, 46498850);
-        assert_eq!(perfects[10].digits, 12640858);
+        let mut perfects:Vec<perfects_utils::Perfect<'a>> = perfects_utils::perfects();
+		perfects.reverse();
+        assert_eq!(perfects[49].digits, 46498850);
+        assert_eq!(perfects[39].digits, 12640858);
     }
 }
