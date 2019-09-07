@@ -114,3 +114,15 @@ pub fn render() -> seed::dom_types::Node<Msg> {
         ]
     ]
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn perfect_test<'a>() {
+        let perfects:Vec<perfects_utils::Perfect<'a>> = perfects_utils::perfects();
+        assert_eq!(perfects[0].digits, 46498850);
+        assert_eq!(perfects[10].digits, 12640858);
+    }
+}
