@@ -1,18 +1,16 @@
 use seed::prelude::*;
 use crate::Msg;
 
-struct Perfect<'a> {
-    p: u64,
-    digits: u64,
-	discovery: &'a str,
-}
-
 mod perfects_utils {
-	pub fn perfects() -> Vec<Vec<usize>> {
+	pub struct Perfect<'a> {
+		pub p: u64,
+		pub digits: u64,
+		pub discovery: &'a str,
+	}
+
+	pub fn perfects<'a>() -> Vec<Perfect<'a>> {
         vec![
-            //vec![p,digits]
-            vec![0,     0],//faux zero entry to make things easier when reading this vector
-            vec![2,     1],
+			Perfect {p: 0, digits: 0, discovery: "Discovered" },
 		]
 	}
 }
@@ -28,9 +26,9 @@ pub fn render() -> seed::dom_types::Node<Msg> {
         html.push(
             tr![
                 td![n.to_string()],//rank
-                td!["2",sup![perfects[n][0].to_string()],"-1"],//perfect number as a formula
-                td![perfects[n][1].to_string()],//digits in length
-                td![perfects_utils::perfects_discovery_dates(n)],//disocvery
+                td!["2",sup![perfects[n].p.to_string()],"-1"],//perfect number as a formula
+                td![perfects[n].digits.to_string()],//digits in length
+                //td![perfects_utils::perfects_discovery_dates(n)],//disocvery
                 if n >= 30 {a![attrs!{At::Href => download_zip},"ZIP"]} else {a![attrs!{At::Href => download_txt},"TXT"]}//downloads
             ]
         );
@@ -69,7 +67,7 @@ pub fn render() -> seed::dom_types::Node<Msg> {
     ]
 }
 
-pub fn render() -> seed::dom_types::Node<Msg> {
+pub fn render_old() -> seed::dom_types::Node<Msg> {
     
     div![
         h1!["The Perfect Numbers"],
