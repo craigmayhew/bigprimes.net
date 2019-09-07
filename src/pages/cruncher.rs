@@ -388,7 +388,6 @@ mod numerics_to_text {
                 " octotrigintillion",
                 " noventrigintillion",
                 " quadragintillion",
-                " ERROR ",
             ];
 
             let num:BigUint = num_bigint::BigUint::from_str_radix(&str_num, 10).unwrap();
