@@ -307,7 +307,7 @@ mod numerics_to_text {
         den2numerals(&n, glyphs)
     }
 
-    pub fn convert(str_num: String) -> String{
+    pub fn convert(str_num: String) -> String {
         let units:Vec<&str> = vec![
             "",
             " one",
@@ -385,13 +385,16 @@ mod numerics_to_text {
             " octotrigintillion",
             " noventrigintillion",
             " quadragintillion",
-            " ERROR ",
         ];
-
-        let num:BigUint = num_bigint::BigUint::from_str_radix(&str_num, 10).unwrap();
-        let string:String = convert_tri(num, Zero::zero(), units, tens, triplets);
-        //remove first character which is a space
-        string[1..].to_string()
+        
+        if str_num.len() > triplets.len()*3 {
+            "Error".to_string()
+        } else {
+            let num:BigUint = num_bigint::BigUint::from_str_radix(&str_num, 10).unwrap();
+            let string:String = convert_tri(num, Zero::zero(), units, tens, triplets);
+            //remove first character which is a space
+            string[1..].to_string()
+        }
     }
 
     fn convert_tri(num:BigUint, tri:usize, units:Vec<&str>, tens:Vec<&str>, triplets:Vec<&str>) -> String {
@@ -512,21 +515,21 @@ fn html_form() -> seed::dom_types::Node<Msg> {
             li!["Is it odd or even?"],
             li!["Is it a palindrome?"],
             li!["Is it a prime number? (Checks numbers upto ",MAX_LEN_PRIME_CHECK.to_string()," digits in length)"],
-            li!["Is it a ",a!["mersenne prime", attrs!{At::Class => "link", At::Href => "https://en.wikipedia.org/wiki/Mersenne_prime"}],"? (Checks numbers upto 2993 digits in length)"],
-            li!["Is it a ",a!["fermat prime", attrs!{At::Class => "link", At::Href => "https://www.fermatsearch.org/"}],"? (Checks numbers upto 155 digits in length"],
-            li!["Is it a ",a!["perfect number", attrs!{At::Class => "link", At::Href => "https://en.wikipedia.org/wiki/Perfect_number"}],"? (Checks numbers upto 12003 digits in length)"],
-            li!["Is it a triangle number? (Checks numbers upto 40 digits in length)"],
+            li!["Is it a ",a!["mersenne prime", attrs!{At::Class => "link", At::Href => "https://en.wikipedia.org/wiki/Mersenne_prime"}],"?"],
+            li!["Is it a ",a!["fermat prime", attrs!{At::Class => "link", At::Href => "https://www.fermatsearch.org/"}],"?"],
+            li!["Is it a ",a!["perfect number", attrs!{At::Class => "link", At::Href => "https://en.wikipedia.org/wiki/Perfect_number"}],"?"],
+            li!["Is it a triangle number?"],
             li!["Is it a square number?"],
-            li!["Is it a cube number? (Checks numbers upto 17 digits in length)"],
+            li!["Is it a cube number?"],
             li!["Is it a factorial number?"],
             br![],
             br![],
-            li!["All factors of the number will be listed (for numbers upto 9 digits)"],
-            li!["The page will also show a list of base conversions. e.g. binary, octal and hexadecimal (Numbers upto 500 digits in length)"],
-            li!["The number will be converted to roman numerals (Upto 6 digits in length)"],
-            li!["The number will be converted to egyptian numerals (Upto 7 digits in length)"],
-            li!["The number will be converted to chinese numerals (Upto 6 digits in length)"],
-            li!["The number will be converted to babylonian numerals (Upto 13 digits in length)"],
+            li!["All factors of the number will be listed"],
+            li!["The page will also show a list of base conversions. e.g. binary, octal and hexadecimal"],
+            li!["The number will be converted to roman numerals"],
+            li!["The number will be converted to egyptian numerals"],
+            li!["The number will be converted to chinese numerals"],
+            li!["The number will be converted to babylonian numerals"],
         ],
         br![],
         br![],
@@ -661,11 +664,18 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
     let html_factors = html_factors(&slug, slug.len(), max_len_factoring);
 
     let table_style = style!{"border" => "1px #000 solid"};
+
+    let spoken_version_of_number:String = numerics_to_text::convert(slug.to_string());
+    let title:String = match spoken_version_of_number.as_ref() {
+        "Error" => slug.to_string(),//just number
+        _ => vec![slug.to_string()," - ".to_string(),spoken_version_of_number].into_iter().collect()//number and text version of number e.g. 1 => one
+    };
+
     div![style!{"width" => "75%"; "padding" => "3px"},
         br![],
         br![],
         b!["The number you submitted to be crunched was:"],
-        h1![slug.to_string()," - ",numerics_to_text::convert(slug.to_string())],
+        h1![title],
         table![attrs!{At::Class => "crunchertable", At::Width => "100%"}, &table_style,
             tbody![
                 tr![
@@ -818,6 +828,8 @@ mod tests {
         assert_eq!(numerics_to_text::convert("170".to_string()), "one hundred seventy");
         assert_eq!(numerics_to_text::convert("90001".to_string()), "ninety thousand one");
         assert_eq!(numerics_to_text::convert("1001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001000".to_string()), "one noventrigintillion one octotrigintillion one septentrigintillion one sestrigintillion one quinquatrigintillion one quattuortrigintillion one trestrigintillion one duotrigintillion one untrigintillion one trigintillion one novemvigintillion one octovigintillion one septemvigintillion one sesvigintillion one quinquavigintillion one quattuorvigintillion one tresvigintillion one duovigintillion one unvigintillion one vigintillion one novemdecillion one octodecillion one septendecillion one sexdecillion one quindecillion one quattuordecillion one tredecillion one duodecillion one undecillion one decillion one nonillion one octillion one septillion one sextillion one quintillion one quadrillion one trillion one billion one million one thousand");
+        // test anything over triplets vector size * 3 returns "Error", and if you want to extend this limit, then more definitions should be added to triplets within convert()
+        assert_eq!(numerics_to_text::convert("1999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999".to_string()), "Error");
     }
 
     #[test]
