@@ -32,7 +32,7 @@ mod fermat_utils {
     }
 
     pub fn save_as_file(filename:String, filecontent:String) -> seed::dom_types::Node<Msg> {
-        let href:String = vec!["data:text/plain;",&filecontent].into_iter().collect();
+        let href:String = vec!["data:text/plain,",&filecontent].into_iter().collect();
         a![attrs!{At::Download => &filename, At::Href => &href}, "TXT"]
     }
 }
@@ -44,7 +44,7 @@ pub fn render() -> seed::dom_types::Node<Msg> {
     let mut fermats = fermat_utils::fermats();
 
     for n in 0..fermats.len() {
-        let download_txt:String = vec!["https://static.bigprimes.net/archive/fermat/F",&fermats[n].n.to_string(),".txt"].into_iter().collect();
+        //let download_txt:String = vec!["https://static.bigprimes.net/archive/fermat/F",&fermats[n].n.to_string(),".txt"].into_iter().collect();
 
 		let equation:String = vec!["2<sup>",&(two.pow((fermats.len()-1-n).try_into().unwrap())).to_string(),"</sup>+1"].into_iter().collect();
 
@@ -55,7 +55,8 @@ pub fn render() -> seed::dom_types::Node<Msg> {
 				
                 td![fermats[n].digits.to_string()],//digits in length
                 td![El::from_html(fermats[n].prime_factors)],//prime factors
-                a![attrs!{At::Href => download_txt},"TXT"],//downloads
+                //a![attrs!{At::Href => download_txt},"TXT"],//downloads
+                fermat_utils::save_as_file(String::from("digital.txt"),String::from("sanctum")),
             ]
         );
     }
