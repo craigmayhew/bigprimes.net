@@ -1,9 +1,5 @@
 use seed::prelude::*;
 use crate::Msg;
-
-extern crate num_bigint as bigint;
-extern crate num_traits;
-
 use crate::utils::nth;
 use regex::Regex;
 
