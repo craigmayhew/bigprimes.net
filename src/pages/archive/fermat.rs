@@ -92,3 +92,17 @@ pub fn render() -> seed::dom_types::Node<Msg> {
         ]
     ]
 }
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn fermat_test<'a>() {
+        let mut fermats:Vec<fermat_utils::Fermat<'a>> = fermat_utils::fermats();
+		fermats.reverse();
+        assert_eq!(fermats[2].prime_factors, "<a href=\"/cruncher/17/\">P7</a>");
+        assert_eq!(fermats[11].digits, 617);
+    }
+}
