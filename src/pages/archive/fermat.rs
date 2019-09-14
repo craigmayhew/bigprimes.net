@@ -2,6 +2,9 @@ use seed::prelude::*;
 use crate::Msg;
 use std::convert::TryInto;
 
+use num_traits::{pow};
+use num_bigint::{BigUint,ToBigUint};
+
 mod fermat_utils {
     use seed::prelude::*;
     use crate::Msg;
@@ -44,9 +47,11 @@ pub fn render() -> seed::dom_types::Node<Msg> {
     let mut fermats = fermat_utils::fermats();
 
     for n in 0..fermats.len() {
-        //let download_txt:String = vec!["https://static.bigprimes.net/archive/fermat/F",&fermats[n].n.to_string(),".txt"].into_iter().collect();
+        let download_filename:String = vec!["F",&fermats[n].n.to_string(),".txt"].into_iter().collect();
 
 		let equation:String = vec!["2<sup>",&(two.pow((fermats.len()-1-n).try_into().unwrap())).to_string(),"</sup>+1"].into_iter().collect();
+        let nth_fermat:usize = fermats.len()-1-n;//counts from 11 to 0
+        let fermat_value:BigUint = pow(two.to_biguint().unwrap(), pow(two, nth_fermat)) + 1.to_biguint().unwrap();
 
         html.push(
             tr![
@@ -55,8 +60,7 @@ pub fn render() -> seed::dom_types::Node<Msg> {
 				
                 td![fermats[n].digits.to_string()],//digits in length
                 td![El::from_html(fermats[n].prime_factors)],//prime factors
-                //a![attrs!{At::Href => download_txt},"TXT"],//downloads
-                fermat_utils::save_as_file(String::from("digital.txt"),String::from("sanctum")),
+                td![fermat_utils::save_as_file(String::from(download_filename),fermat_value.to_string())],
             ]
         );
     }
