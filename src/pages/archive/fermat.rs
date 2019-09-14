@@ -1,9 +1,14 @@
 use seed::prelude::*;
 use crate::Msg;
 
-pub fn save_as_file(filename:String, filecontent:String) -> seed::dom_types::Node<Msg> {
-    let href:String = vec!["data:text/plain;",&filecontent].into_iter().collect();
-    a![attrs!{At::Download => &filename, At::Href => &href}, "TXT"]
+mod fermat_utils {
+    use seed::prelude::*;
+    use crate::Msg;
+
+    pub fn save_as_file(filename:String, filecontent:String) -> seed::dom_types::Node<Msg> {
+        let href:String = vec!["data:text/plain;",&filecontent].into_iter().collect();
+        a![attrs!{At::Download => &filename, At::Href => &href}, "TXT"]
+    }
 }
 
 pub fn render() -> seed::dom_types::Node<Msg> {
