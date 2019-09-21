@@ -97,6 +97,31 @@ Resources:
           Resource: !Sub 'arn:aws:s3:::${S3Bucket}/*'
           Principal:
             CanonicalUser: !GetAtt CloudFrontOriginAccessIdentity.S3CanonicalUserId
+            
+  RedirectS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: bigprimes-redirect
+      AccessControl: PublicRead
+      WebsiteConfiguration:
+        RedirectAllRequestsTo:
+          HostName: 'www.bigprimes.net'
+          Protocol: https
+    DeletionPolicy: Delete
+
+  RedirectBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref RedirectS3Bucket
+      PolicyDocument:
+        Id: MyPolicy
+        Version: 2012-10-17
+        Statement:
+          - Action: 's3:GetObject'
+            Effect: Allow
+            Resource: !Sub 'arn:aws:s3:::${RedirectS3Bucket}/*'
+            Principal:
+              CanonicalUser: !GetAtt RedirectCloudFrontOriginAccessIdentity.S3CanonicalUserId
 
   PublishUser:
     Type: AWS::IAM::User
