@@ -30,7 +30,7 @@ Resources:
             QueryString: 'false'
             Cookies:
               Forward: all
-          ViewerProtocolPolicy: allow-all
+          ViewerProtocolPolicy: redirect-to-https
         CustomErrorResponses:
         - ErrorCode: '404'
           ResponsePagePath: "/index.html"
