@@ -45,21 +45,71 @@ Resources:
         - Key: application
           Value: bigprimes.net
 
+  RedirectCloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Origins:
+        - DomainName: !GetAtt 'RedirectS3Bucket.RegionalDomainName'
+          Id: bigprimesCustomOrigin
+          S3OriginConfig:
+            OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${RedirectCloudFrontOriginAccessIdentity}'
+        Enabled: 'true'
+        Comment: bigprimes.net redirect
+        DefaultRootObject: index.html
+        Aliases:
+        - "bigprimes.net"
+        HttpVersion: http2
+        DefaultCacheBehavior:
+          Compress: 'true'
+          TargetOriginId: bigprimesCustomOrigin
+          SmoothStreaming: 'false'
+          ForwardedValues:
+            QueryString: 'false'
+            Cookies:
+              Forward: all
+          ViewerProtocolPolicy: redirect-to-https
+        PriceClass: PriceClass_100
+        ViewerCertificate:
+          AcmCertificateArn: !Ref ParamCertificateARN
+          MinimumProtocolVersion: TLSv1.1_2016
+          SslSupportMethod: sni-only
+      Tags:
+        - Key: application
+          Value: bigprimes.net
+
   CloudFrontOriginAccessIdentity:
     Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
     Properties:
       CloudFrontOriginAccessIdentityConfig:
         Comment: !Ref S3Bucket
 
+  RedirectCloudFrontOriginAccessIdentity:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: !Ref RedirectS3Bucket
+
   WWWDNSRecord:
     Type: AWS::Route53::RecordSet
     Properties:
       HostedZoneName: bigprimes.net.
-      Comment: Bigprimes API
+      Comment: Bigprimes
       Name: "www.bigprimes.net"
       Type: CNAME
       TTL: '300'
       ResourceRecords: [!GetAtt 'CloudFrontDistribution.DomainName']
+
+  ApexDNSRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      AliasTarget:
+        HostedZoneId: Z2FDTNDATAQYW2 #curiously this hardcoded value is recommened by AWS documentation
+        DNSName: !GetAtt 'RedirectCloudFrontDistribution.DomainName'
+      HostedZoneName: bigprimes.net.
+      Comment: Bigprimes
+      Name: "bigprimes.net"
+      Type: A
 
   S3Bucket:
     Type: AWS::S3::Bucket
@@ -97,7 +147,7 @@ Resources:
           Resource: !Sub 'arn:aws:s3:::${S3Bucket}/*'
           Principal:
             CanonicalUser: !GetAtt CloudFrontOriginAccessIdentity.S3CanonicalUserId
-            
+
   RedirectS3Bucket:
     Type: AWS::S3::Bucket
     Properties:
