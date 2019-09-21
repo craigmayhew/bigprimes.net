@@ -51,7 +51,7 @@ Resources:
       CloudFrontOriginAccessIdentityConfig:
         Comment: !Ref S3Bucket
 
-  APIDNSRecord:
+  WWWDNSRecord:
     Type: AWS::Route53::RecordSet
     Properties:
       HostedZoneName: bigprimes.net.
