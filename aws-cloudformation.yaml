@@ -50,13 +50,12 @@ Resources:
     Properties:
       DistributionConfig:
         Origins:
-        - DomainName: !GetAtt 'RedirectS3Bucket.RegionalDomainName'
+        - DomainName: !Sub bigprimes-redirect.s3-website-${AWS::Region}.amazonaws.com
           Id: bigprimesCustomOrigin
-          S3OriginConfig:
-            OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${RedirectCloudFrontOriginAccessIdentity}'
+          CustomOriginConfig:
+            OriginProtocolPolicy: http-only
         Enabled: 'true'
         Comment: bigprimes.net redirect
-        DefaultRootObject: index.html
         Aliases:
         - "bigprimes.net"
         HttpVersion: http2
