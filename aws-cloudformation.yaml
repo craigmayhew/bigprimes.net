@@ -30,12 +30,44 @@ Resources:
             QueryString: 'false'
             Cookies:
               Forward: all
-          ViewerProtocolPolicy: allow-all
+          ViewerProtocolPolicy: redirect-to-https
         CustomErrorResponses:
         - ErrorCode: '404'
           ResponsePagePath: "/index.html"
           ResponseCode: '200'
           ErrorCachingMinTTL: '30'
+        PriceClass: PriceClass_100
+        ViewerCertificate:
+          AcmCertificateArn: !Ref ParamCertificateARN
+          MinimumProtocolVersion: TLSv1.1_2016
+          SslSupportMethod: sni-only
+      Tags:
+        - Key: application
+          Value: bigprimes.net
+
+  RedirectCloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Origins:
+        - DomainName: !Sub bigprimes-redirect.s3-website-${AWS::Region}.amazonaws.com
+          Id: bigprimesCustomOrigin
+          CustomOriginConfig:
+            OriginProtocolPolicy: http-only
+        Enabled: 'true'
+        Comment: bigprimes.net redirect
+        Aliases:
+        - "bigprimes.net"
+        HttpVersion: http2
+        DefaultCacheBehavior:
+          Compress: 'true'
+          TargetOriginId: bigprimesCustomOrigin
+          SmoothStreaming: 'false'
+          ForwardedValues:
+            QueryString: 'false'
+            Cookies:
+              Forward: all
+          ViewerProtocolPolicy: redirect-to-https
         PriceClass: PriceClass_100
         ViewerCertificate:
           AcmCertificateArn: !Ref ParamCertificateARN
@@ -51,15 +83,32 @@ Resources:
       CloudFrontOriginAccessIdentityConfig:
         Comment: !Ref S3Bucket
 
-  APIDNSRecord:
+  RedirectCloudFrontOriginAccessIdentity:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: !Ref RedirectS3Bucket
+
+  WWWDNSRecord:
     Type: AWS::Route53::RecordSet
     Properties:
       HostedZoneName: bigprimes.net.
-      Comment: Bigprimes API
+      Comment: Bigprimes
       Name: "www.bigprimes.net"
       Type: CNAME
       TTL: '300'
       ResourceRecords: [!GetAtt 'CloudFrontDistribution.DomainName']
+
+  ApexDNSRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      AliasTarget:
+        HostedZoneId: Z2FDTNDATAQYW2 #curiously this hardcoded value is recommened by AWS documentation
+        DNSName: !GetAtt 'RedirectCloudFrontDistribution.DomainName'
+      HostedZoneName: bigprimes.net.
+      Comment: Bigprimes
+      Name: "bigprimes.net"
+      Type: A
 
   S3Bucket:
     Type: AWS::S3::Bucket
@@ -86,7 +135,7 @@ Resources:
             Resource:
               - !Sub 'arn:aws:s3:::${S3Bucket}/*'
 
-  ReadPolicy:
+  S3BucketReadPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
       Bucket: !Ref S3Bucket
@@ -97,6 +146,31 @@ Resources:
           Resource: !Sub 'arn:aws:s3:::${S3Bucket}/*'
           Principal:
             CanonicalUser: !GetAtt CloudFrontOriginAccessIdentity.S3CanonicalUserId
+
+  RedirectS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: bigprimes-redirect
+      AccessControl: PublicRead
+      WebsiteConfiguration:
+        RedirectAllRequestsTo:
+          HostName: 'www.bigprimes.net'
+          Protocol: https
+    DeletionPolicy: Delete
+
+  RedirectBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref RedirectS3Bucket
+      PolicyDocument:
+        Id: MyPolicy
+        Version: 2012-10-17
+        Statement:
+          - Action: 's3:GetObject'
+            Effect: Allow
+            Resource: !Sub 'arn:aws:s3:::${RedirectS3Bucket}/*'
+            Principal:
+              CanonicalUser: !GetAtt RedirectCloudFrontOriginAccessIdentity.S3CanonicalUserId
 
   PublishUser:
     Type: AWS::IAM::User
