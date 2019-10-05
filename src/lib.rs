@@ -47,7 +47,7 @@ pub enum Msg {
 }
 
 /// The sole source of updating the model
-fn update(msg: Msg, model: &mut Model, _: &mut Orders<Msg>) {
+fn update(msg: Msg, model: &mut Model, _: &mut impl Orders<Msg>) {
     match msg {
         Msg::ChangePage(page, slug) => {model.page = page; model.slug = slug}
     }
@@ -139,10 +139,16 @@ fn routes(url: seed::Url) -> Msg {
 
 #[wasm_bindgen(start)]
 pub fn render() {
-    seed::App::build(Model::default(), update, view)
+    seed::App::build(init, update, view)
         .mount("app")
         .routes(routes)
         //.window_events(window_events)
         .finish()
         .run();
+}
+
+fn init(url: Url, orders: &mut impl Orders<Msg>) -> Model {
+    let mut model = Model::default();
+    update(routes(url), &mut model, orders);
+    model
 }
