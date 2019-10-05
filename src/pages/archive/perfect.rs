@@ -73,7 +73,6 @@ pub fn render() -> seed::dom_types::Node<Msg> {
 
     for n in 0..perfects.len() {
         let download_txt:String = vec!["https://static.bigprimes.net/archive/perfect/",&perfects[n].n.to_string(),".txt"].into_iter().collect();
-        let download_zip:String = vec!["https://static.bigprimes.net/archive/perfect/",&perfects[n].n.to_string(),".zip"].into_iter().collect();
 
 		let equation:String = vec!["2<sup>",&(perfects[n].p-1).to_string(),"</sup> × (2<sup>",&(perfects[n].p).to_string(),"</sup>-1)"].into_iter().collect();
 
@@ -84,7 +83,7 @@ pub fn render() -> seed::dom_types::Node<Msg> {
 				
                 td![perfects[n].digits.to_string()],//digits in length
                 td![perfects[n].discovery],//disocvery
-                if perfects[n].n >= 25 {a![attrs!{At::Href => download_zip},"ZIP"]} else {a![attrs!{At::Href => download_txt},"TXT"]}//downloads
+                a![attrs!{At::Href => download_txt},"TXT"]//downloads
             ]
         );
     }
