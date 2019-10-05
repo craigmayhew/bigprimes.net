@@ -1,7 +1,13 @@
 use seed::prelude::*;
 use crate::Msg;
 
+use num_traits::{pow,ToPrimitive};
+use num_bigint::{BigUint,ToBigUint};
+
 mod perfects_utils {
+    use seed::prelude::*;
+    use crate::Msg;
+
 	pub struct Perfect<'a> {
 		pub n: u64,
 		pub p: u64,
@@ -11,7 +17,7 @@ mod perfects_utils {
 
 	pub fn perfects<'a>() -> Vec<Perfect<'a>> {
         vec![
-			Perfect {n: 51, p: 82589934, digits: 49724095, discovery: "2018 Laroche, Woltman, Kurowski, Blosser, et al."},
+			/*Perfect {n: 51, p: 82589934, digits: 49724095, discovery: "2018 Laroche, Woltman, Kurowski, Blosser, et al."},
 			Perfect {n: 50, p: 77232917, digits: 46498850, discovery: "2017 Jonathan Pace, George Woltman, Scott Kurowski, Aaron Blosser, et al.." },
 			Perfect {n: 49, p: 74207281, digits: 44677235, discovery: "2016 Cooper, Woltman, Kurowski, Blosser et al." },
 			Perfect {n: 48, p: 57885161, digits: 34850340, discovery: "2013 Cooper, Woltman, Kurowski, et al." },
@@ -31,7 +37,7 @@ mod perfects_utils {
 			Perfect {n: 34, p: 1257787, digits: 757263, discovery: "1996 Slowinski&amp;Gage" },
 			Perfect {n: 33, p: 859433, digits: 517430, discovery: "1994 Slowinski&amp;Gage" },
 			Perfect {n: 32, p: 756839, digits: 455663, discovery: "1992 Slowinski&amp;Gage" },
-			Perfect {n: 31, p: 216091, digits: 130100, discovery: "1985 Slowinski" },
+			Perfect {n: 31, p: 216091, digits: 130100, discovery: "1985 Slowinski" },*/
 			Perfect {n: 30, p: 132049, digits: 79502, discovery: "1983 Slowinski" },
 			Perfect {n: 29, p: 110503, digits: 66530, discovery: "1988 Colquitt&amp;Welsh" },
 			Perfect {n: 28, p: 86243, digits: 51924, discovery: "1982 Slowinski" },
@@ -64,17 +70,28 @@ mod perfects_utils {
 			Perfect {n: 1, p: 3, digits: 1, discovery: "?" },
 		]
 	}
+
+	pub fn save_as_file(filename:String, filecontent:String) -> seed::dom_types::Node<Msg> {
+        let href:String = vec!["data:text/plain,",&filecontent].into_iter().collect();
+        a![attrs!{At::Download => &filename, At::Href => &href}, "TXT"]
+    }
 }
 
 pub fn render() -> seed::dom_types::Node<Msg> {
     let mut html = vec![];
+	let two:BigUint = 2.to_biguint().unwrap();
 
     let perfects = perfects_utils::perfects();
 
     for n in 0..perfects.len() {
+		let download_filename:String = format!("P{}.txt",&perfects[n].n.to_string());
         let download_txt:String = format!("https://static.bigprimes.net/archive/perfect/{}.txt",&perfects[n].n.to_string());
 
 		let equation:String = format!("2<sup>{}</sup> × (2<sup>{}</sup>-1)",&(perfects[n].p-1).to_string(),&(perfects[n].p).to_string());
+		
+		let p:usize = perfects[n].p.to_usize().unwrap();
+		let power:BigUint = pow(two.clone(), p-1);
+        let perfect_value:BigUint = power.clone() * ((power.clone()*two.clone()) -1.to_biguint().unwrap()) ;
 
         html.push(
             tr![
@@ -83,7 +100,8 @@ pub fn render() -> seed::dom_types::Node<Msg> {
 				
                 td![perfects[n].digits.to_string()],//digits in length
                 td![perfects[n].discovery],//disocvery
-                a![attrs!{At::Href => download_txt},"TXT"]//downloads
+                td![a![attrs!{At::Href => download_txt},"TXT"]],//downloads
+				td![perfects_utils::save_as_file(String::from(download_filename),perfect_value.to_string())],
             ]
         );
     }
