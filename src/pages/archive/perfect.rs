@@ -72,9 +72,9 @@ pub fn render() -> seed::dom_types::Node<Msg> {
     let perfects = perfects_utils::perfects();
 
     for n in 0..perfects.len() {
-        let download_txt:String = vec!["https://static.bigprimes.net/archive/perfect/",&perfects[n].n.to_string(),".txt"].into_iter().collect();
+        let download_txt:String = format!("https://static.bigprimes.net/archive/perfect/{}.txt",&perfects[n].n.to_string());
 
-		let equation:String = vec!["2<sup>",&(perfects[n].p-1).to_string(),"</sup> × (2<sup>",&(perfects[n].p).to_string(),"</sup>-1)"].into_iter().collect();
+		let equation:String = format!("2<sup>{}</sup> × (2<sup>{}</sup>-1)",&(perfects[n].p-1).to_string(),&(perfects[n].p).to_string());
 
         html.push(
             tr![
