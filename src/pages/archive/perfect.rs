@@ -1,10 +1,6 @@
 use seed::prelude::*;
 use crate::Msg;
 
-use num_traits::{ToPrimitive};
-
-const PERFECTS_COUNT: usize = 27;
-
 pub mod perfects_utils {
 	use num_bigint::{BigUint,ToBigUint};
     use seed::prelude::*;
@@ -110,7 +106,7 @@ pub fn render() -> seed::dom_types::Node<Msg> {
 				
                 td![perfect.digits.to_string()],//digits in length
                 td![perfect.discovery],//discovery
-				td![button!["Generate",input_ev("input", move |text| Msg::GenerateDownload(perfect_download))]],
+				td![button!["Generate",input_ev("input", move |_| Msg::GenerateDownload(perfect_download))]],
 				
             ]
         );
