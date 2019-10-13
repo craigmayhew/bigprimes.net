@@ -77,6 +77,11 @@ mod perfects_utils {
         let href:String = vec!["data:text/plain,",&filecontent].into_iter().collect();
         a![attrs!{At::Download => &filename, At::Href => &href}, "TXT"]
     }
+
+	pub fn generate_file(n:usize) -> seed::dom_types::Node<Msg> {
+		let download_filename:String = format!("P{}.txt",&n.to_string());
+        a![attrs!{At::Download => ""}, "TXT"]
+    }
 }
 
 pub fn render() -> seed::dom_types::Node<Msg> {
@@ -86,7 +91,6 @@ pub fn render() -> seed::dom_types::Node<Msg> {
     let mut perfects = perfects_utils::perfects();
 
     for n in 0..PERFECTS_COUNT {
-		let download_filename:String = format!("P{}.txt",&perfects[n].n.to_string());
         let download_txt:String = format!("https://static.bigprimes.net/archive/perfect/{}.txt",&perfects[n].n.to_string());
 
 		let equation:String = format!("2<sup>{}</sup> × (2<sup>{}</sup>-1)",&(perfects[n].p-1).to_string(),&(perfects[n].p).to_string());
@@ -102,7 +106,7 @@ pub fn render() -> seed::dom_types::Node<Msg> {
 				
                 td![perfects[n].digits.to_string()],//digits in length
                 td![perfects[n].discovery],//disocvery
-				td![perfects_utils::save_as_file(String::from(&download_filename),perfect_value.to_string())],
+				td![a![attrs!{At::OnClick => "",}, "Generate"]],
             ]
         );
     }
