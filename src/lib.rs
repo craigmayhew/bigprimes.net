@@ -4,6 +4,7 @@
 extern crate seed;
 
 use seed::prelude::*;
+use web_sys;
 
 pub mod pages;
 pub mod utils;
@@ -46,14 +47,18 @@ impl Default for Model {
 #[derive(Clone)]
 pub enum Msg {
     ChangePage(Page, std::string::String),
-    GenerateDownload(pages::archive::perfect::perfects_utils::PerfectDownload),
+    GenerateDownload(web_sys::MouseEvent, pages::archive::perfect::perfects_utils::PerfectDownload),
 }
 
 /// The sole source of updating the model
 fn update(msg: Msg, model: &mut Model, _: &mut impl Orders<Msg>) {
     match msg {
         Msg::ChangePage(page, slug) => {model.page = page; model.slug = slug},
-        Msg::GenerateDownload(perfect_download) => {model.download.n = perfect_download.n;model.download.p = perfect_download.p}
+        Msg::GenerateDownload(_event, perfect_download) => {
+            //event.prevent_default();
+            model.download.n = perfect_download.n;
+            model.download.p = perfect_download.p
+        }
     }
 }
 
@@ -69,7 +74,7 @@ fn view(model: &Model) -> impl View<Msg> {
         Page::Home => pages::home::render(),
         Page::MersenneArchive => pages::archive::mersenne::render(),
         Page::NumberCruncher => pages::cruncher::render(model.slug.to_owned()),
-        Page::PerfectArchive => pages::archive::perfect::render(),
+        Page::PerfectArchive => pages::archive::perfect::render(&model),
         Page::PrimalityChecker => pages::primalitytest::render(),
         Page::PrimeNumbersArchive => pages::archive::prime::render(model.slug.to_owned()),
         Page::Status => pages::status::render(),
