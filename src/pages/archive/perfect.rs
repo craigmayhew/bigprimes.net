@@ -102,8 +102,6 @@ pub fn render() -> seed::dom_types::Node<Msg> {
 		let perfectp:u64 = perfect.p;
 		let perfect_download = perfects_utils::PerfectDownload {n: perfect.n, p: perfect.p};
 		let equation:String = format!("2<sup>{}</sup> × (2<sup>{}</sup>-1)",&(perfectp-1).to_string(),&(perfectp).to_string());
-		
-		let p:usize = perfectp.to_usize().unwrap();
 
         html.push(
             tr![
