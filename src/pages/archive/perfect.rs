@@ -100,7 +100,7 @@ pub fn render(model: &crate::Model) -> seed::dom_types::Node<Msg> {
 
     for perfect in perfects.iter() {
 		let perfectp:u64 = perfect.p;
-		let PerfectDownload = perfects_utils::PerfectDownload {n: perfect.n, p: perfect.p};
+		let perfect_download = perfects_utils::PerfectDownload {n: perfect.n, p: perfect.p};
 		let equation:String = format!("2<sup>{}</sup> × (2<sup>{}</sup>-1)",&(perfectp-1).to_string(),&(perfectp).to_string());
 		
 		let p:usize = perfectp.to_usize().unwrap();
@@ -112,7 +112,7 @@ pub fn render(model: &crate::Model) -> seed::dom_types::Node<Msg> {
 				
                 td![perfect.digits.to_string()],//digits in length
                 td![perfect.discovery],//discovery
-				td![button!["Generate",input_ev("input", move |text| Msg::GenerateDownload(PerfectDownload))]],
+				td![button!["Generate",input_ev("input", move |text| Msg::GenerateDownload(perfect_download))]],
 				
             ]
         );
