@@ -84,21 +84,6 @@ pub fn render() -> seed::dom_types::Node<Msg> {
 	let two:BigUint = 2.to_biguint().unwrap();
 
     let mut perfects = perfects_utils::perfects();
-	perfects.reverse();
-	let mut power_shifted:BigUint = 2.to_biguint().unwrap();
-	let mut perfects_value:Vec<BigUint> = vec![2.to_biguint().unwrap(); PERFECTS_COUNT];
-	for n in 0..PERFECTS_COUNT {
-		let p:usize = perfects[n].p.to_usize().unwrap();
-		perfects_value[n] = power_shifted.clone();
-		let previous_p:usize = if n > 0 { perfects[n-1].p.to_usize().unwrap() } else { 0 };
-		power_shifted <<= p-previous_p-1;//todo this needs to be the difference between p and previous p
-	}
-	perfects.reverse();
-
-	perfects_value[PERFECTS_COUNT-1] = 2.to_biguint().unwrap();
-	perfects_value[PERFECTS_COUNT-2] = 4.to_biguint().unwrap();
-	
-	perfects_value.reverse();
 
     for n in 0..PERFECTS_COUNT {
 		let download_filename:String = format!("P{}.txt",&perfects[n].n.to_string());
@@ -106,12 +91,9 @@ pub fn render() -> seed::dom_types::Node<Msg> {
 
 		let equation:String = format!("2<sup>{}</sup> × (2<sup>{}</sup>-1)",&(perfects[n].p-1).to_string(),&(perfects[n].p).to_string());
 		
-		//let p:usize = perfects[n].p.to_usize().unwrap();
-		//let power:BigUint = two.clone() << (p-1-1);
-        //let perfect_value:BigUint = power.clone() * ((power.clone()*two.clone()) -1.to_biguint().unwrap());
-
-		let shifted_perfect_value:BigUint = perfects_value[n].clone() * ((perfects_value[n].clone() *two.clone()) -1.to_biguint().unwrap());
-		
+		let p:usize = perfects[n].p.to_usize().unwrap();
+		let power:BigUint = two.clone() << (p-1-1);
+        let perfect_value:BigUint = power.clone() * ((power.clone()*two.clone()) -1.to_biguint().unwrap());
 
         html.push(
             tr![
@@ -121,9 +103,7 @@ pub fn render() -> seed::dom_types::Node<Msg> {
                 td![perfects[n].digits.to_string()],//digits in length
                 td![perfects[n].discovery],//disocvery
                 td![a![attrs!{At::Href => download_txt},"TXT"]],//downloads
-				//td![perfects_utils::save_as_file(String::from(&download_filename),perfect_value.to_string())],
-				
-				td![perfects_utils::save_as_file(String::from(&download_filename),shifted_perfect_value.to_string())],
+				td![perfects_utils::save_as_file(String::from(&download_filename),perfect_value.to_string())],
             ]
         );
     }
