@@ -104,7 +104,7 @@ pub fn render(model: &crate::Model) -> seed::dom_types::Node<Msg> {
 				
                 td![perfects[n].digits.to_string()],//digits in length
                 td![perfects[n].discovery],//disocvery
-				td![a![attrs!{At::OnClick => "",}, "Generate"]],
+				td![button!["Generate",input_ev(Ev::Click, Msg::GenerateDownload)]],
             ]
         );
     }
