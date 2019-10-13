@@ -79,26 +79,23 @@ mod perfects_utils {
         a![attrs!{At::Download => &filename, At::Href => &href}, "TXT"]
     }
 
-	pub fn generate_file(n:usize) -> seed::dom_types::Node<Msg> {
+	pub fn generate_file(n:usize, p:usize) -> seed::dom_types::Node<Msg> {
 		let download_filename:String = format!("P{}.txt",&n.to_string());
+		let two:BigUint = 2.to_biguint().unwrap();
+		let power:BigUint = two.clone() << (p-1-1);
+        let perfect_value:BigUint = power.clone() * ((power.clone()*two.clone()) -1.to_biguint().unwrap());
         a![attrs!{At::Download => ""}, "TXT"]
     }
 }
 
 pub fn render(model: &crate::Model) -> seed::dom_types::Node<Msg> {
     let mut html = vec![];
-	let two:BigUint = 2.to_biguint().unwrap();
-
     let mut perfects = perfects_utils::perfects();
 
     for n in 0..PERFECTS_COUNT {
-        let download_txt:String = format!("https://static.bigprimes.net/archive/perfect/{}.txt",&perfects[n].n.to_string());
-
 		let equation:String = format!("2<sup>{}</sup> × (2<sup>{}</sup>-1)",&(perfects[n].p-1).to_string(),&(perfects[n].p).to_string());
 		
 		let p:usize = perfects[n].p.to_usize().unwrap();
-		let power:BigUint = two.clone() << (p-1-1);
-        let perfect_value:BigUint = power.clone() * ((power.clone()*two.clone()) -1.to_biguint().unwrap());
 
         html.push(
             tr![
