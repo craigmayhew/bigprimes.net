@@ -26,7 +26,7 @@ pub enum Page {
 
 // Model
 pub struct Model {
-    download: std::string::String,
+    download: pages::archive::perfect::perfects_utils::PerfectDownload,
     page: Page,
     slug: std::string::String,
 }
@@ -35,7 +35,7 @@ pub struct Model {
 impl Default for Model {
     fn default() -> Self {
         Self {
-            download: "".to_owned(),
+            download: pages::archive::perfect::perfects_utils::PerfectDownload {n: 0, p: 0},
             page: Page::Home,
             slug: "".to_owned(),
         }
@@ -46,14 +46,14 @@ impl Default for Model {
 #[derive(Clone)]
 pub enum Msg {
     ChangePage(Page, std::string::String),
-    GenerateDownload(std::string::String),
+    GenerateDownload(pages::archive::perfect::perfects_utils::PerfectDownload),
 }
 
 /// The sole source of updating the model
 fn update(msg: Msg, model: &mut Model, _: &mut impl Orders<Msg>) {
     match msg {
         Msg::ChangePage(page, slug) => {model.page = page; model.slug = slug},
-        Msg::GenerateDownload(download) => {model.download = download}
+        Msg::GenerateDownload(perfect_download) => {model.download.n = perfect_download.n;model.download.p = perfect_download.p}
     }
 }
 

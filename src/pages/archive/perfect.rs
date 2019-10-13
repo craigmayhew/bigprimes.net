@@ -5,20 +5,26 @@ use num_traits::{ToPrimitive};
 
 const PERFECTS_COUNT: usize = 27;
 
-mod perfects_utils {
+pub mod perfects_utils {
 	use num_bigint::{BigUint,ToBigUint};
     use seed::prelude::*;
-	use crate::Model;
     use crate::Msg;
 
-	pub struct Perfect<'a> {
+	#[derive(Clone)]
+	pub struct Perfect {
 		pub n: u64,
 		pub p: u64,
 		pub digits: u64,
-		pub discovery: &'a str,
+		pub discovery: String,
 	}
 
-	pub fn perfects<'a>() -> Vec<Perfect<'a>> {
+	#[derive(Clone)]
+	pub struct PerfectDownload {
+		pub n: u64,
+		pub p: u64,
+	}
+	
+	pub fn perfects() -> Vec<Perfect> {
         vec![
 			/*Perfect {n: 51, p: 82589934, digits: 49724095, discovery: "2018 Laroche, Woltman, Kurowski, Blosser, et al."},
 			Perfect {n: 50, p: 77232917, digits: 46498850, discovery: "2017 Jonathan Pace, George Woltman, Scott Kurowski, Aaron Blosser, et al.." },
@@ -44,33 +50,32 @@ mod perfects_utils {
 			Perfect {n: 30, p: 132049, digits: 79502, discovery: "1983 Slowinski" },
 			Perfect {n: 29, p: 110503, digits: 66530, discovery: "1988 Colquitt&amp;Welsh" },
 			Perfect {n: 28, p: 86243, digits: 51924, discovery: "1982 Slowinski" },*/
-			Perfect {n: 27, p: 44497, digits: 26790, discovery: "1979 Nelson&amp;Slowinski" },
-			Perfect {n: 26, p: 23209, digits: 13973, discovery: "1979 Noll" },
-			Perfect {n: 25, p: 21701, digits: 13066, discovery: "1978 Noll&amp;Nickel" },
-			Perfect {n: 24, p: 19937, digits: 12003, discovery: "1971 Tuckerman" },
-			Perfect {n: 23, p: 11213, digits: 6751, discovery: "1963 Gillies" },
-			Perfect {n: 22, p: 9941, digits: 5985, discovery: "1963 Gillies" },
-			Perfect {n: 21, p: 9689, digits: 5834, discovery: "1963 Gillies" },
-			Perfect {n: 20, p: 4423, digits: 2663, discovery: "1961 Hurwitz" },
-			Perfect {n: 19, p: 4253, digits: 2561, discovery: "1961 Hurwitz" },
-			Perfect {n: 18, p: 3217, digits: 1937, discovery: "1957 Riesel" },
-			Perfect {n: 17, p: 2281, digits: 1373, discovery: "1952 Robinson" },
-			Perfect {n: 16, p: 2203, digits: 1327, discovery: "1952 Robinson" },
-			Perfect {n: 15, p: 1279, digits: 770, discovery: "1952 Robinson" },
-			Perfect {n: 14, p: 607, digits: 366, discovery: "1952 Robinson" },
-			Perfect {n: 13, p: 521, digits: 314, discovery: "1952 Robinson" },
-			Perfect {n: 12, p: 127, digits: 77, discovery: "1876 Lucas" },
-			Perfect {n: 11, p: 107, digits: 65, discovery: "1914 Powers" },
-			Perfect {n: 10, p: 89, digits: 54, discovery: "1911 Powers" },
-			Perfect {n: 9, p: 61, digits: 37, discovery: "1883 Pervushin" },
-			Perfect {n: 8, p: 31, digits: 19, discovery: "1772 Euler" },
-			Perfect {n: 7, p: 19, digits: 12, discovery: "1588 Cataldi" },
-			Perfect {n: 6, p: 17, digits: 10, discovery: "1588 Cataldi" },
-			Perfect {n: 5, p: 13, digits: 8, discovery: "1456 ?" },
-			Perfect {n: 4, p: 7, digits: 4, discovery: "?" },
-			Perfect {n: 3, p: 5, digits: 3, discovery: "?" },
-			Perfect {n: 2, p: 3, digits: 2, discovery: "?" },
-			Perfect {n: 1, p: 2, digits: 1, discovery: "?" },
+			Perfect {n: 27, p: 44497, digits: 26790, discovery: String::from("1979 Nelson&amp;Slowinski") },
+			Perfect {n: 26, p: 23209, digits: 13973, discovery: String::from("1979 Noll") },
+			Perfect {n: 25, p: 21701, digits: 13066, discovery: String::from("1978 Noll&amp;Nickel") },
+			Perfect {n: 24, p: 19937, digits: 12003, discovery: String::from("1971 Tuckerman") },
+			Perfect {n: 23, p: 11213, digits: 6751, discovery: String::from("1963 Gillies") },
+			Perfect {n: 22, p: 9941, digits: 5985, discovery: String::from("1963 Gillies") },
+			Perfect {n: 21, p: 9689, digits: 5834, discovery: String::from("1963 Gillies") },
+			Perfect {n: 20, p: 4423, digits: 2663, discovery: String::from("1961 Hurwitz") },
+			Perfect {n: 19, p: 4253, digits: 2561, discovery: String::from("1961 Hurwitz") },
+			Perfect {n: 18, p: 3217, digits: 1937, discovery: String::from("1957 Riesel") },
+			Perfect {n: 17, p: 2281, digits: 1373, discovery: String::from("1952 Robinson") },
+			Perfect {n: 16, p: 2203, digits: 1327, discovery: String::from("1952 Robinson") },
+			Perfect {n: 14, p: 607, digits: 366, discovery: String::from("1952 Robinson") },
+			Perfect {n: 13, p: 521, digits: 314, discovery: String::from("1952 Robinson") },
+			Perfect {n: 12, p: 127, digits: 77, discovery: String::from("1876 Lucas") },
+			Perfect {n: 11, p: 107, digits: 65, discovery: String::from("1914 Powers") },
+			Perfect {n: 10, p: 89, digits: 54, discovery: String::from("1911 Powers") },
+			Perfect {n: 9, p: 61, digits: 37, discovery: String::from("1883 Pervushin") },
+			Perfect {n: 8, p: 31, digits: 19, discovery: String::from("1772 Euler") },
+			Perfect {n: 7, p: 19, digits: 12, discovery: String::from("1588 Cataldi") },
+			Perfect {n: 6, p: 17, digits: 10, discovery: String::from("1588 Cataldi") },
+			Perfect {n: 5, p: 13, digits: 8, discovery: String::from("1456 ?") },
+			Perfect {n: 4, p: 7, digits: 4, discovery: String::from("?") },
+			Perfect {n: 3, p: 5, digits: 3, discovery: String::from("?") },
+			Perfect {n: 2, p: 3, digits: 2, discovery: String::from("?") },
+			Perfect {n: 1, p: 2, digits: 1, discovery: String::from("?") },
 		]
 	}
 
@@ -90,21 +95,25 @@ mod perfects_utils {
 
 pub fn render(model: &crate::Model) -> seed::dom_types::Node<Msg> {
     let mut html = vec![];
-    let mut perfects = perfects_utils::perfects();
+    let perfects = perfects_utils::perfects().to_owned();
 
-    for n in 0..PERFECTS_COUNT {
-		let equation:String = format!("2<sup>{}</sup> × (2<sup>{}</sup>-1)",&(perfects[n].p-1).to_string(),&(perfects[n].p).to_string());
+
+    for perfect in perfects.iter() {
+		let perfectp:u64 = perfect.p;
+		let PerfectDownload = perfects_utils::PerfectDownload {n: perfect.n, p: perfect.p};
+		let equation:String = format!("2<sup>{}</sup> × (2<sup>{}</sup>-1)",&(perfectp-1).to_string(),&(perfectp).to_string());
 		
-		let p:usize = perfects[n].p.to_usize().unwrap();
+		let p:usize = perfectp.to_usize().unwrap();
 
         html.push(
             tr![
-                td![perfects[n].n.to_string()],//rank
+                td![perfect.n.to_string()],//rank
 				td![El::from_html(&equation)],//perfect number as a formula
 				
-                td![perfects[n].digits.to_string()],//digits in length
-                td![perfects[n].discovery],//disocvery
-				td![button!["Generate",input_ev(Ev::Click, Msg::GenerateDownload)]],
+                td![perfect.digits.to_string()],//digits in length
+                td![perfect.discovery],//discovery
+				td![button!["Generate",input_ev("input", move |text| Msg::GenerateDownload(PerfectDownload))]],
+				
             ]
         );
     }
@@ -146,7 +155,7 @@ mod tests {
 
     #[test]
     fn perfect_test<'a>() {
-        let mut perfects:Vec<perfects_utils::Perfect<'a>> = perfects_utils::perfects();
+        let mut perfects:Vec<perfects_utils::Perfect> = perfects_utils::perfects();
 		perfects.reverse();
         assert_eq!(perfects[49].digits, 46498850);
         assert_eq!(perfects[39].digits, 12640858);
