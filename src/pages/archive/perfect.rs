@@ -102,7 +102,6 @@ pub fn render() -> seed::dom_types::Node<Msg> {
 				
                 td![perfects[n].digits.to_string()],//digits in length
                 td![perfects[n].discovery],//disocvery
-                td![a![attrs!{At::Href => download_txt},"TXT"]],//downloads
 				td![perfects_utils::save_as_file(String::from(&download_filename),perfect_value.to_string())],
             ]
         );
