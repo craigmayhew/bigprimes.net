@@ -4,6 +4,8 @@ use crate::Msg;
 use num_traits::{pow,ToPrimitive};
 use num_bigint::{BigUint,ToBigUint};
 
+const PERFECTS_COUNT: usize = 36;
+
 mod perfects_utils {
     use seed::prelude::*;
     use crate::Msg;
@@ -31,13 +33,13 @@ mod perfects_utils {
 			Perfect {n: 40, p: 20996011, digits: 12640858, discovery: "2003 Shafer, Woltman, Kurowski, et. al." },
 			Perfect {n: 39, p: 13466917, digits: 8107892, discovery: "2001 Cameron, Woltman, Kurowski, et. al." },
 			Perfect {n: 38, p: 6972593, digits: 4197919, discovery: "1999 Hajratwala, Woltman, Kurowski, et. al." },
-			Perfect {n: 37, p: 3021377, digits: 1819050, discovery: "1998 Clarkson, Woltman, Kurowski, et. al." },
+			Perfect {n: 37, p: 3021377, digits: 1819050, discovery: "1998 Clarkson, Woltman, Kurowski, et. al." },*/
 			Perfect {n: 36, p: 2976221, digits: 1791864, discovery: "1997 Spence, Woltman, et. al." },
 			Perfect {n: 35, p: 1398269, digits: 841842, discovery: "1996 Armengaud, Woltman, et. al." },
 			Perfect {n: 34, p: 1257787, digits: 757263, discovery: "1996 Slowinski&amp;Gage" },
 			Perfect {n: 33, p: 859433, digits: 517430, discovery: "1994 Slowinski&amp;Gage" },
 			Perfect {n: 32, p: 756839, digits: 455663, discovery: "1992 Slowinski&amp;Gage" },
-			Perfect {n: 31, p: 216091, digits: 130100, discovery: "1985 Slowinski" },*/
+			Perfect {n: 31, p: 216091, digits: 130100, discovery: "1985 Slowinski" },
 			Perfect {n: 30, p: 132049, digits: 79502, discovery: "1983 Slowinski" },
 			Perfect {n: 29, p: 110503, digits: 66530, discovery: "1988 Colquitt&amp;Welsh" },
 			Perfect {n: 28, p: 86243, digits: 51924, discovery: "1982 Slowinski" },
@@ -67,7 +69,7 @@ mod perfects_utils {
 			Perfect {n: 4, p: 7, digits: 4, discovery: "?" },
 			Perfect {n: 3, p: 5, digits: 3, discovery: "?" },
 			Perfect {n: 2, p: 3, digits: 2, discovery: "?" },
-			Perfect {n: 1, p: 3, digits: 1, discovery: "?" },
+			Perfect {n: 1, p: 2, digits: 1, discovery: "?" },
 		]
 	}
 
@@ -81,17 +83,35 @@ pub fn render() -> seed::dom_types::Node<Msg> {
     let mut html = vec![];
 	let two:BigUint = 2.to_biguint().unwrap();
 
-    let perfects = perfects_utils::perfects();
+    let mut perfects = perfects_utils::perfects();
+	perfects.reverse();
+	let mut power_shifted:BigUint = 2.to_biguint().unwrap();
+	let mut perfects_value:Vec<BigUint> = vec![2.to_biguint().unwrap(); PERFECTS_COUNT];
+	for n in 0..PERFECTS_COUNT {
+		let p:usize = perfects[n].p.to_usize().unwrap();
+		perfects_value[n] = power_shifted.clone();
+		let previous_p:usize = if n > 0 { perfects[n-1].p.to_usize().unwrap() } else { 0 };
+		power_shifted <<= p-previous_p-1;//todo this needs to be the difference between p and previous p
+	}
+	perfects.reverse();
 
-    for n in 0..perfects.len() {
+	perfects_value[PERFECTS_COUNT-1] = 2.to_biguint().unwrap();
+	perfects_value[PERFECTS_COUNT-2] = 4.to_biguint().unwrap();
+	
+	perfects_value.reverse();
+
+    for n in 0..PERFECTS_COUNT {
 		let download_filename:String = format!("P{}.txt",&perfects[n].n.to_string());
         let download_txt:String = format!("https://static.bigprimes.net/archive/perfect/{}.txt",&perfects[n].n.to_string());
 
 		let equation:String = format!("2<sup>{}</sup> × (2<sup>{}</sup>-1)",&(perfects[n].p-1).to_string(),&(perfects[n].p).to_string());
 		
-		let p:usize = perfects[n].p.to_usize().unwrap();
-		let power:BigUint = pow(two.clone(), p-1);
-        let perfect_value:BigUint = power.clone() * ((power.clone()*two.clone()) -1.to_biguint().unwrap()) ;
+		//let p:usize = perfects[n].p.to_usize().unwrap();
+		//let power:BigUint = two.clone() << (p-1-1);
+        //let perfect_value:BigUint = power.clone() * ((power.clone()*two.clone()) -1.to_biguint().unwrap());
+
+		let shifted_perfect_value:BigUint = perfects_value[n].clone() * ((perfects_value[n].clone() *two.clone()) -1.to_biguint().unwrap());
+		
 
         html.push(
             tr![
@@ -101,7 +121,9 @@ pub fn render() -> seed::dom_types::Node<Msg> {
                 td![perfects[n].digits.to_string()],//digits in length
                 td![perfects[n].discovery],//disocvery
                 td![a![attrs!{At::Href => download_txt},"TXT"]],//downloads
-				td![perfects_utils::save_as_file(String::from(download_filename),perfect_value.to_string())],
+				//td![perfects_utils::save_as_file(String::from(&download_filename),perfect_value.to_string())],
+				
+				td![perfects_utils::save_as_file(String::from(&download_filename),shifted_perfect_value.to_string())],
             ]
         );
     }
