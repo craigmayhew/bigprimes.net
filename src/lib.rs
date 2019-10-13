@@ -69,7 +69,7 @@ fn view(model: &Model) -> impl View<Msg> {
         Page::Home => pages::home::render(),
         Page::MersenneArchive => pages::archive::mersenne::render(),
         Page::NumberCruncher => pages::cruncher::render(model.slug.to_owned()),
-        Page::PerfectArchive => pages::archive::perfect::render(&model),
+        Page::PerfectArchive => pages::archive::perfect::render(),
         Page::PrimalityChecker => pages::primalitytest::render(),
         Page::PrimeNumbersArchive => pages::archive::prime::render(model.slug.to_owned()),
         Page::Status => pages::status::render(),
