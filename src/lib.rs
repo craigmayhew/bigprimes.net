@@ -25,7 +25,8 @@ pub enum Page {
 }
 
 // Model
-struct Model {
+pub struct Model {
+    download: std::string::String,
     page: Page,
     slug: std::string::String,
 }
