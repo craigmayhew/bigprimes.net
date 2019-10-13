@@ -107,8 +107,11 @@ pub fn render(model: &crate::Model) -> seed::dom_types::Node<Msg> {
 				
                 td![perfect.digits.to_string()],//digits in length
                 td![perfect.discovery],//discovery
-				if model.download.n>0 {perfects_utils::generate_file(model.download.n,model.download.p)} else {td![button!["Generate",input_ev("input", move |_| Msg::GenerateDownload(perfect_download))]]},
-				
+				if model.download.n>0 {
+					perfects_utils::generate_file(model.download.n,model.download.p)
+				} else {
+					td![button!["Generate",mouse_ev("input", move |_| Msg::GenerateDownload(perfect_download))]]
+				},
             ]
         );
     }
