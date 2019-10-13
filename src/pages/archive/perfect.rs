@@ -4,7 +4,7 @@ use crate::Msg;
 use num_traits::{pow,ToPrimitive};
 use num_bigint::{BigUint,ToBigUint};
 
-const PERFECTS_COUNT: usize = 36;
+const PERFECTS_COUNT: usize = 27;
 
 mod perfects_utils {
     use seed::prelude::*;
@@ -33,7 +33,7 @@ mod perfects_utils {
 			Perfect {n: 40, p: 20996011, digits: 12640858, discovery: "2003 Shafer, Woltman, Kurowski, et. al." },
 			Perfect {n: 39, p: 13466917, digits: 8107892, discovery: "2001 Cameron, Woltman, Kurowski, et. al." },
 			Perfect {n: 38, p: 6972593, digits: 4197919, discovery: "1999 Hajratwala, Woltman, Kurowski, et. al." },
-			Perfect {n: 37, p: 3021377, digits: 1819050, discovery: "1998 Clarkson, Woltman, Kurowski, et. al." },*/
+			Perfect {n: 37, p: 3021377, digits: 1819050, discovery: "1998 Clarkson, Woltman, Kurowski, et. al." },
 			Perfect {n: 36, p: 2976221, digits: 1791864, discovery: "1997 Spence, Woltman, et. al." },
 			Perfect {n: 35, p: 1398269, digits: 841842, discovery: "1996 Armengaud, Woltman, et. al." },
 			Perfect {n: 34, p: 1257787, digits: 757263, discovery: "1996 Slowinski&amp;Gage" },
@@ -42,7 +42,7 @@ mod perfects_utils {
 			Perfect {n: 31, p: 216091, digits: 130100, discovery: "1985 Slowinski" },
 			Perfect {n: 30, p: 132049, digits: 79502, discovery: "1983 Slowinski" },
 			Perfect {n: 29, p: 110503, digits: 66530, discovery: "1988 Colquitt&amp;Welsh" },
-			Perfect {n: 28, p: 86243, digits: 51924, discovery: "1982 Slowinski" },
+			Perfect {n: 28, p: 86243, digits: 51924, discovery: "1982 Slowinski" },*/
 			Perfect {n: 27, p: 44497, digits: 26790, discovery: "1979 Nelson&amp;Slowinski" },
 			Perfect {n: 26, p: 23209, digits: 13973, discovery: "1979 Noll" },
 			Perfect {n: 25, p: 21701, digits: 13066, discovery: "1978 Noll&amp;Nickel" },
