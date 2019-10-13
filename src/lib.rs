@@ -35,6 +35,7 @@ pub struct Model {
 impl Default for Model {
     fn default() -> Self {
         Self {
+            download: "".to_owned(),
             page: Page::Home,
             slug: "".to_owned(),
         }
@@ -45,12 +46,14 @@ impl Default for Model {
 #[derive(Clone)]
 pub enum Msg {
     ChangePage(Page, std::string::String),
+    GenerateDownload(std::string::String),
 }
 
 /// The sole source of updating the model
 fn update(msg: Msg, model: &mut Model, _: &mut impl Orders<Msg>) {
     match msg {
-        Msg::ChangePage(page, slug) => {model.page = page; model.slug = slug}
+        Msg::ChangePage(page, slug) => {model.page = page; model.slug = slug},
+        Msg::GenerateDownload(download) => {model.download = download}
     }
 }
 
@@ -66,7 +69,7 @@ fn view(model: &Model) -> impl View<Msg> {
         Page::Home => pages::home::render(),
         Page::MersenneArchive => pages::archive::mersenne::render(),
         Page::NumberCruncher => pages::cruncher::render(model.slug.to_owned()),
-        Page::PerfectArchive => pages::archive::perfect::render(),
+        Page::PerfectArchive => pages::archive::perfect::render(&model),
         Page::PrimalityChecker => pages::primalitytest::render(),
         Page::PrimeNumbersArchive => pages::archive::prime::render(model.slug.to_owned()),
         Page::Status => pages::status::render(),

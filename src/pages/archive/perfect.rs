@@ -1,13 +1,14 @@
 use seed::prelude::*;
 use crate::Msg;
 
-use num_traits::{pow,ToPrimitive};
-use num_bigint::{BigUint,ToBigUint};
+use num_traits::{ToPrimitive};
 
 const PERFECTS_COUNT: usize = 27;
 
 mod perfects_utils {
+	use num_bigint::{BigUint,ToBigUint};
     use seed::prelude::*;
+	use crate::Model;
     use crate::Msg;
 
 	pub struct Perfect<'a> {
@@ -84,7 +85,7 @@ mod perfects_utils {
     }
 }
 
-pub fn render() -> seed::dom_types::Node<Msg> {
+pub fn render(model: &crate::Model) -> seed::dom_types::Node<Msg> {
     let mut html = vec![];
 	let two:BigUint = 2.to_biguint().unwrap();
 
