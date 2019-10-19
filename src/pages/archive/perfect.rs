@@ -59,6 +59,7 @@ pub mod perfects_utils {
 			Perfect {n: 18, p: 3217, digits: 1937, discovery: String::from("1957 Riesel") },
 			Perfect {n: 17, p: 2281, digits: 1373, discovery: String::from("1952 Robinson") },
 			Perfect {n: 16, p: 2203, digits: 1327, discovery: String::from("1952 Robinson") },
+			Perfect {n: 15, p: 1279, digits: 770, discovery: String::from("1952 Robinson") },
 			Perfect {n: 14, p: 607, digits: 366, discovery: String::from("1952 Robinson") },
 			Perfect {n: 13, p: 521, digits: 314, discovery: String::from("1952 Robinson") },
 			Perfect {n: 12, p: 127, digits: 77, discovery: String::from("1876 Lucas") },
