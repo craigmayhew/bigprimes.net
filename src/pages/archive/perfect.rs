@@ -4,8 +4,6 @@ use crate::Msg;
 pub mod perfects_utils {
 	use num_bigint::{BigUint,ToBigUint};	
 	use num_traits::{ToPrimitive};	
-    use seed::prelude::*;
-    use crate::Msg;
 
 	#[derive(Clone)]
 	pub struct Perfect {
@@ -77,18 +75,11 @@ pub mod perfects_utils {
 		]
 	}
 
-	pub fn save_as_file(filename:String, filecontent:String) -> seed::dom_types::Node<Msg> {
-        let href:String = format!("data:text/plain,{}",&filecontent);
-        a![attrs!{At::Download => &filename, At::Href => &href}, "TXT"]
-    }
-
-	pub fn generate_file(n:u64, p:u64) -> seed::dom_types::Node<Msg> {
-		let download_filename:String = format!("P{}.txt",&n.to_string());
+	pub fn equation(p:u64) -> BigUint{
 		let two:BigUint = 2.to_biguint().unwrap();
 		let power:BigUint = two.clone() << (p.to_usize().unwrap()-1-1);
-        let perfect_value:BigUint = power.clone() * ((power.clone()*two.clone()) -1.to_biguint().unwrap());
-        save_as_file(download_filename, perfect_value.to_string())
-    }
+		power.clone() * ((power.clone()*two.clone()) -1.to_biguint().unwrap())
+	}
 }
 
 pub fn render(model: &crate::Model) -> seed::dom_types::Node<Msg> {
@@ -109,9 +100,9 @@ pub fn render(model: &crate::Model) -> seed::dom_types::Node<Msg> {
                 td![perfect.digits.to_string()],//digits in length
                 td![perfect.discovery],//discovery
 				if model.download.n == perfect.n {
-					td![perfects_utils::generate_file(model.download.n,model.download.p)]
+					td![crate::utils::generate_file(model.download.n,perfects_utils::equation(model.download.p))]
 				} else {
-					td![button!["Generate",mouse_ev("mouseup", move |event| Msg::GenerateDownload(event, perfect_download))]]
+					td![button!["Generate",mouse_ev("mouseup", move |event| Msg::GeneratePerfectDownload(event, perfect_download))]]
 				},
             ]
         );

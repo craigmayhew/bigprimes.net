@@ -1,12 +1,16 @@
 use seed::prelude::*;
 use crate::Msg;
 
+extern crate num_bigint;
+extern crate num_traits;
+
 pub mod mersenne_utils {
     extern crate num_bigint;
     extern crate num_traits;
     
-    use num_traits::{Pow,Num};
+    use num_traits::{Pow,Num,ToPrimitive};
     use num_bigint::{BigInt,ToBigInt};
+    use num_bigint::{BigUint,ToBigUint};
 
     #[derive(Clone)]
 	pub struct Mersenne {
@@ -14,6 +18,12 @@ pub mod mersenne_utils {
 		pub p: u64,
 		pub digits: u64,
 		pub discovery: String,
+	}
+    
+    #[derive(Clone)]
+	pub struct MersenneDownload {
+		pub n: u64,
+		pub p: u64,
 	}
 
     pub fn mersennes_discovery_dates(n:usize) -> String {
@@ -110,15 +120,18 @@ pub fn render(model: &crate::Model) -> seed::dom_types::Node<Msg> {
     let mersennes = mersenne_utils::mersennes();
 
     for n in 1..mersennes.len() {
-        let download_txt:String = format!("https://static.bigprimes.net/archive/mersenne/M{}.txt",&n.to_string());
-        let download_zip:String = format!("https://static.bigprimes.net/archive/mersenne/M{}.zip",&n.to_string());
+        let mersenne_download = mersenne_utils::MersenneDownload {n: mersennes[n].n, p: mersennes[n].p};
         html.push(
             tr![
                 td![n.to_string()],
                 td!["2",sup![mersennes[n].p.to_string()],"-1"],
                 td![mersennes[n].digits.to_string()],
                 td![mersenne_utils::mersennes_discovery_dates(n)],
-                if n >= 30 {a![attrs!{At::Href => download_zip},"ZIP"]} else {a![attrs!{At::Href => download_txt},"TXT"]}
+                if model.download.n == mersennes[n].n {
+					td![crate::utils::generate_file(model.download.n,mersenne_utils::equation(model.download.p))]
+				} else {
+					td![button!["Generate",mouse_ev("mouseup", move |event| Msg::GenerateMersenneDownload(event, mersenne_download))]]
+				},
             ]
         );
     }

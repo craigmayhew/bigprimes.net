@@ -1,3 +1,10 @@
+use seed::prelude::*;
+use crate::Msg;
+
+extern crate num_bigint;
+extern crate num_traits;
+
+use num_bigint::{BigUint};
 
 pub fn set_panic_hook() {
     // When the `console_error_panic_hook` feature is enabled, we can call the
@@ -19,6 +26,16 @@ pub fn nth(num: usize) -> String {
         (3, _) => "rd",
         _ => "th",
     })
+}
+
+pub fn save_as_file(filename:String, filecontent:String) -> seed::dom_types::Node<Msg> {
+        let href:String = format!("data:text/plain,{}",&filecontent);
+        a![attrs!{At::Download => &filename, At::Href => &href}, "TXT"]
+}
+
+pub fn generate_file(n:u64, value:BigUint) -> seed::dom_types::Node<Msg> {
+    let download_filename:String = format!("P{}.txt",&n.to_string());
+    save_as_file(download_filename, value.to_string())
 }
 
 #[cfg(test)]
