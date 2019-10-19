@@ -149,6 +149,11 @@ pub fn render(model: &crate::Model) -> seed::dom_types::Node<Msg> {
 }
 
 #[cfg(test)]
+use num_bigint::{BigUint};
+#[cfg(test)]
+use num_traits::{Num};
+
+#[cfg(test)]
 mod tests {
     use super::*;
 
@@ -159,5 +164,20 @@ mod tests {
 		assert_eq!(perfects[50].digits, 49724095);
         assert_eq!(perfects[49].digits, 46498850);
         assert_eq!(perfects[39].digits, 12640858);
+    }
+
+	
+    #[test]
+    fn equation_test() {
+		let mut number:BigUint;
+
+		number = num_bigint::BigUint::from_str_radix("6", 10).unwrap();
+        assert_eq!(perfects_utils::equation(2  ), number);
+
+		number = num_bigint::BigUint::from_str_radix("137438691328", 10).unwrap();
+        assert_eq!(perfects_utils::equation(19 ), number);
+
+        number = num_bigint::BigUint::from_str_radix("2658455991569831744654692615953842176", 10).unwrap();
+        assert_eq!(perfects_utils::equation(61), number);
     }
 }

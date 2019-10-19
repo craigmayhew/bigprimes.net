@@ -97,6 +97,12 @@ pub mod mersenne_utils {
 
         answer
     }
+
+    pub fn equation(p:u64) -> BigUint{
+		let two:BigUint = 2.to_biguint().unwrap();
+		let power:BigUint = two.clone() << (p.to_usize().unwrap()-1);
+		power.clone() -1.to_biguint().unwrap()
+	}
 }
 
 pub fn render(model: &crate::Model) -> seed::dom_types::Node<Msg> {
@@ -151,6 +157,11 @@ pub fn render(model: &crate::Model) -> seed::dom_types::Node<Msg> {
 }
 
 #[cfg(test)]
+use num_bigint::{BigUint,ToBigUint};
+#[cfg(test)]
+use num_traits::{Num};
+
+#[cfg(test)]
 mod tests {
     use super::*;
 
@@ -174,5 +185,13 @@ mod tests {
 
         assert_eq!(mersennes[2].p, 3);
         assert_eq!(mersennes[2].digits, 1);
+    }
+
+    #[test]
+    fn equation_test() {
+        assert_eq!(mersenne_utils::equation(2  ), 3.to_biguint().unwrap());
+        assert_eq!(mersenne_utils::equation(19 ), 524287.to_biguint().unwrap());
+        let number:BigUint = num_bigint::BigUint::from_str_radix("6864797660130609714981900799081393217269435300143305409394463459185543183397656052122559640661454554977296311391480858037121987999716643812574028291115057151", 10).unwrap();
+        assert_eq!(mersenne_utils::equation(521), number);
     }
 }
