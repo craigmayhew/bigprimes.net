@@ -4,8 +4,6 @@ use crate::Msg;
 pub mod perfects_utils {
 	use num_bigint::{BigUint,ToBigUint};	
 	use num_traits::{ToPrimitive};	
-    use seed::prelude::*;
-    use crate::Msg;
 
 	#[derive(Clone)]
 	pub struct Perfect {
@@ -77,18 +75,11 @@ pub mod perfects_utils {
 		]
 	}
 
-	pub fn save_as_file(filename:String, filecontent:String) -> seed::dom_types::Node<Msg> {
-        let href:String = vec!["data:text/plain,",&filecontent].into_iter().collect();
-        a![attrs!{At::Download => &filename, At::Href => &href}, "TXT"]
-    }
-
-	pub fn generate_file(n:u64, p:u64) -> seed::dom_types::Node<Msg> {
-		let download_filename:String = format!("P{}.txt",&n.to_string());
+	pub fn equation(p:u64) -> BigUint{
 		let two:BigUint = 2.to_biguint().unwrap();
 		let power:BigUint = two.clone() << (p.to_usize().unwrap()-1-1);
-        let perfect_value:BigUint = power.clone() * ((power.clone()*two.clone()) -1.to_biguint().unwrap());
-        save_as_file(download_filename, perfect_value.to_string())
-    }
+		power.clone() * ((power.clone()*two.clone()) -1.to_biguint().unwrap())
+	}
 }
 
 pub fn render(model: &crate::Model) -> seed::dom_types::Node<Msg> {
@@ -109,9 +100,9 @@ pub fn render(model: &crate::Model) -> seed::dom_types::Node<Msg> {
                 td![perfect.digits.to_string()],//digits in length
                 td![perfect.discovery],//discovery
 				if model.download.n == perfect.n {
-					td![perfects_utils::generate_file(model.download.n,model.download.p)]
+					td![crate::utils::generate_file(model.download.n,perfects_utils::equation(model.download.p))]
 				} else {
-					td![button!["Generate",mouse_ev("mouseup", move |event| Msg::GenerateDownload(event, perfect_download))]]
+					td![button!["Generate",mouse_ev("mouseup", move |event| Msg::GeneratePerfectDownload(event, perfect_download))]]
 				},
             ]
         );
@@ -149,6 +140,11 @@ pub fn render(model: &crate::Model) -> seed::dom_types::Node<Msg> {
 }
 
 #[cfg(test)]
+use num_bigint::{BigUint};
+#[cfg(test)]
+use num_traits::{Num};
+
+#[cfg(test)]
 mod tests {
     use super::*;
 
@@ -159,5 +155,20 @@ mod tests {
 		assert_eq!(perfects[50].digits, 49724095);
         assert_eq!(perfects[49].digits, 46498850);
         assert_eq!(perfects[39].digits, 12640858);
+    }
+
+	
+    #[test]
+    fn equation_test() {
+		let mut number:BigUint;
+
+		number = num_bigint::BigUint::from_str_radix("6", 10).unwrap();
+        assert_eq!(perfects_utils::equation(2  ), number);
+
+		number = num_bigint::BigUint::from_str_radix("137438691328", 10).unwrap();
+        assert_eq!(perfects_utils::equation(19 ), number);
+
+        number = num_bigint::BigUint::from_str_radix("2658455991569831744654692615953842176", 10).unwrap();
+        assert_eq!(perfects_utils::equation(61), number);
     }
 }

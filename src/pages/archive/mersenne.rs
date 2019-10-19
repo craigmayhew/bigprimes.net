@@ -1,138 +1,102 @@
 use seed::prelude::*;
 use crate::Msg;
 
+extern crate num_bigint;
+extern crate num_traits;
+
 pub mod mersenne_utils {
     extern crate num_bigint;
     extern crate num_traits;
     
-    use num_traits::{Pow,Num};
+    use num_traits::{Pow,Num,ToPrimitive};
     use num_bigint::{BigInt,ToBigInt};
+    use num_bigint::{BigUint,ToBigUint};
+
+    #[derive(Clone)]
+	pub struct Mersenne {
+		pub n: u64,
+		pub p: u64,
+		pub digits: u64,
+		pub discovery: String,
+	}
+    
+    #[derive(Clone)]
+	pub struct MersenneDownload {
+		pub n: u64,
+		pub p: u64,
+	}
 
     pub fn mersennes_discovery_dates(n:usize) -> String {
-        let mersennes_discovery_dates:Vec<Vec<&str>> = vec![
-            //TODO: Complete this list all the way upto 50
-            //TODO: We could include download links etc
-            vec![""],//faux zero entry to make things easier when reading this vector
-            vec!["500BC"],	
-            vec!["500BC"],	
-            vec!["275BC"],
-            vec!["275BC"],
-            vec!["1456"],	
-            vec!["1588"],	
-            vec!["1588"],	
-            vec!["1772"],	
-            vec!["1883"],	
-            vec!["1911"],
-            vec!["1914"],
-            vec!["1876"],
-            vec!["30-Jan-1952"],
-            vec!["30-Jan-1952"],	
-            vec!["26-Jun-1952"],
-            vec!["7-Oct-1952"],
-            vec!["9-Oct-1952"],
-            vec!["8-Sep-1957"],		
-            vec!["3-Nov-1961"],
-            vec!["3-Nov-1961"],
-            vec!["11-May-1963"],
-            vec!["16-May-1963"],
-            vec!["2-Jun-1963"],
-            vec!["4-Mar-1971"],
-            vec!["30-Oct-1978"],
-            vec!["9-Feb-1979"],
-            vec!["8-Apr-1979"],
-            vec!["25-Sep-1982"],
-            vec!["28-Jan-1988"],
-            vec!["20-Sep-1983"],
-            vec!["6-Sep-1985"],
-            vec!["19-Feb-1992"],
-            vec!["10-Jan-1994"],
-            vec!["3-Sep-1996"],
-            vec!["12-Nov-1996"],
-            vec!["24-Aug-1997"],
-            vec!["27-Jan-1998"],
-            vec!["1-Jun-1999"],
-            vec!["14-Nov-2001"],
-            vec!["17-Nov-2003"],
-            vec!["28-May-2004"],
-            vec!["26-Feb-2005"],
-            vec!["15-Dec-2005"],
-            vec!["4-Sep-2006"],
-            vec!["23-Aug-2008"],
-            vec!["06-Sep-2009"],
-            vec!["12-Apr-2008"],
-            vec!["25-Jan-2013"],
-            vec!["07-Jan-2016"],
-            vec!["26-Dec-2017"],
-        ];
+        let mersennes_discovery_dates:Vec<Mersenne> = mersennes();
 
-        mersennes_discovery_dates[n][0].to_owned()
+        mersennes_discovery_dates[n].discovery.to_owned()
     }
 
-    pub fn mersennes() -> Vec<Vec<usize>> {
+    pub fn mersennes() -> Vec<Mersenne> {
         vec![
             //vec![p,digits]
-            vec![0,     0],//faux zero entry to make things easier when reading this vector
-            vec![2,     1],	
-            vec![3,     1],	
-            vec![5,     2],
-            vec![7,     3],
-            vec![13,    4],	
-            vec![17,    6],
-            vec![19,    6],	
-            vec![31,   10],	
-            vec![61,   19],	
-            vec![89,   27],
-            vec![107,  33],
-            vec![127,  39],
-            vec![521,  157],
-            vec![607,  183],
-            vec![1279, 386],
-            vec![2203, 664],
-            vec![2281, 687],
-            vec![3217, 969],		
-            vec![4253,1281],
-            vec![4423,1332],
-            vec![9689,2917],
-            vec![9941,2993],
-            vec![11213,3376],
-            vec![19937,6002],
-            vec![21701,6533],
-            vec![23209,6987],
-            vec![44497,13395],
-            vec![86243,25962],
-            vec![110503,33265],
-            vec![132049,39751],
-            vec![216091,65050],
-            vec![756839,227832],
-            vec![859433,258716],
-            vec![1257787,378632],
-            vec![1398269,420921],
-            vec![2976221,895832],
-            vec![3021377,909526],
-            vec![6972593,2098960],
-            vec![13466917,4053946],
-            vec![20996011,6320430],
-            vec![24036583,7235733],
-            vec![25964951,7816230],
-            vec![30402457,9152052],
-            vec![32582657,9808358],
-            vec![37156667,11185272],
-            vec![42643801,12837064],
-            vec![43112609,12978189],
-            vec![57885161,17425170],
-            vec![74207281,22338618],
-            vec![77232917,23249425],
+            Mersenne {n: 0, p: 0, digits: 0, discovery: String::from("")},//faux zero entry to make things easier when reading this vector
+            Mersenne {n: 1, p: 2, digits: 1, discovery: String::from("500BC")},
+            Mersenne {n: 2, p: 3, digits: 1, discovery: String::from("500BC")},
+            Mersenne {n: 3, p: 5, digits: 2, discovery: String::from("275BC")},
+            Mersenne {n: 4, p: 7, digits: 3, discovery: String::from("275BC")},
+            Mersenne {n: 5, p: 13, digits: 4, discovery: String::from("1456")},
+            Mersenne {n: 6, p: 17, digits: 6, discovery: String::from("1588")},
+            Mersenne {n: 7, p: 19, digits: 6, discovery: String::from("1588")},
+            Mersenne {n: 8, p: 31, digits: 10, discovery: String::from("1772")},
+            Mersenne {n: 9, p: 61, digits: 19, discovery: String::from("1883")},
+            Mersenne {n: 10, p: 89, digits: 27, discovery: String::from("1911")},
+            Mersenne {n: 11, p: 107, digits: 33, discovery: String::from("1914")},
+            Mersenne {n: 12, p: 127, digits: 39, discovery: String::from("1876")},
+            Mersenne {n: 13, p: 521, digits: 157, discovery: String::from("30-Jan-1952")},
+            Mersenne {n: 14, p: 607, digits: 183, discovery: String::from("30-Jan-1952")},
+            Mersenne {n: 15, p: 1279, digits: 386, discovery: String::from("26-Jun-1952")},
+            Mersenne {n: 16, p: 2203, digits: 664, discovery: String::from(" 7-Oct-1952")},
+            Mersenne {n: 17, p: 2281, digits: 687, discovery: String::from(" 9-Oct-1952")},
+            Mersenne {n: 18, p: 3217, digits: 969, discovery: String::from(" 8-Sep-1957")},
+            Mersenne {n: 19, p: 4253, digits: 1281, discovery: String::from(" 3-Nov-1961")},
+            Mersenne {n: 20, p: 4423, digits: 1332, discovery: String::from(" 3-Nov-1961")},
+            Mersenne {n: 21, p: 9689, digits: 2917, discovery: String::from("11-May-1963")},
+            Mersenne {n: 22, p: 9941, digits: 2993, discovery: String::from("16-May-1963")},
+            Mersenne {n: 23, p: 11213, digits: 3376, discovery: String::from(" 2-Jun-1963")},
+            Mersenne {n: 24, p: 19937, digits: 6002, discovery: String::from(" 4-Mar-1971")},
+            Mersenne {n: 25, p: 21701, digits: 6533, discovery: String::from("30-Oct-1978")},
+            Mersenne {n: 26, p: 23209, digits: 6987, discovery: String::from(" 9-Feb-1979")},
+            Mersenne {n: 27, p: 44497, digits: 13395, discovery: String::from(" 8-Apr-1979")},
+            Mersenne {n: 28, p: 86243, digits: 25962, discovery: String::from("25-Sep-1982")},
+            Mersenne {n: 29, p: 110503, digits: 33265, discovery: String::from("28-Jan-1988")},
+            Mersenne {n: 30, p: 132049, digits: 39751, discovery: String::from("20-Sep-1983")},
+            Mersenne {n: 31, p: 216091, digits: 65050, discovery: String::from(" 6-Sep-1985")},
+            Mersenne {n: 32, p: 756839, digits: 227832, discovery: String::from("19-Feb-1992")},
+            Mersenne {n: 33, p: 859433, digits: 258716, discovery: String::from("10-Jan-1994")},
+            Mersenne {n: 34, p: 1257787, digits: 378632, discovery: String::from(" 3-Sep-1996")},
+            Mersenne {n: 35, p: 1398269, digits: 420921, discovery: String::from("12-Nov-1996")},
+            Mersenne {n: 36, p: 2976221, digits: 895832, discovery: String::from("24-Aug-1997")},
+            Mersenne {n: 37, p: 3021377, digits: 909526, discovery: String::from("27-Jan-1998")},
+            Mersenne {n: 38, p: 6972593, digits: 2098960, discovery: String::from(" 1-Jun-1999")},
+            Mersenne {n: 39, p: 13466917, digits: 4053946, discovery: String::from("14-Nov-2001")},
+            Mersenne {n: 40, p: 20996011, digits: 6320430, discovery: String::from("17-Nov-2003")},
+            Mersenne {n: 41, p: 24036583, digits: 7235733, discovery: String::from("28-May-2004")},
+            Mersenne {n: 42, p: 25964951, digits: 7816230, discovery: String::from("26-Feb-2005")},
+            Mersenne {n: 43, p: 30402457, digits: 9152052, discovery: String::from("15-Dec-2005")},
+            Mersenne {n: 44, p: 32582657, digits: 9808358, discovery: String::from(" 4-Sep-2006")},
+            Mersenne {n: 45, p: 37156667, digits: 11185272, discovery: String::from("23-Aug-2008")},
+            Mersenne {n: 46, p: 42643801, digits: 12837064, discovery: String::from("06-Sep-2009")},
+            Mersenne {n: 47, p: 43112609, digits: 12978189, discovery: String::from("12-Apr-2008")},
+            Mersenne {n: 48, p: 57885161, digits: 17425170, discovery: String::from("25-Jan-2013")},
+            Mersenne {n: 49, p: 74207281, digits: 22338618, discovery: String::from("07-Jan-2016")},
+            Mersenne {n: 50, p: 77232917, digits: 23249425, discovery: String::from("26-Dec-2017")},
         ]
     }
 
     pub fn nth_mersenne_prime (candidate:&str) -> u64 {
         let big_candidate:BigInt = num_bigint::BigInt::from_str_radix(&candidate, 10).unwrap();
-        let mersennes:Vec<Vec<usize>> = mersennes();
+        let mersennes:Vec<Mersenne> = mersennes();
 
         let mut answer:u64 = 0;
         let big_two:BigInt = 2.to_bigint().unwrap();
         for n in 1..mersennes.len() {
-            let mprime:BigInt = big_two.pow(mersennes[n][0]) - 1;
+            let mprime:BigInt = big_two.pow(mersennes[n].p) - 1;
             if big_candidate == mprime {
                 answer = n as u64;
                 break
@@ -143,23 +107,31 @@ pub mod mersenne_utils {
 
         answer
     }
+
+    pub fn equation(p:u64) -> BigUint{
+		let two:BigUint = 2.to_biguint().unwrap();
+		let power:BigUint = two.clone() << (p.to_usize().unwrap()-1);
+		power.clone() -1.to_biguint().unwrap()
+	}
 }
 
-pub fn render() -> seed::dom_types::Node<Msg> {
+pub fn render(model: &crate::Model) -> seed::dom_types::Node<Msg> {
     let mut html = vec![];
-
     let mersennes = mersenne_utils::mersennes();
 
     for n in 1..mersennes.len() {
-        let download_txt:String = vec!["https://static.bigprimes.net/archive/mersenne/M",&n.to_string(),".txt"].into_iter().collect();
-        let download_zip:String = vec!["https://static.bigprimes.net/archive/mersenne/M",&n.to_string(),".zip"].into_iter().collect();
+        let mersenne_download = mersenne_utils::MersenneDownload {n: mersennes[n].n, p: mersennes[n].p};
         html.push(
             tr![
                 td![n.to_string()],
-                td!["2",sup![mersennes[n][0].to_string()],"-1"],
-                td![mersennes[n][1].to_string()],
+                td!["2",sup![mersennes[n].p.to_string()],"-1"],
+                td![mersennes[n].digits.to_string()],
                 td![mersenne_utils::mersennes_discovery_dates(n)],
-                if n >= 30 {a![attrs!{At::Href => download_zip},"ZIP"]} else {a![attrs!{At::Href => download_txt},"TXT"]}
+                if model.download.n == mersennes[n].n {
+					td![crate::utils::generate_file(model.download.n,mersenne_utils::equation(model.download.p))]
+				} else {
+					td![button!["Generate",mouse_ev("mouseup", move |event| Msg::GenerateMersenneDownload(event, mersenne_download))]]
+				},
             ]
         );
     }
@@ -198,6 +170,11 @@ pub fn render() -> seed::dom_types::Node<Msg> {
 }
 
 #[cfg(test)]
+use num_bigint::{BigUint,ToBigUint};
+#[cfg(test)]
+use num_traits::{Num};
+
+#[cfg(test)]
 mod tests {
     use super::*;
 
@@ -215,11 +192,19 @@ mod tests {
 
     #[test]
     fn mersenne_test() {
-        let mersennes:Vec<Vec<usize>> = mersenne_utils::mersennes();
-        assert_eq!(mersennes[0][0], 0);
-        assert_eq!(mersennes[0][1], 0);
+        let mersennes:Vec<mersenne_utils::Mersenne> = mersenne_utils::mersennes();
+        assert_eq!(mersennes[0].p, 0);
+        assert_eq!(mersennes[0].digits, 0);
 
-        assert_eq!(mersennes[2][0], 3);
-        assert_eq!(mersennes[2][1], 1);
+        assert_eq!(mersennes[2].p, 3);
+        assert_eq!(mersennes[2].digits, 1);
+    }
+
+    #[test]
+    fn equation_test() {
+        assert_eq!(mersenne_utils::equation(2  ), 3.to_biguint().unwrap());
+        assert_eq!(mersenne_utils::equation(19 ), 524287.to_biguint().unwrap());
+        let number:BigUint = num_bigint::BigUint::from_str_radix("6864797660130609714981900799081393217269435300143305409394463459185543183397656052122559640661454554977296311391480858037121987999716643812574028291115057151", 10).unwrap();
+        assert_eq!(mersenne_utils::equation(521), number);
     }
 }

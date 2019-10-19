@@ -6,7 +6,7 @@ extern crate num_traits;
 
 use crate::utils::{nth};
 use crate::pages::archive::mersenne::mersenne_utils as mersenne;
-use crate::pages::archive::prime::prime as prime;
+use crate::pages::archive::prime::prime_utils as prime;
 use regex::Regex;
 
 const MAX_LEN_PRIME_CHECK: usize = 2;
@@ -439,7 +439,7 @@ mod numerics_to_text {
     fn factor(n: u64) -> Vec<u64> {
         let mut factors: Vec<u64> = Vec::new(); // creates a new vector for the factors of the number
     
-        for i in 1..((n as f64).sqrt() as u64 + 1) { 
+        for i in 1..(n as f64).sqrt() as u64 + 1 { 
             if n % i == 0 {
                 factors.push(i); // pushes smallest factor to factors
                 factors.push(n/i); // pushes largest factor to factors
@@ -465,7 +465,7 @@ mod numerics_to_text {
         let mut total:BigUint = One::one();
         while total <= num {
             i += 1;
-            total = total * i;
+            total *= i;
             if total == num {
                 factorial_n = i;
             }
@@ -668,7 +668,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
     let spoken_version_of_number:String = numerics_to_text::convert(slug.to_string());
     let title:String = match spoken_version_of_number.as_ref() {
         "Error" => slug.to_string(),//just number
-        _ => vec![slug.to_string()," - ".to_string(),spoken_version_of_number].into_iter().collect()//number and text version of number e.g. 1 => one
+        _ => format!("{} - {}",slug.to_string(),spoken_version_of_number)//number and text version of number e.g. 1 => one
     };
 
     div![style!{"width" => "75%"; "padding" => "3px"},
@@ -813,9 +813,10 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
 pub fn render(slug:String) -> seed::dom_types::Node<Msg> {
     let rgx = Regex::new(r"^([1-9]+[0-9]*)$").unwrap();
 
-    match rgx.is_match(&slug) {
-        true => html_crunched_number(slug),
-        _ => html_form()
+    if rgx.is_match(&slug) {
+        html_crunched_number(slug)
+    } else {
+        html_form()
     }
 }
 
