@@ -151,8 +151,8 @@ pub fn render() -> seed::dom_types::Node<Msg> {
     let mersennes = mersenne_utils::mersennes();
 
     for n in 1..mersennes.len() {
-        let download_txt:String = vec!["https://static.bigprimes.net/archive/mersenne/M",&n.to_string(),".txt"].into_iter().collect();
-        let download_zip:String = vec!["https://static.bigprimes.net/archive/mersenne/M",&n.to_string(),".zip"].into_iter().collect();
+        let download_txt:String = format!("https://static.bigprimes.net/archive/mersenne/M{}.txt",&n.to_string());
+        let download_zip:String = format!("https://static.bigprimes.net/archive/mersenne/M{}.zip",&n.to_string());
         html.push(
             tr![
                 td![n.to_string()],

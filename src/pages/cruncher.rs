@@ -668,7 +668,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
     let spoken_version_of_number:String = numerics_to_text::convert(slug.to_string());
     let title:String = match spoken_version_of_number.as_ref() {
         "Error" => slug.to_string(),//just number
-        _ => vec![slug.to_string()," - ".to_string(),spoken_version_of_number].into_iter().collect()//number and text version of number e.g. 1 => one
+        _ => format!("{} - {}",slug.to_string(),spoken_version_of_number)//number and text version of number e.g. 1 => one
     };
 
     div![style!{"width" => "75%"; "padding" => "3px"},

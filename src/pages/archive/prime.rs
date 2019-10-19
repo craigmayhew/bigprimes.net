@@ -106,10 +106,10 @@ pub fn render(slug:String) -> seed::dom_types::Node<Msg> {
             href_prev = "/archive/prime/1/".to_string();
             prev_link = vec![a!["back to 1st prime numbers", attrs!{At::Class => "link", At::Href => href_prev}]];
         } else {
-            href_prev = vec!["/archive/prime/",&(slug_int-numbers_per_page).to_string(),"/"].into_iter().collect();
+            href_prev = format!("/archive/prime/{}/",&(slug_int-numbers_per_page).to_string());
             prev_link = vec![a!["previous ",numbers_per_page.to_string()," prime numbers", attrs!{At::Class => "link", At::Href => href_prev}]];
         }
-        let href_next:String = vec!["/archive/prime/",&(slug_int+numbers_per_page).to_string(),"/"].into_iter().collect();
+        let href_next:String = format!("/archive/prime/{}/",&(slug_int+numbers_per_page).to_string());
 
         div![
             h1!["The Prime Numbers"],

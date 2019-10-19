@@ -78,7 +78,7 @@ pub mod perfects_utils {
 	}
 
 	pub fn save_as_file(filename:String, filecontent:String) -> seed::dom_types::Node<Msg> {
-        let href:String = vec!["data:text/plain,",&filecontent].into_iter().collect();
+        let href:String = format!("data:text/plain,{}",&filecontent);
         a![attrs!{At::Download => &filename, At::Href => &href}, "TXT"]
     }
 
