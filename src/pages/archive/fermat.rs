@@ -60,7 +60,7 @@ pub fn render() -> seed::dom_types::Node<Msg> {
 				
                 td![fermats[n].digits.to_string()],//digits in length
                 td![El::from_html(fermats[n].prime_factors)],//prime factors
-                td![fermat_utils::save_as_file(String::from(download_filename),fermat_value.to_string())],
+                td![fermat_utils::save_as_file(download_filename,fermat_value.to_string())],
             ]
         );
     }
