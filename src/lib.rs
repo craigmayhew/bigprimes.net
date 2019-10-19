@@ -77,7 +77,7 @@ fn view(model: &Model) -> impl View<Msg> {
         Page::FermatArchive => pages::archive::fermat::render(),
         Page::FibonacciArchive => pages::archive::fibonacci::render(model.slug.to_owned()),
         Page::Home => pages::home::render(),
-        Page::MersenneArchive => pages::archive::mersenne::render(),
+        Page::MersenneArchive => pages::archive::mersenne::render(&model),
         Page::NumberCruncher => pages::cruncher::render(model.slug.to_owned()),
         Page::PerfectArchive => pages::archive::perfect::render(&model),
         Page::PrimalityChecker => pages::primalitytest::render(),
