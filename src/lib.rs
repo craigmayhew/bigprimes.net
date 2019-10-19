@@ -53,7 +53,12 @@ pub enum Msg {
 /// The sole source of updating the model
 fn update(msg: Msg, model: &mut Model, _: &mut impl Orders<Msg>) {
     match msg {
-        Msg::ChangePage(page, slug) => {model.page = page; model.slug = slug},
+        Msg::ChangePage(page, slug) => {
+            //reset download so subsequent visits to perfect page don't hang the browser with a download
+            model.download = pages::archive::perfect::perfects_utils::PerfectDownload {n: 0, p: 0};
+            model.page = page;
+            model.slug = slug
+        },
         Msg::GenerateDownload(_event, perfect_download) => {
             //event.prevent_default();
             model.download.n = perfect_download.n;
