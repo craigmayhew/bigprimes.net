@@ -156,6 +156,7 @@ mod tests {
     fn perfect_test<'a>() {
         let mut perfects:Vec<perfects_utils::Perfect> = perfects_utils::perfects();
 		perfects.reverse();
+		assert_eq!(perfects[50].digits, 49724095);
         assert_eq!(perfects[49].digits, 46498850);
         assert_eq!(perfects[39].digits, 12640858);
     }
