@@ -40,6 +40,11 @@ pub fn generate_file(n:u64, value:BigUint) -> seed::dom_types::Node<Msg> {
 
 #[cfg(test)]
 mod tests {
+    extern crate num_bigint;
+    extern crate num_traits;
+    
+    use num_bigint::{BigUint,ToBigUint};
+
     use super::*;
 
     #[test]
@@ -64,5 +69,13 @@ mod tests {
 
         assert_eq!(test_file.get_text(), "TXT");
         //todo: we are only testing the link text currently
+    }
+
+    #[test]
+    fn generate_file_test() {
+        let two:BigUint = 2.to_biguint().unwrap();
+
+        assert_eq!(generate_file(8, two).get_text(), "TXT");
+        //TODO: this test is not checking download value, or the <a> attributes. Just link text. 
     }
 }
