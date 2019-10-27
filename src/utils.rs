@@ -54,4 +54,15 @@ mod tests {
         assert_eq!(nth(7000000000000000012), "7000000000000000012th");
         assert_eq!(nth(7000000000000000013), "7000000000000000013th");
     }
+
+    #[test]
+    fn save_as_file_test() {
+        let test_file = save_as_file(
+            String::from("example name"),
+            String::from("some content")
+        );
+
+        assert_eq!(test_file.get_text(), "TXT");
+        //todo: we are only testing the link text currently
+    }
 }
