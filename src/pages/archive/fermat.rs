@@ -32,11 +32,11 @@ mod fermat_utils {
     }
 }
 
-pub fn render() -> seed::dom_types::Node<Msg> {
+fn generate_rows() -> std::vec::Vec<seed::dom_types::Node<Msg>> {
     let mut html = vec![];
     let two:usize = 2;
 
-    let mut fermats = fermat_utils::fermats();
+    let fermats = fermat_utils::fermats();
 
     for n in 0..fermats.len() {
         let download_filename:String = format!("F{}.txt",&fermats[n].n.to_string());
@@ -56,6 +56,12 @@ pub fn render() -> seed::dom_types::Node<Msg> {
             ]
         );
     }
+
+    html
+}
+
+pub fn render() -> seed::dom_types::Node<Msg> {
+    let html:std::vec::Vec<seed::dom_types::Node<Msg>> = generate_rows();
     
     div![
         h1!["The Fermat Numbers"],
