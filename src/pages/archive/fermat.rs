@@ -56,8 +56,6 @@ pub fn render() -> seed::dom_types::Node<Msg> {
             ]
         );
     }
-
-    fermats.reverse();
     
     div![
         h1!["The Fermat Numbers"],
