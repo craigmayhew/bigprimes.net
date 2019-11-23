@@ -61,8 +61,6 @@ pub mod prime_utils {
         let mut is_prime = vec![true; end+1];
         is_prime[0] = false;
         if end >= 1 { is_prime[1] = false }
-        
-        println!("{:#?}", is_prime);
 
         for num in 2..end+1 {
             if is_prime[num] {
@@ -73,8 +71,6 @@ pub mod prime_utils {
                 }
             }
         }
-
-        println!("{:#?}", is_prime);
     
         is_prime.iter().enumerate()
             .filter_map(
@@ -90,7 +86,7 @@ pub mod prime_utils {
                 } 
             )
             .collect()
-        }
+    }
 }
 
 pub fn render(slug:String) -> seed::dom_types::Node<Msg> {
