@@ -6,9 +6,6 @@ use num_traits::{pow};
 use num_bigint::{BigUint,ToBigUint};
 
 mod fermat_utils {
-    use seed::prelude::*;
-    use crate::Msg;
-
     pub struct Fermat<'a> {
 		pub n: u64,
 		pub f: u64,
@@ -33,18 +30,13 @@ mod fermat_utils {
             Fermat {n:  0, f: 0, digits:    1, prime_factors: "<a href=\"/cruncher/3/\">P2</a>", download: "F0"},
         ]
     }
-
-    pub fn save_as_file(filename:String, filecontent:String) -> seed::dom_types::Node<Msg> {
-        let href:String = format!("data:text/plain,{}",&filecontent);
-        a![attrs!{At::Download => &filename, At::Href => &href}, "TXT"]
-    }
 }
 
-pub fn render() -> seed::dom_types::Node<Msg> {
+fn generate_rows() -> std::vec::Vec<seed::dom_types::Node<Msg>> {
     let mut html = vec![];
     let two:usize = 2;
 
-    let mut fermats = fermat_utils::fermats();
+    let fermats = fermat_utils::fermats();
 
     for n in 0..fermats.len() {
         let download_filename:String = format!("F{}.txt",&fermats[n].n.to_string());
@@ -60,12 +52,16 @@ pub fn render() -> seed::dom_types::Node<Msg> {
 				
                 td![fermats[n].digits.to_string()],//digits in length
                 td![El::from_html(fermats[n].prime_factors)],//prime factors
-                td![fermat_utils::save_as_file(download_filename,fermat_value.to_string())],
+                td![crate::utils::save_as_file(download_filename,fermat_value.to_string())],
             ]
         );
     }
 
-    fermats.reverse();
+    html
+}
+
+pub fn render() -> seed::dom_types::Node<Msg> {
+    let html:std::vec::Vec<seed::dom_types::Node<Msg>> = generate_rows();
     
     div![
         h1!["The Fermat Numbers"],
