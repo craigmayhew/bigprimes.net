@@ -163,3 +163,8 @@ pub fn render() {
     .routes(routes)
     .build_and_start();
 }
+
+pub fn log(s: &str){
+    use web_sys::console;
+    console::log_1(&s.into());
+}
