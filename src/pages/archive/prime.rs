@@ -58,13 +58,13 @@ pub mod prime_utils {
     }
 
     pub fn sieve(start: usize, end: usize) -> Vec<usize> {
-        let mut is_prime = vec![true; end+1];//NOTE does not use start var :/
+        let mut is_prime = vec![true; end+1];
         is_prime[0] = false;
         if end >= 1 { is_prime[1] = false }
         
         println!("{:#?}", is_prime);
 
-        for num in start..end+1 {
+        for num in 2..end+1 {
             if is_prime[num] {
                 let mut num_squared = num*num;
                 while num_squared <= end {
@@ -77,7 +77,18 @@ pub mod prime_utils {
         println!("{:#?}", is_prime);
     
         is_prime.iter().enumerate()
-            .filter_map(|(pr, &is_pr)| if is_pr {Some(pr)} else {None} )
+            .filter_map(
+                |(pr, &is_pr)|
+                if is_pr { //is prime
+                    if pr>=start { //is greater than start vaariable
+                        Some(pr) //prime and we want it returned
+                    } else {
+                        None // not prime
+                    }
+                } else {
+                    None // not prime
+                } 
+            )
             .collect()
         }
 }
@@ -174,7 +185,11 @@ mod tests {
 
     #[test]
     fn sieve_test(){
+        //basic test starting from 1
         assert_eq!(prime_utils::sieve(1,10), vec![2,3,5,7]);
+
+        //basic test starting from 3
+        assert_eq!(prime_utils::sieve(3,10), vec![3,5,7]);
     }
 
 }
