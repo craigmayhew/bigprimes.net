@@ -206,6 +206,10 @@ mod tests {
         //test mid range prime numbers
         let first_prime_on_page = prime_utils::sieve_n_primes(2, SQRT_MAX_32BIT, 1600).pop().unwrap();
         assert_eq!(prime_utils::sieve_n_primes(first_prime_on_page, SQRT_MAX_32BIT, 3), vec![13499,13513,13523]);
+
+        //test more mid range prime numbers
+        let first_prime_on_page = prime_utils::sieve_n_primes(2, SQRT_MAX_32BIT, 4800).pop().unwrap();
+        assert_eq!(prime_utils::sieve_n_primes(first_prime_on_page, SQRT_MAX_32BIT, 3), vec![46447,46451,46457]);
     }
 
 }
