@@ -56,6 +56,30 @@ pub mod prime_utils {
 
         list_primes
     }
+
+    pub fn sieve(start: usize, end: usize) -> Vec<usize> {
+        let mut is_prime = vec![true; end+1];//NOTE does not use start var :/
+        is_prime[0] = false;
+        if end >= 1 { is_prime[1] = false }
+        
+        println!("{:#?}", is_prime);
+
+        for num in start..end+1 {
+            if is_prime[num] {
+                let mut num_squared = num*num;
+                while num_squared <= end {
+                    is_prime[num_squared] = false;
+                    num_squared += num;
+                }
+            }
+        }
+
+        println!("{:#?}", is_prime);
+    
+        is_prime.iter().enumerate()
+            .filter_map(|(pr, &is_pr)| if is_pr {Some(pr)} else {None} )
+            .collect()
+        }
 }
 
 pub fn render(slug:String) -> seed::dom_types::Node<Msg> {
@@ -142,4 +166,15 @@ mod tests {
         assert_eq!(prime_utils::n100_prime(101,100), vec![547,557,563,569,571,577,587,593,599,601,607,613,617,619,631,641,643,647,653,659,661,673,677,683,691,701,709,719,727,733,739,743,751,757,761,769,773,787,797,809,811,821,823,827,829,839,853,857,859,863,877,881,883,887,907,911,919,929,937,941,947,953,967,971,977,983,991,997,1009,1013,1019,1021,1031,1033,1039,1049,1051,1061,1063,1069,1087,1091,1093,1097,1103,1109,1117,1123,1129,1151,1153,1163,1171,1181,1187,1193,1201,1213,1217,1223]);
         assert_eq!(prime_utils::n100_prime(5001,100), vec![48619,48623,48647,48649,48661,48673,48677,48679,48731,48733,48751,48757,48761,48767,48779,48781,48787,48799,48809,48817,48821,48823,48847,48857,48859,48869,48871,48883,48889,48907,48947,48953,48973,48989,48991,49003,49009,49019,49031,49033,49037,49043,49057,49069,49081,49103,49109,49117,49121,49123,49139,49157,49169,49171,49177,49193,49199,49201,49207,49211,49223,49253,49261,49277,49279,49297,49307,49331,49333,49339,49363,49367,49369,49391,49393,49409,49411,49417,49429,49433,49451,49459,49463,49477,49481,49499,49523,49529,49531,49537,49547,49549,49559,49597,49603,49613,49627,49633,49639,49663]);
     }
+
+    /*TODO:
+    1) Introduce sane upper limit to prime archive. e.g. 2 or 3 seconds and then give up on the page.
+    2) Rewrite to use seive or similar. Aiming to get 10 million primes in less than a second.
+    */
+
+    #[test]
+    fn sieve_test(){
+        assert_eq!(prime_utils::sieve(1,10), vec![2,3,5,7]);
+    }
+
 }
