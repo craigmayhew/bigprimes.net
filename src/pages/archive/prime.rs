@@ -2,6 +2,7 @@ use seed::prelude::*;
 use crate::Msg;
 use crate::utils::nth;
 use regex::Regex;
+const SQRT_MAX_32BIT:usize = 46_340;
 
 pub mod prime_utils {
     /*
@@ -62,7 +63,12 @@ pub mod prime_utils {
         is_prime[0] = false;
         if end >= 1 { is_prime[1] = false }
 
-        for num in 2..end+1 {
+        if end > crate::pages::archive::prime::SQRT_MAX_32BIT {
+            crate::log("ERROR end is too large if we square into 32 bits");
+            println!("ERROR {} is too large if we square into 32 bits", end);
+        }
+
+        for num in 2..end {
             if is_prime[num] {
                 let mut num_squared = num*num;
                 while num_squared <= end {
@@ -71,7 +77,7 @@ pub mod prime_utils {
                 }
             }
         }
-    
+        
         is_prime.iter().enumerate()
             .filter_map(
                 |(pr, &is_pr)|
@@ -113,7 +119,9 @@ pub fn render(slug:String) -> seed::dom_types::Node<Msg> {
     } else {
         let mut slug_int:usize = slug.parse().unwrap();
         if slug_int < 1 {slug_int = 1};
-        let primes = prime_utils::n100_prime(slug_int, numbers_per_page);
+
+        let first_prime_on_page = prime_utils::sieve_n_primes(2, SQRT_MAX_32BIT, slug_int).pop().unwrap();
+        let primes = prime_utils::sieve_n_primes(first_prime_on_page, SQRT_MAX_32BIT, numbers_per_page);
 
         let mut prime_vec_formatted = vec![];
         for col in 1..col_count+1 {
@@ -194,6 +202,10 @@ mod tests {
 
         //test starting from 3, return 15 numbers
         assert_eq!(prime_utils::sieve_n_primes(3,100,15), vec![3,5,7,11,13,17,19,23,29,31,37,41,43,47,53]);
+
+        //test mid range prime numbers
+        let first_prime_on_page = prime_utils::sieve_n_primes(2, SQRT_MAX_32BIT, 1600).pop().unwrap();
+        assert_eq!(prime_utils::sieve_n_primes(first_prime_on_page, SQRT_MAX_32BIT, 85), vec![14347,14369,14387]);
     }
 
 }
