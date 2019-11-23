@@ -107,6 +107,7 @@ jobs:
         - cargo test
     - stage: Tests
       rust: nightly
+      env: CODECOV=1
       install:
         # If caching is working then this binary will already be installed, and this throws an error
         # We prevent the error from stopping travisci via || true
