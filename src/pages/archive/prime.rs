@@ -181,7 +181,7 @@ mod tests {
 
     /*TODO:
     1) Introduce sane upper limit to prime archive. e.g. 2 or 3 seconds and then give up on the page.
-    2) Rewrite to use seive or similar. Aiming to get 10 million primes in less than a second.
+    2) Rewrite to use sieve or similar. Aiming to get 10 million primes in less than a second.
     */
 
     #[test]
