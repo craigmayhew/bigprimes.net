@@ -87,6 +87,11 @@ pub mod prime_utils {
             )
             .collect()
     }
+
+    pub fn sieve_n_primes (start: usize, end: usize, n_primes: usize) -> Vec<usize> {
+        let sieved_numbers: Vec<usize> = sieve(start, end);
+        sieved_numbers[0..n_primes].to_vec()
+    }
 }
 
 pub fn render(slug:String) -> seed::dom_types::Node<Msg> {
@@ -181,11 +186,14 @@ mod tests {
 
     #[test]
     fn sieve_test(){
-        //basic test starting from 1
+        //test starting from 1
         assert_eq!(prime_utils::sieve(1,10), vec![2,3,5,7]);
 
-        //basic test starting from 3
+        //test starting from 3
         assert_eq!(prime_utils::sieve(3,10), vec![3,5,7]);
+
+        //test starting from 3, return 15 numbers
+        assert_eq!(prime_utils::sieve_n_primes(3,100,15), vec![3,5,7,11,13,17,19,23,29,31,37,41,43,47,53]);
     }
 
 }
