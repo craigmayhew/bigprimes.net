@@ -9,7 +9,7 @@ use crate::pages::archive::mersenne::mersenne_utils as mersenne;
 use crate::pages::archive::prime::prime_utils as prime;
 use regex::Regex;
 
-const MAX_LEN_PRIME_CHECK: usize = 2;
+const MAX_LEN_PRIME_CHECK: usize = 6;
 
 mod numerics_to_text {
     use crate::utils::{nth};
