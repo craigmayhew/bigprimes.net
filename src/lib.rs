@@ -112,15 +112,15 @@ impl ToString for Page {
     }
 }
 
-fn routes(url: seed::Url) -> Msg {
+fn routes(url: seed::Url) -> Option<Msg> {
 
     let empty_string = "".to_owned();
 
     if url.path.is_empty() {
-        return Msg::ChangePage(Page::Home, empty_string)
+        return Some(Msg::ChangePage(Page::Home, empty_string))
     }
 
-    match url.path[0].as_ref() {
+    Some(match url.path[0].as_ref() {
         "archive" => {
             // Determine if we are at the archive page, or a subpage
             match url.path[1].as_ref() {
@@ -154,21 +154,17 @@ fn routes(url: seed::Url) -> Msg {
         "primalitytest" => Msg::ChangePage(Page::PrimalityChecker, empty_string),
         "status" => Msg::ChangePage(Page::Status, empty_string),
         _ => Msg::ChangePage(Page::Home, empty_string)
-    }
+    })
 }
 
 #[wasm_bindgen(start)]
 pub fn render() {
-    seed::App::build(init, update, view)
-        .mount("app")
-        .routes(routes)
-        //.window_events(window_events)
-        .finish()
-        .run();
+    seed::App::build(|_, _| Init::new(Model::default()), update, view)
+    .routes(routes)
+    .build_and_start();
 }
 
-fn init(url: Url, orders: &mut impl Orders<Msg>) -> Model {
-    let mut model = Model::default();
-    update(routes(url), &mut model, orders);
-    model
+pub fn log(s: &str){
+    use web_sys::console;
+    console::log_1(&s.into());
 }
