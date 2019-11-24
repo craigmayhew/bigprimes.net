@@ -185,6 +185,10 @@ pub fn render(slug:String) -> seed::dom_types::Node<Msg> {
             a!["1000th prime Number", attrs!{At::Class => "link", At::Href => "/archive/prime/1000/"}],
             br![],
             a!["10000th prime Number", attrs!{At::Class => "link", At::Href => "/archive/prime/10000/"}],
+            br![],
+            a!["100000th prime Number", attrs!{At::Class => "link", At::Href => "/archive/prime/100000/"}],
+            br![],
+            a!["1000000th prime Number", attrs!{At::Class => "link", At::Href => "/archive/prime/1000000/"}],
         ]
     }
 }
