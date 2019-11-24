@@ -96,7 +96,15 @@ pub mod prime_utils {
 
     pub fn sieve_n_primes (start: usize, end: usize, n_primes: usize) -> Vec<usize> {
         let sieved_numbers: Vec<usize> = sieve(start, end);
-        sieved_numbers[0..n_primes].to_vec()
+        // check if we didn't get as many numbers as we expected
+        if n_primes >= sieved_numbers.len() {
+            // todo: consider erroring in this case, as we asked for a
+            // specific number of primes and did not provide them all
+            sieved_numbers[0..sieved_numbers.len()-1].to_vec()
+        } else {
+            sieved_numbers[0..n_primes].to_vec()
+        }
+        
     }
 }
 
@@ -127,6 +135,12 @@ pub fn render(slug:String) -> seed::dom_types::Node<Msg> {
         for col in 1..col_count+1 {
             let mut prime_vec = vec![];
             for i in numbers_per_col*(col-1)..numbers_per_col*col {
+                // check data is available to display
+                if i >= primes.len() {
+                    continue;
+                }
+
+                // the data is there, display it
                 let mut href:String = "/cruncher/".to_owned();
                 href.push_str(&primes[i].to_string());
                 prime_vec.push(
