@@ -62,13 +62,14 @@ pub mod prime_utils {
         let mut is_prime = vec![true; end+1];
         is_prime[0] = false;
         if end >= 1 { is_prime[1] = false }
+        let sqrtlmt = (end as f64).sqrt() as usize + 1;
 
         if end > crate::pages::archive::prime::SQRT_MAX_32BIT {
             crate::log("ERROR end is too large if we square into 32 bits");
             println!("ERROR {} is too large if we square into 32 bits", end);
         }
 
-        for num in 2..end {
+        for num in 2..sqrtlmt {
             if is_prime[num] {
                 let mut num_squared = num*num;
                 while num_squared <= end {
