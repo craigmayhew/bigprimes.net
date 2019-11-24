@@ -2,7 +2,6 @@ use seed::prelude::*;
 use crate::Msg;
 use crate::utils::nth;
 use regex::Regex;
-const SQRT_MAX_32BIT:usize = 46_340;
 
 pub mod prime_utils {
     /*
@@ -64,11 +63,6 @@ pub mod prime_utils {
         if end >= 1 { is_prime[1] = false }
         let sqrtlmt = (end as f64).sqrt() as usize + 1;
 
-        if end > crate::pages::archive::prime::SQRT_MAX_32BIT {
-            crate::log("ERROR end is too large if we square into 32 bits");
-            println!("ERROR {} is too large if we square into 32 bits", end);
-        }
-
         for num in 2..sqrtlmt {
             if is_prime[num] {
                 let mut num_squared = num*num;
@@ -129,8 +123,12 @@ pub fn render(slug:String) -> seed::dom_types::Node<Msg> {
         let mut slug_int:usize = slug.parse().unwrap();
         if slug_int < 1 {slug_int = 1};
 
-        let first_prime_on_page = prime_utils::sieve_n_primes(2, SQRT_MAX_32BIT, slug_int).pop().unwrap();
-        let primes = prime_utils::sieve_n_primes(first_prime_on_page, SQRT_MAX_32BIT, numbers_per_page);
+        // todo: slug_int*100 and first_prime_on_page*2 are both inefficient
+        // first_prime_on_page could be multiplied by slightly more than 1, just enough to cover expected primes on the page
+        // slug_int*100 would cover us up until prime gaps are above 100 on average
+        let first_prime_on_page = prime_utils::sieve_n_primes(2, slug_int*100, slug_int).pop().unwrap();
+        let upper_bound_of_sieve = first_prime_on_page*2;
+        let primes = prime_utils::sieve_n_primes(first_prime_on_page, upper_bound_of_sieve, numbers_per_page);
 
         let mut prime_vec_formatted = vec![];
         for col in 1..col_count+1 {
@@ -219,12 +217,16 @@ mod tests {
         assert_eq!(prime_utils::sieve_n_primes(3,100,15), vec![3,5,7,11,13,17,19,23,29,31,37,41,43,47,53]);
 
         //test mid range prime numbers
-        let first_prime_on_page = prime_utils::sieve_n_primes(2, SQRT_MAX_32BIT, 1600).pop().unwrap();
-        assert_eq!(prime_utils::sieve_n_primes(first_prime_on_page, SQRT_MAX_32BIT, 3), vec![13499,13513,13523]);
+        let start_nth_prime = 1600;
+        let first_prime_on_page = prime_utils::sieve_n_primes(2, 50000, start_nth_prime).pop().unwrap();
+        let upper_bound_of_sieve = first_prime_on_page*2;
+        assert_eq!(prime_utils::sieve_n_primes(first_prime_on_page, upper_bound_of_sieve, 3), vec![13499,13513,13523]);
 
         //test more mid range prime numbers
-        let first_prime_on_page = prime_utils::sieve_n_primes(2, SQRT_MAX_32BIT, 4800).pop().unwrap();
-        assert_eq!(prime_utils::sieve_n_primes(first_prime_on_page, SQRT_MAX_32BIT, 3), vec![46447,46451,46457]);
+        let start_nth_prime = 4800;
+        let first_prime_on_page = prime_utils::sieve_n_primes(2, 50000, start_nth_prime).pop().unwrap();
+        let upper_bound_of_sieve = first_prime_on_page*2;
+        assert_eq!(prime_utils::sieve_n_primes(first_prime_on_page, upper_bound_of_sieve, 3), vec![46447,46451,46457]);
     }
 
 }
