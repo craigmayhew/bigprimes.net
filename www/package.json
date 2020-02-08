@@ -12,9 +12,9 @@
     "big_primes": "file:../pkg"
   },
   "devDependencies": {
-    "webpack": "^4.29.3",
-    "webpack-cli": "^3.1.0",
-    "webpack-dev-server": "^3.1.5",
+    "webpack": "4.x",
+    "webpack-cli": "3.x",
+    "webpack-dev-server": "^3.x",
     "copy-webpack-plugin": "^5.0.0"
   }
 }
