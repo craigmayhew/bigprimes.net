@@ -1,1 +1,1 @@
-import * as wasm from "BigPrimes";
+import * as wasm from "big_primes";

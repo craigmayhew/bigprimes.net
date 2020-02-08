@@ -9,7 +9,7 @@
   },
   "license": "(MIT OR Apache-2.0)",
   "dependencies": {
-    "BigPrimes": "file:../pkg"
+    "big_primes": "file:../pkg"
   },
   "devDependencies": {
     "webpack": "^4.29.3",
