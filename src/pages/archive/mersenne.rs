@@ -96,7 +96,7 @@ pub mod mersenne_utils {
         let mut answer:u64 = 0;
         let big_two:BigInt = 2.to_bigint().unwrap();
         for n in 1..mersennes.len() {
-            let mprime:BigInt = big_two.pow(mersennes[n].p) - 1;
+            let mprime:BigInt = big_two.clone().pow(mersennes[n].p) - 1;
             if big_candidate == mprime {
                 answer = n as u64;
                 break
