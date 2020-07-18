@@ -21,11 +21,13 @@ jobs:
     # Builds on nightly.
       rust: nightly
       install:
-        # If caching is working then this binary will already be installed, and this throws an error
-        # We prevent the error from stopping travisci via || true
-        - cargo install wasm-pack || true
+        - | # Download wasm-pack binary
+          WASMPACKVERSION=$(curl --silent "https://api.github.com/repos/rustwasm/wasm-pack/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
+          wget https://github.com/rustwasm/wasm-pack/releases/download/$WASMPACKVERSION/wasm-pack-$WASMPACKVERSION-x86_64-unknown-linux-musl.tar.gz
+          tar -zxvf wasm-pack-$WASMPACKVERSION-x86_64-unknown-linux-musl.tar.gz wasm-pack-$WASMPACKVERSION-x86_64-unknown-linux-musl/wasm-pack
+          mv wasm-pack-$WASMPACKVERSION-x86_64-unknown-linux-musl/wasm-pack wasm-pack
       before_script:
-        - wasm-pack build
+        - ./wasm-pack build
         - cd www && cp -r ../pkg/ . && npm install && cd ../
       before_cache:
         # this following line is recommended by travis docs if one overrides before_cache
@@ -43,17 +45,18 @@ jobs:
         - cargo check --target wasm32-unknown-unknown --no-default-features --features console_error_panic_hook
         - cargo check                                 --no-default-features --features "console_error_panic_hook wee_alloc"
         - cargo check --target wasm32-unknown-unknown --no-default-features --features "console_error_panic_hook wee_alloc"
-        - cargo build
         - cargo test
     # Builds on beta.
     - 
       rust: beta
       install:
-        # If caching is working then this binary will already be installed, and this throws an error
-        # We prevent the error from stopping travisci via || true
-        - cargo install wasm-pack || true
+        - | # Download wasm-pack binary
+          WASMPACKVERSION=$(curl --silent "https://api.github.com/repos/rustwasm/wasm-pack/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
+          wget https://github.com/rustwasm/wasm-pack/releases/download/$WASMPACKVERSION/wasm-pack-$WASMPACKVERSION-x86_64-unknown-linux-musl.tar.gz
+          tar -zxvf wasm-pack-$WASMPACKVERSION-x86_64-unknown-linux-musl.tar.gz wasm-pack-$WASMPACKVERSION-x86_64-unknown-linux-musl/wasm-pack
+          mv wasm-pack-$WASMPACKVERSION-x86_64-unknown-linux-musl/wasm-pack wasm-pack
       before_script:
-        - wasm-pack build && cd www && npm install
+        - ./wasm-pack build && cd www && npm install
       before_cache:
         # this following line is recommended by travis docs if one overrides before_cache
         - rm -rf "$TRAVIS_HOME/.cargo/registry/src"
@@ -73,17 +76,18 @@ jobs:
         - cargo check                                 --no-default-features --features console_error_panic_hook
         - cargo check --target wasm32-unknown-unknown --no-default-features --features console_error_panic_hook
         # Note: no enabling the `wee_alloc` feature here because it requires nightly for now.
-        - cargo build
         - cargo test
     # Builds on stable.
     -
       rust: stable
       install:
-        # If caching is working then this binary will already be installed, and this throws an error
-        # We prevent the error from stopping travisci via || true
-        - cargo install wasm-pack || true
+        - | # Download wasm-pack binary
+          WASMPACKVERSION=$(curl --silent "https://api.github.com/repos/rustwasm/wasm-pack/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
+          wget https://github.com/rustwasm/wasm-pack/releases/download/$WASMPACKVERSION/wasm-pack-$WASMPACKVERSION-x86_64-unknown-linux-musl.tar.gz
+          tar -zxvf wasm-pack-$WASMPACKVERSION-x86_64-unknown-linux-musl.tar.gz wasm-pack-$WASMPACKVERSION-x86_64-unknown-linux-musl/wasm-pack
+          mv wasm-pack-$WASMPACKVERSION-x86_64-unknown-linux-musl/wasm-pack wasm-pack
       before_script:
-        - wasm-pack build && cd www && npm install
+        - ./wasm-pack build && cd www && npm install
       before_cache:
         # this following line is recommended by travis docs if one overrides before_cache
         - rm -rf "$TRAVIS_HOME/.cargo/registry/src"
@@ -103,15 +107,10 @@ jobs:
         - cargo check                                 --no-default-features --features console_error_panic_hook
         - cargo check --target wasm32-unknown-unknown --no-default-features --features console_error_panic_hook
         # Note: no enabling the `wee_alloc` feature here because it requires nightly for now.
-        - cargo build
         - cargo test
     - stage: Tests
       rust: nightly
       env: CODECOV=1
-      install:
-        # If caching is working then this binary will already be installed, and this throws an error
-        # We prevent the error from stopping travisci via || true
-        - cargo install wasm-pack || true
       before_cache:
         # this following line is recommended by travis docs if one overrides before_cache
         - rm -rf "$TRAVIS_HOME/.cargo/registry/src"
@@ -143,9 +142,11 @@ jobs:
         - sudo apt-get install python python-pip
         - sudo -H pip install awscli
       install:
-        # If caching is working then this binary will already be installed, and this throws an error
-        # We prevent the error from stopping travisci via || true
-        - cargo install wasm-pack || true
+        - | # Download wasm-pack binary
+          WASMPACKVERSION=$(curl --silent "https://api.github.com/repos/rustwasm/wasm-pack/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
+          wget https://github.com/rustwasm/wasm-pack/releases/download/$WASMPACKVERSION/wasm-pack-$WASMPACKVERSION-x86_64-unknown-linux-musl.tar.gz
+          tar -zxvf wasm-pack-$WASMPACKVERSION-x86_64-unknown-linux-musl.tar.gz wasm-pack-$WASMPACKVERSION-x86_64-unknown-linux-musl/wasm-pack
+          mv wasm-pack-$WASMPACKVERSION-x86_64-unknown-linux-musl/wasm-pack wasm-pack
         # binaryen is used to optimize wasm files for a ~20% size reduction and some extra speed
         - |
           BINARYENVERSION=$(curl --silent "https://api.github.com/repos/WebAssembly/binaryen/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
@@ -153,7 +154,7 @@ jobs:
           tar -zxvf binaryen-$BINARYENVERSION-aarch64-linux.tar.gz binaryen-$BINARYENVERSION/wasm-opt
           mv binaryen-$BINARYENVERSION/wasm-opt wasm-opt
       before_script:
-        - wasm-pack build
+        - ./wasm-pack build
         - #optimize wasm file
         - ./wasm-opt pkg/big_primes_bg.wasm -O4 -o pkg/big_primes_bg.wasm
         - cd www && cp -r ../pkg/ . && npm install && cd ../
