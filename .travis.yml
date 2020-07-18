@@ -45,7 +45,6 @@ jobs:
         - cargo check --target wasm32-unknown-unknown --no-default-features --features console_error_panic_hook
         - cargo check                                 --no-default-features --features "console_error_panic_hook wee_alloc"
         - cargo check --target wasm32-unknown-unknown --no-default-features --features "console_error_panic_hook wee_alloc"
-        - cargo build
         - cargo test
     # Builds on beta.
     - 
@@ -77,7 +76,6 @@ jobs:
         - cargo check                                 --no-default-features --features console_error_panic_hook
         - cargo check --target wasm32-unknown-unknown --no-default-features --features console_error_panic_hook
         # Note: no enabling the `wee_alloc` feature here because it requires nightly for now.
-        - cargo build
         - cargo test
     # Builds on stable.
     -
@@ -109,7 +107,6 @@ jobs:
         - cargo check                                 --no-default-features --features console_error_panic_hook
         - cargo check --target wasm32-unknown-unknown --no-default-features --features console_error_panic_hook
         # Note: no enabling the `wee_alloc` feature here because it requires nightly for now.
-        - cargo build
         - cargo test
     - stage: Tests
       rust: nightly
