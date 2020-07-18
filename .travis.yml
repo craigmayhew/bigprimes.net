@@ -114,12 +114,6 @@ jobs:
     - stage: Tests
       rust: nightly
       env: CODECOV=1
-      install:
-        - | # Download wasm-pack binary
-          WASMPACKVERSION=$(curl --silent "https://api.github.com/repos/rustwasm/wasm-pack/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
-          wget https://github.com/rustwasm/wasm-pack/releases/download/$WASMPACKVERSION/wasm-pack-$WASMPACKVERSION-x86_64-unknown-linux-musl.tar.gz
-          tar -zxvf wasm-pack-$WASMPACKVERSION-x86_64-unknown-linux-musl.tar.gz wasm-pack-$WASMPACKVERSION-x86_64-unknown-linux-musl/wasm-pack
-          mv wasm-pack-$WASMPACKVERSION-x86_64-unknown-linux-musl/wasm-pack wasm-pack
       before_cache:
         # this following line is recommended by travis docs if one overrides before_cache
         - rm -rf "$TRAVIS_HOME/.cargo/registry/src"
