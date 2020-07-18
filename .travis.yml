@@ -27,7 +27,7 @@ jobs:
           tar -zxvf wasm-pack-$WASMPACKVERSION-x86_64-unknown-linux-musl.tar.gz wasm-pack-$WASMPACKVERSION-x86_64-unknown-linux-musl/wasm-pack
           mv wasm-pack-$WASMPACKVERSION-x86_64-unknown-linux-musl/wasm-pack wasm-pack
       before_script:
-        - wasm-pack build
+        - ./wasm-pack build
         - cd www && cp -r ../pkg/ . && npm install && cd ../
       before_cache:
         # this following line is recommended by travis docs if one overrides before_cache
@@ -57,7 +57,7 @@ jobs:
           tar -zxvf wasm-pack-$WASMPACKVERSION-x86_64-unknown-linux-musl.tar.gz wasm-pack-$WASMPACKVERSION-x86_64-unknown-linux-musl/wasm-pack
           mv wasm-pack-$WASMPACKVERSION-x86_64-unknown-linux-musl/wasm-pack wasm-pack
       before_script:
-        - wasm-pack build && cd www && npm install
+        - ./wasm-pack build && cd www && npm install
       before_cache:
         # this following line is recommended by travis docs if one overrides before_cache
         - rm -rf "$TRAVIS_HOME/.cargo/registry/src"
@@ -89,7 +89,7 @@ jobs:
           tar -zxvf wasm-pack-$WASMPACKVERSION-x86_64-unknown-linux-musl.tar.gz wasm-pack-$WASMPACKVERSION-x86_64-unknown-linux-musl/wasm-pack
           mv wasm-pack-$WASMPACKVERSION-x86_64-unknown-linux-musl/wasm-pack wasm-pack
       before_script:
-        - wasm-pack build && cd www && npm install
+        - ./wasm-pack build && cd www && npm install
       before_cache:
         # this following line is recommended by travis docs if one overrides before_cache
         - rm -rf "$TRAVIS_HOME/.cargo/registry/src"
@@ -163,7 +163,7 @@ jobs:
           tar -zxvf binaryen-$BINARYENVERSION-aarch64-linux.tar.gz binaryen-$BINARYENVERSION/wasm-opt
           mv binaryen-$BINARYENVERSION/wasm-opt wasm-opt
       before_script:
-        - wasm-pack build
+        - ./wasm-pack build
         - #optimize wasm file
         - ./wasm-opt pkg/big_primes_bg.wasm -O4 -o pkg/big_primes_bg.wasm
         - cd www && cp -r ../pkg/ . && npm install && cd ../
