@@ -149,7 +149,7 @@ jobs:
           mv wasm-pack-$WASMPACKVERSION-x86_64-unknown-linux-musl/wasm-pack wasm-pack
         # binaryen is used to optimize wasm files for a ~20% size reduction and some extra speed
         - |
-          BINARYENVERSION=$(curl --silent "https://api.github.com/repos/WebAssembly/binaryen/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
+          #BINARYENVERSION=$(curl --silent "https://api.github.com/repos/WebAssembly/binaryen/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
           BINARYENVERSION=97 # hardcoded version until this is fixed: https://github.com/WebAssembly/binaryen/issues/3459
           wget https://github.com/WebAssembly/binaryen/releases/download/$BINARYENVERSION/binaryen-$BINARYENVERSION-aarch64-linux.tar.gz
           tar -zxvf binaryen-$BINARYENVERSION-aarch64-linux.tar.gz binaryen-$BINARYENVERSION/wasm-opt
