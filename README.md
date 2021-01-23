@@ -44,5 +44,4 @@ Fun Facts
 Thanks
 ===
  - https://seed-rs.org/
- - https://tatrix.org/public/html-to-seed/
  
