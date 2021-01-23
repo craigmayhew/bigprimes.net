@@ -2,6 +2,10 @@
 name = "big_primes"
 version = "0.1.0"
 authors = ["Craig Mayhew"]
+description = "The rust source code that powers bigprimes.net"
+readme = "README.md"
+license = "MIT/APACHE"
+repository = "https://github.com/craigmayhew/bigprimes.net"
 edition = "2018" #rust has two major editions, 2018 is the latest
 
 [lib]
