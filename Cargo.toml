@@ -2,6 +2,10 @@
 name = "big_primes"
 version = "0.1.0"
 authors = ["Craig Mayhew"]
+description = "The rust source code that powers bigprimes.net"
+readme = "README.md"
+license = "MIT/APACHE"
+repository = "https://github.com/craigmayhew/bigprimes.net"
 edition = "2018" #rust has two major editions, 2018 is the latest
 
 [lib]
@@ -13,7 +17,7 @@ default = ["console_error_panic_hook"]
 [dependencies]
 seed = "0.4"
 wasm-bindgen = "0.2"
-web-sys = "0.3.42"
+web-sys = "0.3.46"
 num-bigint = "0.3"
 num-traits = "0.2"
 regex = "1"
