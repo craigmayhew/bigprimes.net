@@ -59,6 +59,8 @@ jobs:
           - { toolchain: nightly, target: x86_64-unknown-linux-gnu}
 
     steps:
+      - name: Checkout project
+        run: git clone ${{ github.event.repository.git_url }}
       - name: Submit code coverage using rust ${{ matrix.config.toolchain }}
         env:
           CARGO_INCREMENTAL: 0
