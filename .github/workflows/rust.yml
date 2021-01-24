@@ -12,15 +12,15 @@ env:
 jobs:
   lint:
     runs-on: ubuntu-latest
-    
+
     strategy:
       fail-fast: false
       matrix:
         config:
           # Linux
-          - { os: ubuntu-latest, toolchain: stable, target: x86_64-unknown-linux-gnu, cross: false }
-          - { os: ubuntu-latest, toolchain: beta, target: x86_64-unknown-linux-gnu, cross: false }
-          - { os: ubuntu-latest, toolchain: nightly, target: x86_64-unknown-linux-gnu, cross: false }
+          - { toolchain: stable, target: x86_64-unknown-linux-gnu, cross: false }
+          - { toolchain: beta, target: x86_64-unknown-linux-gnu, cross: false }
+          - { toolchain: nightly, target: x86_64-unknown-linux-gnu, cross: false }
 
     steps:
       - uses: actions/checkout@v2
@@ -36,9 +36,9 @@ jobs:
       matrix:
         config:
           # Linux
-          - { os: ubuntu-latest, toolchain: stable, target: x86_64-unknown-linux-gnu, cross: false }
-          - { os: ubuntu-latest, toolchain: beta, target: x86_64-unknown-linux-gnu, cross: false }
-          - { os: ubuntu-latest, toolchain: nightly, target: x86_64-unknown-linux-gnu, cross: false }
+          - { toolchain: stable, target: x86_64-unknown-linux-gnu, cross: false }
+          - { toolchain: beta, target: x86_64-unknown-linux-gnu, cross: false }
+          - { toolchain: nightly, target: x86_64-unknown-linux-gnu, cross: false }
 
     steps:
       - uses: actions/checkout@v2
