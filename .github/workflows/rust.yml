@@ -18,14 +18,16 @@ jobs:
       matrix:
         config:
           # Linux
-          - { toolchain: stable, target: x86_64-unknown-linux-gnu, cross: false }
-          - { toolchain: beta, target: x86_64-unknown-linux-gnu, cross: false }
-          - { toolchain: nightly, target: x86_64-unknown-linux-gnu, cross: false }
+          - { toolchain: stable, target: x86_64-unknown-linux-gnu }
+          - { toolchain: beta, target: x86_64-unknown-linux-gnu }
+          - { toolchain: nightly, target: x86_64-unknown-linux-gnu }
 
     steps:
       - uses: actions/checkout@v2
       - name: Lint code ${{ matrix.config.toolchain }}
-        run: cargo fmt --all -- --check
+        run: |
+          rustup toolchain install ${{ matrix.config.toolchain }}
+          cargo fmt --all -- --check
 
   test:
     needs: lint
@@ -36,14 +38,16 @@ jobs:
       matrix:
         config:
           # Linux
-          - { toolchain: stable, target: x86_64-unknown-linux-gnu, cross: false }
-          - { toolchain: beta, target: x86_64-unknown-linux-gnu, cross: false }
-          - { toolchain: nightly, target: x86_64-unknown-linux-gnu, cross: false }
+          - { toolchain: stable, target: x86_64-unknown-linux-gnu }
+          - { toolchain: beta, target: x86_64-unknown-linux-gnu }
+          - { toolchain: nightly, target: x86_64-unknown-linux-gnu }
 
     steps:
       - uses: actions/checkout@v2
       - name: Run tests ${{ matrix.config.toolchain }}
-        run: cargo test --verbose
+        run: |
+          rustup toolchain install ${{ matrix.config.toolchain }}
+          cargo test --verbose
 
   codecov:
     needs: lint
@@ -68,6 +72,7 @@ jobs:
           RUSTDOCFLAGS: "-Cpanic=abort"
         working-directory: ./bigprimes.net # change cwd to be in the cloned repo
         run: |
+          rustup toolchain install ${{ matrix.config.toolchain }}
           # see stackoverflow checkout in github actions https://stackoverflow.com/questions/63795736/github-action-to-check-out-repo-as-a-git-submodule
           git fetch --force ${{ github.event.repository.git_url }} "+refs/heads/*:refs/remotes/origin/*"
           git fetch --force ${{ github.event.repository.git_url }} "+refs/pull/*/merge:refs/remotes/origin/pr/*"
