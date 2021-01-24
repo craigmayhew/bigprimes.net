@@ -1,5 +1,5 @@
-use seed::prelude::*;
 use crate::Msg;
+use seed::prelude::*;
 
 pub fn render() -> seed::dom_types::Node<Msg> {
     div![
