@@ -15,7 +15,7 @@ crate-type = ["cdylib", "rlib"]
 default = ["console_error_panic_hook"]
 
 [dependencies]
-seed = "0.4"
+seed = "0.8"
 wasm-bindgen = "0.2"
 web-sys = "0.3.46"
 num-bigint = "0.3"
