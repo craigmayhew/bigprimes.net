@@ -12,17 +12,35 @@ env:
 jobs:
   lint:
     runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          # Linux
+          - { os: ubuntu-latest, toolchain: stable, target: x86_64-unknown-linux-gnu, cross: false }
+          - { os: ubuntu-latest, toolchain: beta, target: x86_64-unknown-linux-gnu, cross: false }
+          - { os: ubuntu-latest, toolchain: nightly, target: x86_64-unknown-linux-gnu, cross: false }
 
     steps:
       - uses: actions/checkout@v2
-      - name: Lint code
+      - name: Lint code ${{ matrix.config.toolchain }}
         run: cargo fmt --all -- --check
 
   test:
     needs: lint
     runs-on: ubuntu-latest
 
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          # Linux
+          - { os: ubuntu-latest, toolchain: stable, target: x86_64-unknown-linux-gnu, cross: false }
+          - { os: ubuntu-latest, toolchain: beta, target: x86_64-unknown-linux-gnu, cross: false }
+          - { os: ubuntu-latest, toolchain: nightly, target: x86_64-unknown-linux-gnu, cross: false }
+
     steps:
       - uses: actions/checkout@v2
-      - name: Run tests
+      - name: Run tests ${{ matrix.config.toolchain }}
         run: cargo test --verbose
