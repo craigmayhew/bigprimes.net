@@ -73,6 +73,7 @@ jobs:
         working-directory: ./bigprimes.net # change cwd to be in the cloned repo
         run: |
           rustup toolchain install ${{ matrix.config.toolchain }}
+          rustup default ${{ matrix.config.toolchain }}
           # see stackoverflow checkout in github actions https://stackoverflow.com/questions/63795736/github-action-to-check-out-repo-as-a-git-submodule
           git fetch --force ${{ github.event.repository.git_url }} "+refs/heads/*:refs/remotes/origin/*"
           git fetch --force ${{ github.event.repository.git_url }} "+refs/pull/*/merge:refs/remotes/origin/pr/*"
