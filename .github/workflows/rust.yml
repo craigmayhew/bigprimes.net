@@ -66,6 +66,7 @@ jobs:
           CARGO_INCREMENTAL: 0
           RUSTFLAGS: "-Zprofile -Ccodegen-units=1 -Copt-level=0 -Clink-dead-code -Coverflow-checks=off -Zpanic_abort_tests -Cpanic=abort"
           RUSTDOCFLAGS: "-Cpanic=abort"
+        working-directory: ./bigprimes.net # change cwd to be in the cloned repo
         run: |
           # see stackoverflow checkout in github actions https://stackoverflow.com/questions/63795736/github-action-to-check-out-repo-as-a-git-submodule
           git fetch --force ${{ github.event.repository.git_url }} "+refs/heads/*:refs/remotes/origin/*"
