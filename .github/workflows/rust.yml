@@ -26,6 +26,7 @@ jobs:
       - name: Lint code ${{ matrix.config.toolchain }}
         run: |
           rustup toolchain install ${{ matrix.config.toolchain }}
+          rustup default ${{ matrix.config.toolchain }}
           cargo fmt --all -- --check
 
   test:
@@ -45,6 +46,7 @@ jobs:
       - name: Run tests ${{ matrix.config.toolchain }}
         run: |
           rustup toolchain install ${{ matrix.config.toolchain }}
+          rustup default ${{ matrix.config.toolchain }}
           cargo test --verbose
 
   codecov:
