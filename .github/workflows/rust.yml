@@ -56,7 +56,7 @@ jobs:
       matrix:
         config:
           # Linux
-          - { toolchain: stable, target: x86_64-unknown-linux-gnu}
+          - { toolchain: nightly, target: x86_64-unknown-linux-gnu}
 
     steps:
       - uses: actions/checkout@v2
