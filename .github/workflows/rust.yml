@@ -17,10 +17,9 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          # Linux
-          - { toolchain: stable, target: x86_64-unknown-linux-gnu }
-          - { toolchain: beta, target: x86_64-unknown-linux-gnu }
-          - { toolchain: nightly, target: x86_64-unknown-linux-gnu }
+          - { toolchain: stable }
+          - { toolchain: beta }
+          - { toolchain: nightly }
 
     steps:
       - uses: actions/checkout@v2
@@ -37,10 +36,9 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          # Linux
-          - { toolchain: stable, target: x86_64-unknown-linux-gnu }
-          - { toolchain: beta, target: x86_64-unknown-linux-gnu }
-          - { toolchain: nightly, target: x86_64-unknown-linux-gnu }
+          - { toolchain: stable }
+          - { toolchain: beta }
+          - { toolchain: nightly }
 
     steps:
       - uses: actions/checkout@v2
@@ -59,8 +57,7 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          # Linux
-          - { toolchain: nightly, target: x86_64-unknown-linux-gnu}
+          - { toolchain: nightly }
 
     steps:
       - name: Checkout project
