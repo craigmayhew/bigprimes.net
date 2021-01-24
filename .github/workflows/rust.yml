@@ -27,6 +27,7 @@ jobs:
         run: |
           rustup toolchain install ${{ matrix.config.toolchain }}
           rustup default ${{ matrix.config.toolchain }}
+          rustup component add rustfmt
           cargo fmt --all -- --check
 
   test:
