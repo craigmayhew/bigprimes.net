@@ -356,10 +356,10 @@ pub fn render(model: &crate::Model) -> seed::dom_types::Node<Msg> {
         );
 
         html.push(tr![
-            td![perfect.n.to_string()],    //rank
-            td![El::from_html(&equation)], //perfect number as a formula
+            td![perfect.n.to_string()],      //rank
+            td![El::from_html(&equation)],   //perfect number as a formula
             td![perfect.digits.to_string()], //digits in length
-            td![perfect.discovery],        //discovery
+            td![perfect.discovery],          //discovery
             if model.download.n == perfect.n {
                 td![crate::utils::generate_file(
                     model.download.n,
