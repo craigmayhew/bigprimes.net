@@ -70,11 +70,18 @@ pub fn render(slug:String) -> seed::dom_types::Node<Msg> {
         let mut slug_int:usize = slug.parse().unwrap();
         if slug_int < 1 {slug_int = 1};
 
-        // todo: slug_int*100 and first_prime_on_page*2 are both inefficient
+        // TODO: slug_int*100 and first_prime_on_page are both inefficient
         // first_prime_on_page could be multiplied by slightly more than 1, just enough to cover expected primes on the page
         // slug_int*100 would cover us up until prime gaps are above 100 on average
         let first_prime_on_page = prime_utils::sieve_n_primes(2, slug_int*100, slug_int).pop().unwrap();
-        let upper_bound_of_sieve = first_prime_on_page*2;
+
+        let upper_bound_of_sieve;
+        if slug_int < 1000 {
+            upper_bound_of_sieve = 10000;
+        } else {
+            upper_bound_of_sieve = first_prime_on_page+10000;
+        }
+        
         let primes = prime_utils::sieve_n_primes(first_prime_on_page, upper_bound_of_sieve, numbers_per_page);
 
         let mut prime_vec_formatted = vec![];
