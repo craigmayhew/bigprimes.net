@@ -48,7 +48,8 @@ jobs:
   codecov:
     needs: lint
     runs-on: ubuntu-latest
-    env: RUST_BACKTRACE=1
+    env:
+      RUST_BACKTRACE: 1
 
     strategy:
       fail-fast: false
