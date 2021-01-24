@@ -1,60 +1,62 @@
-use seed::prelude::*;
 use crate::Msg;
+use seed::prelude::*;
 
 extern crate num_bigint as bigint;
 extern crate num_traits;
 
-use crate::utils::{nth};
 use crate::pages::archive::mersenne::mersenne_utils as mersenne;
 use crate::pages::archive::prime::prime_utils as prime;
+use crate::utils::nth;
 use regex::Regex;
 
 const MAX_LEN_PRIME_CHECK: usize = 6;
 
 mod numerics_to_text {
-    use crate::utils::{nth};
-    use num_traits::{Num,ToPrimitive,Zero,One,pow};
-    use num_bigint::{BigUint,ToBigUint};
+    use crate::utils::nth;
+    use num_bigint::{BigUint, ToBigUint};
+    use num_traits::{pow, Num, One, ToPrimitive, Zero};
 
-    pub fn is_odd(str_num: &str) -> bool{
-        match str_num[str_num.len()-1..str_num.len()].as_ref() {
-           "1"|"3"|"5"|"7"|"9" => true,
-           _ => false,
+    pub fn is_odd(str_num: &str) -> bool {
+        match str_num[str_num.len() - 1..str_num.len()].as_ref() {
+            "1" | "3" | "5" | "7" | "9" => true,
+            _ => false,
         }
     }
 
-    fn den2numerals(n:&str, glyphs:Vec<Vec<&str>>) -> String {
+    fn den2numerals(n: &str, glyphs: Vec<Vec<&str>>) -> String {
         //this function converts a number in the form of a string
         //to roman/egyptian/babylonian/chinese numerals
-        let mut numerals:String = "".to_owned();
-        let n_vec:Vec<char> = n.chars().collect();
+        let mut numerals: String = "".to_owned();
+        let n_vec: Vec<char> = n.chars().collect();
         for i in 0..n.len() {
-            let digit:String = n_vec[n.len()-1-i].to_string();
+            let digit: String = n_vec[n.len() - 1 - i].to_string();
             if digit != "0" {
-                let digit_usize:usize = digit.parse().unwrap();
-                let numerals_tmp:String = numerals;
-                numerals = glyphs[i][digit_usize-1].to_owned();
+                let digit_usize: usize = digit.parse().unwrap();
+                let numerals_tmp: String = numerals;
+                numerals = glyphs[i][digit_usize - 1].to_owned();
                 numerals.push_str(&numerals_tmp);
             }
         }
         numerals
     }
 
-    pub fn den_to_babylonian(str_num:&str) -> String {
-        let mut glyphs:Vec<String> = vec!["".to_owned(); 60];
+    pub fn den_to_babylonian(str_num: &str) -> String {
+        let mut glyphs: Vec<String> = vec!["".to_owned(); 60];
         glyphs[0] = " &nbsp; &nbsp; &nbsp; ".to_owned();
         for i in 1..59 {
             //TODO: replace these with unicode or svgs
             //e.g. if the license allows, replace with https://commons.wikimedia.org/wiki/File:Babylonian_numerals.svg
-            glyphs[i].push_str("<img height=\"15\" src=\"https://static.bigprimes.net/imgs/babnumbers/bab_");
+            glyphs[i].push_str(
+                "<img height=\"15\" src=\"https://static.bigprimes.net/imgs/babnumbers/bab_",
+            );
             glyphs[i].push_str(&i.to_string());
             glyphs[i].push_str(".gif\" alt=\"");
             glyphs[i].push_str(&i.to_string());
             glyphs[i].push_str("\">");
         }
-        let mut val:Vec<&str> = vec![""; 1000];
-        let mut num:BigUint = num_bigint::BigUint::from_str_radix(&str_num, 10).unwrap();
-        let sixty:BigUint = 60.to_biguint().unwrap();
+        let mut val: Vec<&str> = vec![""; 1000];
+        let mut num: BigUint = num_bigint::BigUint::from_str_radix(&str_num, 10).unwrap();
+        let sixty: BigUint = 60.to_biguint().unwrap();
         while num > Zero::zero() {
             val.push(&glyphs[(&num % &sixty).to_usize().unwrap()]);
             val.push(" &nbsp; ");
@@ -64,27 +66,23 @@ mod numerics_to_text {
         val = val.iter().rev().cloned().collect();
         //convert to String
         val.into_iter().collect()
-        
     }
 
-    pub fn dec_to_base(str_num:&str, base:u32) -> String {
-        num_bigint::BigUint::from_str_radix(&str_num, 10).unwrap().to_str_radix(base)
+    pub fn dec_to_base(str_num: &str, base: u32) -> String {
+        num_bigint::BigUint::from_str_radix(&str_num, 10)
+            .unwrap()
+            .to_str_radix(base)
     }
 
-    pub fn den_to_chinese(n:&str) -> String {
-        let glyphs:Vec<Vec<&str>> = vec![
-            vec![ //units
-                "&#22777;",
-                "&#36019;",
-                "&#21444;",
-                "&#32902;",
-                "&#20237;",
-                "&#38520;",
-                "&#26578;",
-                "&#25420;",
-                "&#29590;"
+    pub fn den_to_chinese(n: &str) -> String {
+        let glyphs: Vec<Vec<&str>> = vec![
+            vec![
+                //units
+                "&#22777;", "&#36019;", "&#21444;", "&#32902;", "&#20237;", "&#38520;", "&#26578;",
+                "&#25420;", "&#29590;",
             ],
-            vec![ //tens
+            vec![
+                //tens
                 "&#22777;&#25342;",
                 "&#36019;&#25342;",
                 "&#21444;&#25342;",
@@ -93,9 +91,10 @@ mod numerics_to_text {
                 "&#38520;&#25342;",
                 "&#26578;&#25342;",
                 "&#25420;&#25342;",
-                "&#29590;&#25342;"
+                "&#29590;&#25342;",
             ],
-            vec![ //hundreds
+            vec![
+                //hundreds
                 "&#22777;&#20336;",
                 "&#36019;&#20336;",
                 "&#21444;&#20336;",
@@ -104,9 +103,10 @@ mod numerics_to_text {
                 "&#38520;&#20336;",
                 "&#26578;&#20336;",
                 "&#25420;&#20336;",
-                "&#29590;&#20336;"
+                "&#29590;&#20336;",
             ],
-            vec![ //thousands
+            vec![
+                //thousands
                 "&#22777;&#20191;",
                 "&#36019;&#20191;",
                 "&#21444;&#20191;",
@@ -115,9 +115,10 @@ mod numerics_to_text {
                 "&#38520;&#20191;",
                 "&#26578;&#20191;",
                 "&#25420;&#20191;",
-                "&#29590;&#20191;"
+                "&#29590;&#20191;",
             ],
-            vec![ //tenthousands
+            vec![
+                //tenthousands
                 "&#22777;&#33836;",
                 "&#36019;&#33836;",
                 "&#21444;&#33836;",
@@ -126,9 +127,10 @@ mod numerics_to_text {
                 "&#38520;&#33836;",
                 "&#26578;&#33836;",
                 "&#25420;&#33836;",
-                "&#29590;&#33836;"
+                "&#29590;&#33836;",
             ],
-            vec![ //hundred thousands
+            vec![
+                //hundred thousands
                 "&#22777;&#25342;&#33836;",
                 "&#36019;&#25342;&#33836;",
                 "&#21444;&#25342;&#33836;",
@@ -137,14 +139,14 @@ mod numerics_to_text {
                 "&#38520;&#25342;&#33836;",
                 "&#26578;&#25342;&#33836;",
                 "&#25420;&#25342;&#33836;",
-                "&#29590;&#25342;&#33836;"
+                "&#29590;&#25342;&#33836;",
             ],
         ];
 
         den2numerals(&n, glyphs)
     }
 
-    pub fn den_to_egyptian(n:&str) -> String {
+    pub fn den_to_egyptian(n: &str) -> String {
         let glyphs:Vec<Vec<&str>> = vec![
             vec![
                 "&#x133fa;",
@@ -228,45 +230,22 @@ mod numerics_to_text {
         den2numerals(&n, glyphs)
     }
 
-    pub fn den_to_roman(n:&str) -> String {
-        let glyphs:Vec<Vec<&str>> = vec![
-            vec![ //units
-                "I",
-                "II",
-                "III",
-                "IV",
-                "V",
-                "VI",
-                "VII",
-                "VIII",
-                "IX",
-                "X"
+    pub fn den_to_roman(n: &str) -> String {
+        let glyphs: Vec<Vec<&str>> = vec![
+            vec![
+                //units
+                "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X",
             ],
-            vec![ //tens
-                "X",
-                "XX",
-                "XXX",
-                "XL",
-                "L",
-                "LX",
-                "LXX",
-                "LXXX",
-                "XC",
-                "C"
+            vec![
+                //tens
+                "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC", "C",
             ],
-            vec![ //hundreds
-                "C",
-                "CC",
-                "CCC",
-                "CD",
-                "D",
-                "DC",
-                "DCC",
-                "DCCC",
-                "CM",
-                "M"
+            vec![
+                //hundreds
+                "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM", "M",
             ],
-            vec![ //THOUSANDS
+            vec![
+                //THOUSANDS
                 "M",
                 "MM",
                 "MMM",
@@ -276,9 +255,10 @@ mod numerics_to_text {
                 "<u>V</u>MM",
                 "<u>V</u>MMM",
                 "M<u>X</u>",
-                "<u>X</u>"
+                "<u>X</u>",
             ],
-            vec![ //TEN THOUSANDS
+            vec![
+                //TEN THOUSANDS
                 "<u>X</u>",
                 "<u>X</u><u>X</u>",
                 "<u>X</u><u>X</u><u>X</u>",
@@ -288,9 +268,10 @@ mod numerics_to_text {
                 "<span class=\"u\">L</span><u>X</u><u>X</u>",
                 "<span class=\"u\">L</span><u>X</u><u>X</u><u>X</u>",
                 "<u>X</u><u>C</u>",
-                "<u>C</u>"
+                "<u>C</u>",
             ],
-            vec![ //HUNDRED THOUSANDS
+            vec![
+                //HUNDRED THOUSANDS
                 "<u>C</u>",
                 "<u>C</u><u>C</u>",
                 "<u>C</u><u>C</u><u>C</u>",
@@ -300,15 +281,15 @@ mod numerics_to_text {
                 "<u>D</u><u>C</u><u>C</u>",
                 "<u>D</u><u>C</u><u>D</u><u>C</u>",
                 "<u>C</u><u>M</u>",
-                "<u>M</u>"
-            ]
+                "<u>M</u>",
+            ],
         ];
 
         den2numerals(&n, glyphs)
     }
 
     pub fn convert(str_num: String) -> String {
-        let units:Vec<&str> = vec![
+        let units: Vec<&str> = vec![
             "",
             " one",
             " two",
@@ -328,21 +309,13 @@ mod numerics_to_text {
             " sixteen",
             " seventeen",
             " eighteen",
-            " nineteen"
+            " nineteen",
         ];
-        let tens:Vec<&str> = vec![
-            "",
-            "",
-            " twenty",
-            " thirty",
-            " forty",
-            " fifty",
-            " sixty",
-            " seventy",
-            " eighty",
-            " ninety"
+        let tens: Vec<&str> = vec![
+            "", "", " twenty", " thirty", " forty", " fifty", " sixty", " seventy", " eighty",
+            " ninety",
         ];
-        let triplets:Vec<&str> = vec![
+        let triplets: Vec<&str> = vec![
             "",
             " thousand",
             " million",
@@ -386,27 +359,33 @@ mod numerics_to_text {
             " noventrigintillion",
             " quadragintillion",
         ];
-        
-        if str_num.len() > triplets.len()*3 {
+
+        if str_num.len() > triplets.len() * 3 {
             "Error".to_string()
         } else {
-            let num:BigUint = num_bigint::BigUint::from_str_radix(&str_num, 10).unwrap();
-            let string:String = convert_tri(num, Zero::zero(), units, tens, triplets);
+            let num: BigUint = num_bigint::BigUint::from_str_radix(&str_num, 10).unwrap();
+            let string: String = convert_tri(num, Zero::zero(), units, tens, triplets);
             //remove first character which is a space
             string[1..].to_string()
         }
     }
 
-    fn convert_tri(num:BigUint, tri:usize, units:Vec<&str>, tens:Vec<&str>, triplets:Vec<&str>) -> String {
+    fn convert_tri(
+        num: BigUint,
+        tri: usize,
+        units: Vec<&str>,
+        tens: Vec<&str>,
+        triplets: Vec<&str>,
+    ) -> String {
         // chunk the number, ...rxyy
-        let ten:BigUint = 10.to_biguint().unwrap();
-        let hundred:BigUint = 100.to_biguint().unwrap();
-        let thousand:BigUint = 1000.to_biguint().unwrap();
+        let ten: BigUint = 10.to_biguint().unwrap();
+        let hundred: BigUint = 100.to_biguint().unwrap();
+        let thousand: BigUint = 1000.to_biguint().unwrap();
         let r = &num / &thousand; // this in theory is rounding down to an int
-        let x:usize = ((&num / &hundred) % &ten).to_usize().unwrap();
-        let y:usize = (&num % &hundred).to_usize().unwrap();
+        let x: usize = ((&num / &hundred) % &ten).to_usize().unwrap();
+        let y: usize = (&num % &hundred).to_usize().unwrap();
         // init the output string
-        let mut string:String = "".to_owned();
+        let mut string: String = "".to_owned();
         // do hundreds
         if x > 0 {
             string.push_str(units[x]);
@@ -428,7 +407,7 @@ mod numerics_to_text {
         }
         // continue recursing?
         if r > Zero::zero() {
-            let mut string2:String = convert_tri(r, tri + 1, units, tens, triplets);
+            let mut string2: String = convert_tri(r, tri + 1, units, tens, triplets);
             string2.push_str(&string);
             string2
         } else {
@@ -438,11 +417,11 @@ mod numerics_to_text {
 
     fn factor(n: u64) -> Vec<u64> {
         let mut factors: Vec<u64> = Vec::new(); // creates a new vector for the factors of the number
-    
-        for i in 1..(n as f64).sqrt() as u64 + 1 { 
+
+        for i in 1..(n as f64).sqrt() as u64 + 1 {
             if n % i == 0 {
                 factors.push(i); // pushes smallest factor to factors
-                factors.push(n/i); // pushes largest factor to factors
+                factors.push(n / i); // pushes largest factor to factors
             }
         }
         factors.sort(); // sorts the factors into numerical order for viewing purposes
@@ -450,19 +429,26 @@ mod numerics_to_text {
     }
 
     pub fn list_factors(str_num: &str, glue: String) -> String {
-        let num:u64 = str_num.parse().unwrap();
-        let factors:Vec<u64> = factor(num);
+        let num: u64 = str_num.parse().unwrap();
+        let factors: Vec<u64> = factor(num);
 
         //convert to String
-        factors.into_iter().map(|num: u64| {let mut string:String = glue.clone(); string.push_str(&num.to_string()); string}).collect()
+        factors
+            .into_iter()
+            .map(|num: u64| {
+                let mut string: String = glue.clone();
+                string.push_str(&num.to_string());
+                string
+            })
+            .collect()
     }
 
     pub fn nth_factorial(str_num: &str) -> String {
-        let num:BigUint = num_bigint::BigUint::from_str_radix(&str_num, 10).unwrap();
+        let num: BigUint = num_bigint::BigUint::from_str_radix(&str_num, 10).unwrap();
 
-        let mut factorial_n:usize = 0;
-        let mut i:usize = 0;
-        let mut total:BigUint = One::one();
+        let mut factorial_n: usize = 0;
+        let mut i: usize = 0;
+        let mut total: BigUint = One::one();
         while total <= num {
             i += 1;
             total *= i;
@@ -472,7 +458,7 @@ mod numerics_to_text {
         }
 
         if factorial_n != 0 {
-            let mut string:String = "".to_owned();
+            let mut string: String = "".to_owned();
             string.push_str("It is the ");
             string.push_str(&nth(factorial_n));
             string.push_str(" factorial number. (");
@@ -485,19 +471,22 @@ mod numerics_to_text {
     }
 
     pub fn is_palindrome(string: &str) -> bool {
-        let half_len = string.len()/2;
-        string.chars().take(half_len).eq(string.chars().rev().take(half_len))
+        let half_len = string.len() / 2;
+        string
+            .chars()
+            .take(half_len)
+            .eq(string.chars().rev().take(half_len))
     }
 
-    pub fn nth_root(str_num: &str, n:usize) -> String {
-        let number:BigUint = num_bigint::BigUint::from_str_radix(&str_num, 10).unwrap();
+    pub fn nth_root(str_num: &str, n: usize) -> String {
+        let number: BigUint = num_bigint::BigUint::from_str_radix(&str_num, 10).unwrap();
         let answer = number.nth_root(n.to_u32().unwrap()).to_owned();
 
-        if pow(answer.to_owned(),n) == number {
-            let mut string:String = "".to_owned();
+        if pow(answer.to_owned(), n) == number {
+            let mut string: String = "".to_owned();
             string.push_str(&answer.to_string());
             string
-        } else{
+        } else {
             "0".to_owned()
         }
     }
@@ -544,9 +533,14 @@ fn html_form() -> seed::dom_types::Node<Msg> {
     ]
 }
 
-fn html_factors(slug:&str, slug_len:usize, max_len_factoring:usize) -> seed::dom_types::Node<Msg> {
+fn html_factors(
+    slug: &str,
+    slug_len: usize,
+    max_len_factoring: usize,
+) -> seed::dom_types::Node<Msg> {
     if slug_len <= max_len_factoring {
-        td![attrs!{At::Width => "200"},
+        td![
+            attrs! {At::Width => "200"},
             "It it has factors:",
             br![],
             El::from_html(&numerics_to_text::list_factors(&slug, "<br>".to_owned()))
@@ -556,12 +550,11 @@ fn html_factors(slug:&str, slug_len:usize, max_len_factoring:usize) -> seed::dom
     }
 }
 
-fn html_roman(slug:&str, max_len_roman:usize) -> seed::dom_types::Node<Msg> {
+fn html_roman(slug: &str, max_len_roman: usize) -> seed::dom_types::Node<Msg> {
     tr![
-        td![attrs!{At::Width => "200"},
-            "Roman Numerals:",
-        ],
-        td![attrs!{At::Width => "40"},
+        td![attrs! {At::Width => "200"}, "Roman Numerals:",],
+        td![
+            attrs! {At::Width => "40"},
             if slug.len() <= max_len_roman {
                 El::from_html(&numerics_to_text::den_to_roman(&slug))
             } else {
@@ -571,12 +564,11 @@ fn html_roman(slug:&str, max_len_roman:usize) -> seed::dom_types::Node<Msg> {
     ]
 }
 
-fn html_chinese(slug:&str, max_len_chinese:usize) -> seed::dom_types::Node<Msg> {
+fn html_chinese(slug: &str, max_len_chinese: usize) -> seed::dom_types::Node<Msg> {
     tr![
-        td![attrs!{At::Width => "200"},
-            "Chinese Numerals:",
-        ],
-        td![style!{"vertical-align" => "middle"; "background-color" => "#FFF"},
+        td![attrs! {At::Width => "200"}, "Chinese Numerals:",],
+        td![
+            style! {"vertical-align" => "middle"; "background-color" => "#FFF"},
             if slug.len() <= max_len_chinese {
                 El::from_html(&numerics_to_text::den_to_chinese(&slug))
             } else {
@@ -586,49 +578,60 @@ fn html_chinese(slug:&str, max_len_chinese:usize) -> seed::dom_types::Node<Msg> 
     ]
 }
 
-fn html_egyptian(slug:&str, max_len_egyptian:usize) -> seed::dom_types::Node<Msg> {
+fn html_egyptian(slug: &str, max_len_egyptian: usize) -> seed::dom_types::Node<Msg> {
     tr![
-        td![attrs!{At::Width => "200"},
-            "Egyptian Numerals:",
-        ],
-        td![
-            if slug.len() <= max_len_egyptian {
-                El::from_html(&numerics_to_text::den_to_egyptian(&slug))
-            } else {
-                El::from_html("")
-            }
-        ]
+        td![attrs! {At::Width => "200"}, "Egyptian Numerals:",],
+        td![if slug.len() <= max_len_egyptian {
+            El::from_html(&numerics_to_text::den_to_egyptian(&slug))
+        } else {
+            El::from_html("")
+        }]
     ]
 }
 
-fn html_mersenne_prime(str_num:&str) -> seed::dom_types::Node<Msg> {
+fn html_mersenne_prime(str_num: &str) -> seed::dom_types::Node<Msg> {
     let n = mersenne::nth_mersenne_prime(str_num) as usize;
 
     if n == 0 {
-        span!["It is not a ",a!["mersenne prime", attrs!{At::Class => "link", At::Href => "http://en.wikipedia.org/wiki/Mersenne_prime"}],"."] 
+        span![
+            "It is not a ",
+            a![
+                "mersenne prime",
+                attrs! {At::Class => "link", At::Href => "http://en.wikipedia.org/wiki/Mersenne_prime"}
+            ],
+            "."
+        ]
     } else {
-        span!["It is the ",nth(n)," ",a!["mersenne prime", attrs!{At::Class => "link", At::Href => "http://en.wikipedia.org/wiki/Mersenne_prime"}],"."]     
+        span![
+            "It is the ",
+            nth(n),
+            " ",
+            a![
+                "mersenne prime",
+                attrs! {At::Class => "link", At::Href => "http://en.wikipedia.org/wiki/Mersenne_prime"}
+            ],
+            "."
+        ]
     }
 }
 
-fn html_nth_prime(str_num:&str) -> seed::dom_types::Node<Msg> {
+fn html_nth_prime(str_num: &str) -> seed::dom_types::Node<Msg> {
     if MAX_LEN_PRIME_CHECK < str_num.len() {
         span!["It is too large to check primality."]
     } else {
         //check primes in the first million numbers
-        let mut primes_list = prime::sieve(2,str_num.parse::<usize>().unwrap());
+        let mut primes_list = prime::sieve(2, str_num.parse::<usize>().unwrap());
 
         let final_prime_in_sieve = primes_list.pop().unwrap();
         if str_num == final_prime_in_sieve.to_string() {
-            span!["It is the ",nth(primes_list.len()+1)," prime number."]
+            span!["It is the ", nth(primes_list.len() + 1), " prime number."]
         } else {
             span!["It is not a prime number."]
         }
     }
 }
 
-fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
-
+fn html_crunched_number(slug: String) -> seed::dom_types::Node<Msg> {
     let max_len_roman = 6;
     let html_roman = html_roman(&slug, max_len_roman);
 
@@ -638,148 +641,146 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
     let max_len_egyptian = 7;
     let html_egyptian = html_egyptian(&slug, max_len_egyptian);
 
-    let max_len_factoring = 17;   
+    let max_len_factoring = 17;
     let html_factors = html_factors(&slug, slug.len(), max_len_factoring);
 
-    let table_style = style!{"border" => "1px #000 solid"};
+    let table_style = style! {"border" => "1px #000 solid"};
 
-    let spoken_version_of_number:String = numerics_to_text::convert(slug.to_string());
-    let title:String = match spoken_version_of_number.as_ref() {
-        "Error" => slug.to_string(),//just number
-        _ => format!("{} - {}",slug.to_string(),spoken_version_of_number)//number and text version of number e.g. 1 => one
+    let spoken_version_of_number: String = numerics_to_text::convert(slug.to_string());
+    let title: String = match spoken_version_of_number.as_ref() {
+        "Error" => slug.to_string(), //just number
+        _ => format!("{} - {}", slug.to_string(), spoken_version_of_number), //number and text version of number e.g. 1 => one
     };
 
-    div![style!{"width" => "75%"; "padding" => "3px"},
+    div![
+        style! {"width" => "75%"; "padding" => "3px"},
         br![],
         br![],
         b!["The number you submitted to be crunched was:"],
         h1![title],
-        table![attrs!{At::Class => "crunchertable", At::Width => "100%"}, &table_style,
+        table![
+            attrs! {At::Class => "crunchertable", At::Width => "100%"},
+            &table_style,
+            tbody![tr![td![
+                "It is an ",
+                if numerics_to_text::is_odd(&slug) {
+                    "odd"
+                } else {
+                    "even"
+                },
+                " number.",
+                br![],
+                html_nth_prime(&slug),
+                br![],
+                "It is ",
+                if numerics_to_text::is_palindrome(&slug) {
+                    ""
+                } else {
+                    "not "
+                },
+                "palindromic.",
+                br![],
+                html_mersenne_prime(&slug),
+                br![],
+                //TODO hardcoded example value
+                //"It is not a ",a!["fermat prime", attrs!{At::Class => "link", At::Href => "https://www.fermatsearch.org/"}],".",
+                //br![],
+                //TODO hardcoded example value
+                //"It is not a ",a!["perfect number", attrs!{At::Class => "link", At::Href => "https://en.wikipedia.org/wiki/Perfect_number"}],".",
+                //br![],
+            ],],],
+        ],
+        br![],
+        br![],
+        table![
+            attrs! {At::Class => "crunchertable", At::Width => "100%"},
+            &table_style,
+            tbody![tr![td![
+                //TODO hardcoded example value
+                //"It is not a triangle number.",
+                //br![],
+                if numerics_to_text::nth_root(&slug, 2) != "0" {
+                    format!(
+                        "It is the {} square number.",
+                        &nth(numerics_to_text::nth_root(&slug, 2)
+                            .parse::<usize>()
+                            .unwrap())
+                    )
+                } else {
+                    "It is not a square number.".to_owned()
+                },
+                br![],
+                if numerics_to_text::nth_root(&slug, 3) != "0" {
+                    format!(
+                        "It is the {} cube number.",
+                        &nth(numerics_to_text::nth_root(&slug, 3)
+                            .parse::<usize>()
+                            .unwrap())
+                    )
+                } else {
+                    "It is not a cube number.".to_owned()
+                },
+                br![],
+                br![],
+                numerics_to_text::nth_factorial(&slug),
+            ],],],
+        ],
+        br![],
+        br![],
+        table![
+            attrs! {At::Class => "crunchertable", At::Width => "100%"},
+            &table_style,
+            tbody![tr![html_factors,],],
+        ],
+        br![],
+        br![],
+        table![
+            attrs! {At::Class => "crunchertable", At::Width => "100%"},
+            &table_style,
             tbody![
                 tr![
-                    td![
-                        "It is an ",if numerics_to_text::is_odd(&slug) {"odd"} else {"even"} ," number.",
-                        br![],
-                        html_nth_prime(&slug),
-                        br![],
-                        "It is ",
-                        if numerics_to_text::is_palindrome(&slug) { "" } else { "not " },
-                        "palindromic.",
-                        br![],
-                        html_mersenne_prime(&slug),
-                        br![],
-                        //TODO hardcoded example value
-                        //"It is not a ",a!["fermat prime", attrs!{At::Class => "link", At::Href => "https://www.fermatsearch.org/"}],".",
-                        //br![],
-                        //TODO hardcoded example value
-                        //"It is not a ",a!["perfect number", attrs!{At::Class => "link", At::Href => "https://en.wikipedia.org/wiki/Perfect_number"}],".",
-                        //br![],
-                    ],
+                    td![attrs! {At::Width => "200"}, "Base 2 (Binary):",],
+                    td![numerics_to_text::dec_to_base(&slug, 2),],
+                ],
+                tr![
+                    td![attrs! {At::Width => "200"}, "Base 3 (Ternary):",],
+                    td![numerics_to_text::dec_to_base(&slug, 3),],
+                ],
+                tr![
+                    td![attrs! {At::Width => "200"}, "Base 4 (Quaternary):",],
+                    td![numerics_to_text::dec_to_base(&slug, 4),],
+                ],
+                tr![
+                    td![attrs! {At::Width => "200"}, "Base 5 (Quinary):",],
+                    td![numerics_to_text::dec_to_base(&slug, 5),],
+                ],
+                tr![
+                    td![attrs! {At::Width => "200"}, "Base 8 (Octal):",],
+                    td![numerics_to_text::dec_to_base(&slug, 8),],
+                ],
+                tr![
+                    td![attrs! {At::Width => "200"}, "Base 10 (Denary):",],
+                    td![numerics_to_text::dec_to_base(&slug, 10),],
+                ],
+                tr![
+                    td![attrs! {At::Width => "200"}, "Base 16 (Hexadecimal):",],
+                    td![numerics_to_text::dec_to_base(&slug, 16).to_uppercase(),],
                 ],
             ],
         ],
         br![],
         br![],
-        table![attrs!{At::Class => "crunchertable", At::Width => "100%"}, &table_style,
-            tbody![
-                tr![
-                    td![
-                        //TODO hardcoded example value
-                        //"It is not a triangle number.",
-                        //br![],
-                        if numerics_to_text::nth_root(&slug, 2) != "0" { format!("It is the {} square number.",&nth(numerics_to_text::nth_root(&slug, 2).parse::<usize>().unwrap())) } else { "It is not a square number.".to_owned() },
-                        br![],
-                        if numerics_to_text::nth_root(&slug, 3) != "0" { format!("It is the {} cube number.",&nth(numerics_to_text::nth_root(&slug, 3).parse::<usize>().unwrap())) } else { "It is not a cube number.".to_owned() },
-                        br![],
-                        br![],
-                        numerics_to_text::nth_factorial(&slug),
-                    ],
-                ],
-            ],
-        ],
-        br![],
-        br![],
-        table![attrs!{At::Class => "crunchertable", At::Width => "100%"}, &table_style,
-            tbody![
-                tr![
-                    html_factors,
-                ],
-            ],
-        ],
-        br![],
-        br![],
-        table![attrs!{At::Class => "crunchertable", At::Width => "100%"}, &table_style,
-            tbody![
-                tr![
-                    td![attrs!{At::Width => "200"},
-                        "Base 2 (Binary):",
-                    ],
-                    td![
-                        numerics_to_text::dec_to_base(&slug, 2),
-                    ],
-                ],
-                tr![
-                    td![attrs!{At::Width => "200"},
-                        "Base 3 (Ternary):",
-                    ],
-                    td![
-                        numerics_to_text::dec_to_base(&slug, 3),
-                    ],
-                ],
-                tr![
-                    td![attrs!{At::Width => "200"},
-                        "Base 4 (Quaternary):",
-                    ],
-                    td![
-                        numerics_to_text::dec_to_base(&slug, 4),
-                    ],
-                ],
-                tr![
-                    td![attrs!{At::Width => "200"},
-                        "Base 5 (Quinary):",
-                    ],
-                    td![
-                        numerics_to_text::dec_to_base(&slug, 5),
-                    ],
-                ],
-                tr![
-                    td![attrs!{At::Width => "200"},
-                        "Base 8 (Octal):",
-                    ],
-                    td![
-                        numerics_to_text::dec_to_base(&slug, 8),
-                    ],
-                ],
-                tr![
-                    td![attrs!{At::Width => "200"},
-                        "Base 10 (Denary):",
-                    ],
-                    td![
-                        numerics_to_text::dec_to_base(&slug, 10),
-                    ],
-                ],
-                tr![
-                    td![attrs!{At::Width => "200"},
-                        "Base 16 (Hexadecimal):",
-                    ],
-                    td![
-                        numerics_to_text::dec_to_base(&slug, 16).to_uppercase(),
-                    ],
-                ],
-            ],
-        ],
-        br![],
-        br![],
-        table![attrs!{At::Class => "crunchertable", At::Width => "100%"}, &table_style,
+        table![
+            attrs! {At::Class => "crunchertable", At::Width => "100%"},
+            &table_style,
             tbody![
                 html_roman,
                 html_egyptian,
                 html_chinese,
                 tr![
-                    td![attrs!{At::Width => "200"},
-                        "Babylonian Numerals:",
-                    ],
-                    td![style!{"vertical-align" => "middle"; "background-color" => "#FFF"},
+                    td![attrs! {At::Width => "200"}, "Babylonian Numerals:",],
+                    td![
+                        style! {"vertical-align" => "middle"; "background-color" => "#FFF"},
                         El::from_html(&numerics_to_text::den_to_babylonian(&slug)),
                     ]
                 ],
@@ -788,7 +789,7 @@ fn html_crunched_number(slug:String) -> seed::dom_types::Node<Msg> {
     ]
 }
 
-pub fn render(slug:String) -> seed::dom_types::Node<Msg> {
+pub fn render(slug: String) -> seed::dom_types::Node<Msg> {
     let rgx = Regex::new(r"^([1-9]+[0-9]*)$").unwrap();
 
     if rgx.is_match(&slug) {
@@ -804,8 +805,14 @@ mod tests {
 
     #[test]
     fn numerics_to_text_convert_test() {
-        assert_eq!(numerics_to_text::convert("170".to_string()), "one hundred seventy");
-        assert_eq!(numerics_to_text::convert("90001".to_string()), "ninety thousand one");
+        assert_eq!(
+            numerics_to_text::convert("170".to_string()),
+            "one hundred seventy"
+        );
+        assert_eq!(
+            numerics_to_text::convert("90001".to_string()),
+            "ninety thousand one"
+        );
         assert_eq!(numerics_to_text::convert("1001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001000".to_string()), "one noventrigintillion one octotrigintillion one septentrigintillion one sestrigintillion one quinquatrigintillion one quattuortrigintillion one trestrigintillion one duotrigintillion one untrigintillion one trigintillion one novemvigintillion one octovigintillion one septemvigintillion one sesvigintillion one quinquavigintillion one quattuorvigintillion one tresvigintillion one duovigintillion one unvigintillion one vigintillion one novemdecillion one octodecillion one septendecillion one sexdecillion one quindecillion one quattuordecillion one tredecillion one duodecillion one undecillion one decillion one nonillion one octillion one septillion one sextillion one quintillion one quadrillion one trillion one billion one million one thousand");
         // test anything over triplets vector size * 3 returns "Error", and if you want to extend this limit, then more definitions should be added to triplets within convert()
         assert_eq!(numerics_to_text::convert("1999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999".to_string()), "Error");
@@ -821,10 +828,13 @@ mod tests {
 
     #[test]
     fn dec_to_base_test() {
-        assert_eq!(numerics_to_text::dec_to_base("16",16), "10");
-        assert_eq!(numerics_to_text::dec_to_base("9003",5), "242003");
-        assert_eq!(numerics_to_text::dec_to_base("2147483648",16), "80000000");//test for 32bit overflow
-        assert_eq!(numerics_to_text::dec_to_base("18446744073709551616",16), "10000000000000000");//test for 64bit overflow
+        assert_eq!(numerics_to_text::dec_to_base("16", 16), "10");
+        assert_eq!(numerics_to_text::dec_to_base("9003", 5), "242003");
+        assert_eq!(numerics_to_text::dec_to_base("2147483648", 16), "80000000"); //test for 32bit overflow
+        assert_eq!(
+            numerics_to_text::dec_to_base("18446744073709551616", 16),
+            "10000000000000000"
+        ); //test for 64bit overflow
     }
 
     #[test]
@@ -854,7 +864,10 @@ mod tests {
     #[test]
     fn list_factors_test() {
         //todo: this test shows we have a comma prefix, tidier if that didn't happen
-        assert_eq!(numerics_to_text::list_factors("20",",".to_owned()), ",1,2,4,5,10,20");
+        assert_eq!(
+            numerics_to_text::list_factors("20", ",".to_owned()),
+            ",1,2,4,5,10,20"
+        );
     }
 }
 

@@ -1,18 +1,18 @@
-use seed::prelude::*;
 use crate::Msg;
+use seed::prelude::*;
 use std::convert::TryInto;
 
-use num_traits::{pow};
-use num_bigint::{BigUint,ToBigUint};
+use num_bigint::{BigUint, ToBigUint};
+use num_traits::pow;
 
 mod fermat_utils {
     pub struct Fermat<'a> {
-		pub n: u64,
-		pub f: u64,
-		pub digits: u64,
-		pub prime_factors: &'a str,
+        pub n: u64,
+        pub f: u64,
+        pub digits: u64,
+        pub prime_factors: &'a str,
         pub download: &'a str,
-	}
+    }
 
     pub fn fermats<'a>() -> Vec<Fermat<'a>> {
         vec![
@@ -34,59 +34,53 @@ mod fermat_utils {
 
 fn generate_rows() -> std::vec::Vec<seed::dom_types::Node<Msg>> {
     let mut html = vec![];
-    let two:usize = 2;
+    let two: usize = 2;
 
     let fermats = fermat_utils::fermats();
 
     for n in 0..fermats.len() {
-        let download_filename:String = format!("F{}.txt",&fermats[n].n.to_string());
+        let download_filename: String = format!("F{}.txt", &fermats[n].n.to_string());
 
-		let equation:String = format!("2<sup>{}</sup>+1",&(two.pow((fermats.len()-1-n).try_into().unwrap())).to_string());
-        let nth_fermat:usize = fermats.len()-1-n;//counts from 11 to 0
-        let fermat_value:BigUint = pow(two.to_biguint().unwrap(), pow(two, nth_fermat)) + 1.to_biguint().unwrap();
-
-        html.push(
-            tr![
-                td![fermats[n].n.to_string()],//rank
-				td![El::from_html(&equation)],//fermat number as a formula
-				
-                td![fermats[n].digits.to_string()],//digits in length
-                td![El::from_html(fermats[n].prime_factors)],//prime factors
-                td![crate::utils::save_as_file(download_filename,fermat_value.to_string())],
-            ]
+        let equation: String = format!(
+            "2<sup>{}</sup>+1",
+            &(two.pow((fermats.len() - 1 - n).try_into().unwrap())).to_string()
         );
+        let nth_fermat: usize = fermats.len() - 1 - n; //counts from 11 to 0
+        let fermat_value: BigUint =
+            pow(two.to_biguint().unwrap(), pow(two, nth_fermat)) + 1.to_biguint().unwrap();
+
+        html.push(tr![
+            td![fermats[n].n.to_string()], //rank
+            td![El::from_html(&equation)], //fermat number as a formula
+            td![fermats[n].digits.to_string()], //digits in length
+            td![El::from_html(fermats[n].prime_factors)], //prime factors
+            td![crate::utils::save_as_file(
+                download_filename,
+                fermat_value.to_string()
+            )],
+        ]);
     }
 
     html
 }
 
 pub fn render() -> seed::dom_types::Node<Msg> {
-    let html:std::vec::Vec<seed::dom_types::Node<Msg>> = generate_rows();
-    
+    let html: std::vec::Vec<seed::dom_types::Node<Msg>> = generate_rows();
+
     div![
         h1!["The Fermat Numbers"],
         br![],
         br![],
         br![],
         table![
-            attrs!{At::Id => "tbl"},
+            attrs! {At::Id => "tbl"},
             tbody![
                 tr![
-                    td![
-                        b!["No."]
-                    ],
-                    td![
-                        b!["Fermat"]
-                    ],	
-                    td![
-                        b!["Digits"]
-                    ],	
-                    td![
-                        b!["Prime Factors"]
-                    ],
-                    td![
-                        b!["Download"]
-                    ]
+                    td![b!["No."]],
+                    td![b!["Fermat"]],
+                    td![b!["Digits"]],
+                    td![b!["Prime Factors"]],
+                    td![b!["Download"]]
                 ],
                 html
             ]
@@ -94,15 +88,14 @@ pub fn render() -> seed::dom_types::Node<Msg> {
     ]
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
     fn fermat_test<'a>() {
-        let mut fermats:Vec<fermat_utils::Fermat<'a>> = fermat_utils::fermats();
-		fermats.reverse();
+        let mut fermats: Vec<fermat_utils::Fermat<'a>> = fermat_utils::fermats();
+        fermats.reverse();
         assert_eq!(fermats[2].prime_factors, "<a href=\"/cruncher/17/\">P7</a>");
         assert_eq!(fermats[11].digits, 617);
     }
