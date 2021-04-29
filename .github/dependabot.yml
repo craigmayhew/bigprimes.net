@@ -1,0 +1,19 @@
+version: 2
+updates:
+- package-ecosystem: cargo
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: wasm-bindgen
+    versions:
+    - 0.2.71
+    - 0.2.72
+  - dependency-name: web-sys
+    versions:
+    - 0.3.48
+    - 0.3.49
+  - dependency-name: num-bigint
+    versions:
+    - 0.3.2
