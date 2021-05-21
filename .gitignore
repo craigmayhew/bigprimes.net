@@ -2,3 +2,4 @@
 target
 www/dist
 www/node_modules
+www/pkg

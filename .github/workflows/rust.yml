@@ -1,0 +1,51 @@
+name: Rust
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - { toolchain: stable }
+          - { toolchain: beta }
+          - { toolchain: nightly }
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Lint code ${{ matrix.config.toolchain }}
+        run: |
+          rustup toolchain install ${{ matrix.config.toolchain }}
+          rustup default ${{ matrix.config.toolchain }}
+          rustup component add rustfmt
+          cargo fmt --all -- --check
+
+  test:
+    needs: lint
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - { toolchain: stable }
+          - { toolchain: beta }
+          - { toolchain: nightly }
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run tests ${{ matrix.config.toolchain }}
+        run: |
+          rustup toolchain install ${{ matrix.config.toolchain }}
+          rustup default ${{ matrix.config.toolchain }}
+          cargo test --verbose

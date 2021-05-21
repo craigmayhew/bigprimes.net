@@ -1,10 +1,10 @@
-use seed::prelude::*;
 use crate::Msg;
+use seed::prelude::*;
 
 extern crate num_bigint;
 extern crate num_traits;
 
-use num_bigint::{BigUint};
+use num_bigint::BigUint;
 
 pub fn set_panic_hook() {
     // When the `console_error_panic_hook` feature is enabled, we can call the
@@ -19,22 +19,26 @@ pub fn set_panic_hook() {
 
 pub fn nth(num: usize) -> String {
     //format a number to say 1st, 2nd, 3rd etc
-    format!("{}{}", num, match (num % 10, num % 100) {
-        (1, 11) | (2, 12) | (3, 13) => "th",
-        (1, _) => "st",
-        (2, _) => "nd",
-        (3, _) => "rd",
-        _ => "th",
-    })
+    format!(
+        "{}{}",
+        num,
+        match (num % 10, num % 100) {
+            (1, 11) | (2, 12) | (3, 13) => "th",
+            (1, _) => "st",
+            (2, _) => "nd",
+            (3, _) => "rd",
+            _ => "th",
+        }
+    )
 }
 
-pub fn save_as_file(filename:String, filecontent:String) -> seed::dom_types::Node<Msg> {
-        let href:String = format!("data:text/plain,{}",&filecontent);
-        a![attrs!{At::Download => &filename, At::Href => &href}, "TXT"]
+pub fn save_as_file(filename: String, filecontent: String) -> seed::dom_types::Node<Msg> {
+    let href: String = format!("data:text/plain,{}", &filecontent);
+    a![attrs! {At::Download => &filename, At::Href => &href}, "TXT"]
 }
 
-pub fn generate_file(n:u64, value:BigUint) -> seed::dom_types::Node<Msg> {
-    let download_filename:String = format!("P{}.txt",&n.to_string());
+pub fn generate_file(n: u64, value: BigUint) -> seed::dom_types::Node<Msg> {
+    let download_filename: String = format!("P{}.txt", &n.to_string());
     save_as_file(download_filename, value.to_string())
 }
 
@@ -42,8 +46,8 @@ pub fn generate_file(n:u64, value:BigUint) -> seed::dom_types::Node<Msg> {
 mod tests {
     extern crate num_bigint;
     extern crate num_traits;
-    
-    use num_bigint::{BigUint,ToBigUint};
+
+    use num_bigint::{BigUint, ToBigUint};
 
     use super::*;
 
@@ -62,10 +66,7 @@ mod tests {
 
     #[test]
     fn save_as_file_test() {
-        let test_file = save_as_file(
-            String::from("example name"),
-            String::from("some content")
-        );
+        let test_file = save_as_file(String::from("example name"), String::from("some content"));
 
         assert_eq!(test_file.get_text(), "TXT");
         //todo: we are only testing the link text currently
@@ -73,9 +74,9 @@ mod tests {
 
     #[test]
     fn generate_file_test() {
-        let two:BigUint = 2.to_biguint().unwrap();
+        let two: BigUint = 2.to_biguint().unwrap();
 
         assert_eq!(generate_file(8, two).get_text(), "TXT");
-        //TODO: this test is not checking download value, or the <a> attributes. Just link text. 
+        //TODO: this test is not checking download value, or the <a> attributes. Just link text.
     }
 }
