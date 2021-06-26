@@ -17,7 +17,7 @@ pub fn render() -> Node<Msg> {
                 ],
                 tr![
                     td!["26th June 2021"],
-                    td![El::from_html("bigprimes.net is now using the <a href=\"https://github.com/thedodd/trunk\">trunk</a> test server rather than node.")],
+                    td![El::from_html("bigprimes.net is now using the <a class=\"link\" href=\"https://github.com/thedodd/trunk\">trunk</a> WASM web application bundler for Rust.")],
                 ],
                 tr![
                     td!["28th July 2019"],
