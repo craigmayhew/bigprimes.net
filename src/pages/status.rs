@@ -9,12 +9,6 @@ pub fn render() -> Node<Msg> {
         br![],
         table![tbody![
             tr![td!["Number of verified primes:"], td!["1.4 billion"],],
-            tr![
-                td!["Website build status:"],
-                td![img![
-                    attrs! {At::Src => "https://travis-ci.org/craigmayhew/bigprimes.net.svg?branch=master"}
-                ],],
-            ]
         ]],
     ]
 }
