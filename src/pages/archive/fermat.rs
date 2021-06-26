@@ -32,7 +32,7 @@ mod fermat_utils {
     }
 }
 
-fn generate_rows() -> std::vec::Vec<seed::dom_types::Node<Msg>> {
+fn generate_rows() -> std::vec::Vec<Node<Msg>> {
     let mut html = vec![];
     let two: usize = 2;
 
@@ -64,8 +64,8 @@ fn generate_rows() -> std::vec::Vec<seed::dom_types::Node<Msg>> {
     html
 }
 
-pub fn render() -> seed::dom_types::Node<Msg> {
-    let html: std::vec::Vec<seed::dom_types::Node<Msg>> = generate_rows();
+pub fn render() -> Node<Msg> {
+    let html: std::vec::Vec<Node<Msg>> = generate_rows();
 
     div![
         h1!["The Fermat Numbers"],

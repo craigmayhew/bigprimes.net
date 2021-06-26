@@ -54,7 +54,7 @@ pub mod prime_utils {
     }
 }
 
-pub fn render(slug: String) -> seed::dom_types::Node<Msg> {
+pub fn render(slug: String) -> Node<Msg> {
     let numbers_per_page: usize = 100;
     let col_count = 4;
     let numbers_per_col = numbers_per_page / col_count;
@@ -119,7 +119,7 @@ pub fn render(slug: String) -> seed::dom_types::Node<Msg> {
         }
 
         let href_prev: String;
-        let prev_link: Vec<seed::dom_types::Node<_>>;
+        let prev_link: Vec<Node<_>>;
         // we are on the first page of primes so don't display a previous button
         if slug_int <= 1 {
             prev_link = vec![];

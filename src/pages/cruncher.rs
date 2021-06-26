@@ -492,7 +492,7 @@ mod numerics_to_text {
     }
 }
 
-fn html_form() -> seed::dom_types::Node<Msg> {
+fn html_form() -> Node<Msg> {
     div![
         h1!["Number Cruncher"],
         "Welcome to the number cruncher.
@@ -537,7 +537,7 @@ fn html_factors(
     slug: &str,
     slug_len: usize,
     max_len_factoring: usize,
-) -> seed::dom_types::Node<Msg> {
+) -> Node<Msg> {
     if slug_len <= max_len_factoring {
         td![
             attrs! {At::Width => "200"},
@@ -550,7 +550,7 @@ fn html_factors(
     }
 }
 
-fn html_roman(slug: &str, max_len_roman: usize) -> seed::dom_types::Node<Msg> {
+fn html_roman(slug: &str, max_len_roman: usize) -> Node<Msg> {
     tr![
         td![attrs! {At::Width => "200"}, "Roman Numerals:",],
         td![
@@ -564,7 +564,7 @@ fn html_roman(slug: &str, max_len_roman: usize) -> seed::dom_types::Node<Msg> {
     ]
 }
 
-fn html_chinese(slug: &str, max_len_chinese: usize) -> seed::dom_types::Node<Msg> {
+fn html_chinese(slug: &str, max_len_chinese: usize) -> Node<Msg> {
     tr![
         td![attrs! {At::Width => "200"}, "Chinese Numerals:",],
         td![
@@ -578,7 +578,7 @@ fn html_chinese(slug: &str, max_len_chinese: usize) -> seed::dom_types::Node<Msg
     ]
 }
 
-fn html_egyptian(slug: &str, max_len_egyptian: usize) -> seed::dom_types::Node<Msg> {
+fn html_egyptian(slug: &str, max_len_egyptian: usize) -> Node<Msg> {
     tr![
         td![attrs! {At::Width => "200"}, "Egyptian Numerals:",],
         td![if slug.len() <= max_len_egyptian {
@@ -589,7 +589,7 @@ fn html_egyptian(slug: &str, max_len_egyptian: usize) -> seed::dom_types::Node<M
     ]
 }
 
-fn html_mersenne_prime(str_num: &str) -> seed::dom_types::Node<Msg> {
+fn html_mersenne_prime(str_num: &str) -> Node<Msg> {
     let n = mersenne::nth_mersenne_prime(str_num) as usize;
 
     if n == 0 {
@@ -615,7 +615,7 @@ fn html_mersenne_prime(str_num: &str) -> seed::dom_types::Node<Msg> {
     }
 }
 
-fn html_nth_prime(str_num: &str) -> seed::dom_types::Node<Msg> {
+fn html_nth_prime(str_num: &str) -> Node<Msg> {
     if MAX_LEN_PRIME_CHECK < str_num.len() {
         span!["It is too large to check primality."]
     } else {
@@ -631,7 +631,7 @@ fn html_nth_prime(str_num: &str) -> seed::dom_types::Node<Msg> {
     }
 }
 
-fn html_crunched_number(slug: String) -> seed::dom_types::Node<Msg> {
+fn html_crunched_number(slug: String) -> Node<Msg> {
     let max_len_roman = 6;
     let html_roman = html_roman(&slug, max_len_roman);
 
@@ -789,7 +789,7 @@ fn html_crunched_number(slug: String) -> seed::dom_types::Node<Msg> {
     ]
 }
 
-pub fn render(slug: String) -> seed::dom_types::Node<Msg> {
+pub fn render(slug: String) -> Node<Msg> {
     let rgx = Regex::new(r"^([1-9]+[0-9]*)$").unwrap();
 
     if rgx.is_match(&slug) {

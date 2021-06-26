@@ -27,7 +27,7 @@ fn nth_fibonacci(n: usize, count: usize) -> Vec<BigUint> {
     x
 }
 
-pub fn render(slug: String) -> seed::dom_types::Node<Msg> {
+pub fn render(slug: String) -> Node<Msg> {
     let numbers_per_page: usize = 25;
     let slug_int: usize = slug.parse().unwrap();
     let fib_vec = nth_fibonacci(slug_int, numbers_per_page);
@@ -39,7 +39,7 @@ pub fn render(slug: String) -> seed::dom_types::Node<Msg> {
     }
 
     let href_prev: String;
-    let prev_link: Vec<seed::dom_types::Node<_>>;
+    let prev_link: Vec<Node<_>>;
     if slug_int <= 1 {
         prev_link = vec![];
     } else if slug_int <= 25 {

@@ -1,8 +1,8 @@
 use crate::Msg;
 use seed::prelude::*;
 
-pub fn render() -> seed::dom_types::Node<Msg> {
-    //TODO: `svg` has type `seed::dom_types::Node<Msg>`, which does not implement the `Copy` trait, therefore we must have duplicate code for now.
+pub fn render() -> Node<Msg> {
+    //TODO: `svg` has type `Node<Msg>`, which does not implement the `Copy` trait, therefore we must have duplicate code for now.
     let svg_attrs = attrs! {
             At::Width => "20px";
             At::Height => "20px";

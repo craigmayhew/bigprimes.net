@@ -370,7 +370,7 @@ pub mod mersenne_utils {
     }
 }
 
-pub fn render(model: &crate::Model) -> seed::dom_types::Node<Msg> {
+pub fn render(model: &crate::Model) -> Node<Msg> {
     let mut html = vec![];
     let mersennes = mersenne_utils::mersennes();
 

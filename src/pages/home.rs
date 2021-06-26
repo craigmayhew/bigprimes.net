@@ -1,7 +1,7 @@
 use crate::Msg;
 use seed::prelude::*;
 
-pub fn render() -> seed::dom_types::Node<Msg> {
+pub fn render() -> Node<Msg> {
     div![
         h1!["News"],
         br![],
