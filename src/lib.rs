@@ -131,13 +131,11 @@ fn routes(url: seed::Url) -> (Page, std::string::String) {
                     "mersenne" => (Page::MersenneArchive, empty_string),
                     "perfect" => (Page::PerfectArchive, empty_string),
                     "prime" => match url.path().get(2).as_ref() {
-                        Some(_slug) => {
-                            (Page::PrimeNumbersArchive, url.path()[2].to_owned())
-                        }
+                        Some(_slug) => (Page::PrimeNumbersArchive, url.path()[2].to_owned()),
                         None => (Page::PrimeNumbersArchive, "1".to_owned()),
                     },
                     _ => (Page::Error, empty_string),
-                }
+                },
             }
         }
         "contactus" => (Page::ContactUs, empty_string),

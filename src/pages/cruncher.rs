@@ -533,11 +533,7 @@ fn html_form() -> Node<Msg> {
     ]
 }
 
-fn html_factors(
-    slug: &str,
-    slug_len: usize,
-    max_len_factoring: usize,
-) -> Node<Msg> {
+fn html_factors(slug: &str, slug_len: usize, max_len_factoring: usize) -> Node<Msg> {
     if slug_len <= max_len_factoring {
         td![
             attrs! {At::Width => "200"},

@@ -7,8 +7,9 @@ pub fn render() -> Node<Msg> {
         br![],
         br![],
         br![],
-        table![tbody![
-            tr![td!["Number of verified primes:"], td!["1.4 billion"],],
-        ]],
+        table![tbody![tr![
+            td!["Number of verified primes:"],
+            td!["1.4 billion"],
+        ],]],
     ]
 }
