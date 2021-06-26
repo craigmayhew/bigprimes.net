@@ -12,14 +12,10 @@ Setup your local dev environment
  1. Clone bigprimes.net `git clone https://github.com/craigmayhew/bigprimes.net.git`
  2. Install cargo rustc, rustup `curl https://sh.rustup.rs -sSf | sh`
  3. Install wasm-pack `curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh`
- 4. If developing on Ubuntu, `apt-get update && apt-get install libssl-dev npm pkg-config`
- 5. Install npm `npm install npm@latest -g`
-
-Setup project for the first time
-===
-Unless you are the author of this repo, you almost certainly do not need to do these!
- 1. `npm init wasm-app www`
- 2. `cd www && npm install && npm audit fix`
+ 4. `cargo install --locked trunk`
+ 5. `cargo install wasm-bindgen-cli`
+ 6. Build `trunk build`
+ 7. Build, serve and rebuild on changes `trunk serve --open`
 
 Contributing
 ===
@@ -31,9 +27,8 @@ Contributing
 Build
 ===
 
- 1. Compile rust into wasm `wasm-pack build`
- 2. Build web app `cd www && npm install`
- 3. Build command Craig has been using: `cd /mnt/c/Users/user/Documents/GitHub/bigprimes.net/ && RUST_BACKTRACE=1 wasm-pack build --release && cp pkg/* www/pkg/ && cd www && npm install && npm start`
+ Build: `wasm-pack build` or `trunk build`
+ Build and server locally: `cd /mnt/c/Users/user/Documents/GitHub/bigprimes.net/ && trunk build && trunk serve --open`
  
 Fun Facts
 ===
@@ -43,4 +38,5 @@ Fun Facts
 Thanks
 ===
  - https://seed-rs.org/
+ - https://github.com/thedodd/trunk
  

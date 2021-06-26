@@ -152,6 +152,6 @@ fn routes(url: seed::Url) -> (Page, std::string::String) {
 }
 
 #[wasm_bindgen(start)]
-pub fn start() {
+pub fn main() {
     App::start("app", init, update, view);
 }

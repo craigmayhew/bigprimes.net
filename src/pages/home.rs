@@ -16,6 +16,10 @@ pub fn render() -> Node<Msg> {
                     td![attrs!{At::Width => "300"},"News"],
                 ],
                 tr![
+                    td!["26th June 2021"],
+                    td![El::from_html("bigprimes.net is now using the <a href=\"https://github.com/thedodd/trunk\">trunk</a> test server rather than node.")],
+                ],
+                tr![
                     td!["28th July 2019"],
                     td![El::from_html("bigprimes.net has been rewritten from the ground up using rust!<br>All archives have been retired in favour of client side processing in web assembly.")],
                 ],
