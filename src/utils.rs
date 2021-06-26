@@ -32,12 +32,12 @@ pub fn nth(num: usize) -> String {
     )
 }
 
-pub fn save_as_file(filename: String, filecontent: String) -> seed::dom_types::Node<Msg> {
+pub fn save_as_file(filename: String, filecontent: String) -> Node<Msg> {
     let href: String = format!("data:text/plain,{}", &filecontent);
     a![attrs! {At::Download => &filename, At::Href => &href}, "TXT"]
 }
 
-pub fn generate_file(n: u64, value: BigUint) -> seed::dom_types::Node<Msg> {
+pub fn generate_file(n: u64, value: BigUint) -> Node<Msg> {
     let download_filename: String = format!("P{}.txt", &n.to_string());
     save_as_file(download_filename, value.to_string())
 }
