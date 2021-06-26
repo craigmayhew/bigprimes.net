@@ -1,5 +1,6 @@
-// file reuqired by Rust's module system
+// file required by Rust's module system
 
+pub mod index;
 pub mod fermat;
 pub mod fibonacci;
 pub mod mersenne;

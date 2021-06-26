@@ -11,6 +11,7 @@ pub mod utils;
 
 #[derive(Copy, Clone)]
 pub enum Page {
+    Archive,
     ContactUs,
     Downloads,
     Error,
@@ -92,6 +93,7 @@ fn update(msg: Msg, model: &mut Model, orders: &mut impl Orders<Msg>) {
 /// only argument, and output has to implement trait `ElContainer`.
 fn view(model: &Model) -> Node<Msg> {
     match model.page {
+        Page::Archive => pages::archive::index::render(),
         Page::ContactUs => pages::contact::render(),
         Page::Downloads => pages::downloads::render(),
         Page::Error => pages::error::render(),
@@ -118,21 +120,24 @@ fn routes(url: seed::Url) -> (Page, std::string::String) {
     match url.path()[0].as_ref() {
         "archive" => {
             // Determine if we are at the archive page, or a subpage
-            match url.path()[1].as_ref() {
-                "fermat" => (Page::FermatArchive, empty_string),
-                "fibonacci" => match url.path().get(2).as_ref() {
-                    Some(_slug) => (Page::FibonacciArchive, url.path()[2].to_owned()),
-                    None => (Page::FibonacciArchive, "1".to_owned()),
-                },
-                "mersenne" => (Page::MersenneArchive, empty_string),
-                "perfect" => (Page::PerfectArchive, empty_string),
-                "prime" => match url.path().get(2).as_ref() {
-                    Some(_slug) => {
-                        (Page::PrimeNumbersArchive, url.path()[2].to_owned())
-                    }
-                    None => (Page::PrimeNumbersArchive, "1".to_owned()),
-                },
+            match url.path().get(1) {
+                None => (Page::Archive, empty_string),
+                Some(_) => match url.path()[1].as_ref() {
+                    "fermat" => (Page::FermatArchive, empty_string),
+                    "fibonacci" => match url.path().get(2).as_ref() {
+                        Some(_slug) => (Page::FibonacciArchive, url.path()[2].to_owned()),
+                        None => (Page::FibonacciArchive, "1".to_owned()),
+                    },
+                    "mersenne" => (Page::MersenneArchive, empty_string),
+                    "perfect" => (Page::PerfectArchive, empty_string),
+                    "prime" => match url.path().get(2).as_ref() {
+                        Some(_slug) => {
+                            (Page::PrimeNumbersArchive, url.path()[2].to_owned())
+                        }
+                        None => (Page::PrimeNumbersArchive, "1".to_owned()),
+                    },
                     _ => (Page::Error, empty_string),
+                }
             }
         }
         "contactus" => (Page::ContactUs, empty_string),
