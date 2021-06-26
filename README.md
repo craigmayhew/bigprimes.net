@@ -27,8 +27,8 @@ Contributing
 Build
 ===
 
- Build: `wasm-pack build` or `trunk build`
- Build and server locally: `cd /mnt/c/Users/user/Documents/GitHub/bigprimes.net/ && trunk build && trunk serve --open`
+ - Build: `wasm-pack build` or `trunk build`
+ - Build and serve locally: `trunk serve --open`
  
 Fun Facts
 ===
