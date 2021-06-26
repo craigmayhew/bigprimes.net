@@ -13,6 +13,7 @@ pub mod utils;
 pub enum Page {
     ContactUs,
     Downloads,
+    Error,
     Faq,
     Home,
     Status,
@@ -93,6 +94,7 @@ fn view(model: &Model) -> Node<Msg> {
     match model.page {
         Page::ContactUs => pages::contact::render(),
         Page::Downloads => pages::downloads::render(),
+        Page::Error => pages::error::render(),
         Page::Faq => pages::faq::render(),
         Page::FermatArchive => pages::archive::fermat::render(),
         Page::FibonacciArchive => pages::archive::fibonacci::render(model.slug.to_owned()),
@@ -130,7 +132,7 @@ fn routes(url: seed::Url) -> (Page, std::string::String) {
                     }
                     None => (Page::PrimeNumbersArchive, "1".to_owned()),
                 },
-                _ => (Page::Home, empty_string), //TODO: add archive page
+                    _ => (Page::Error, empty_string),
             }
         }
         "contactus" => (Page::ContactUs, empty_string),
@@ -142,7 +144,7 @@ fn routes(url: seed::Url) -> (Page, std::string::String) {
         "faq" => (Page::Faq, empty_string),
         "primalitytest" => (Page::PrimalityChecker, empty_string),
         "status" => (Page::Status, empty_string),
-        _ => (Page::Home, empty_string),
+        _ => (Page::Error, empty_string),
     }
 }
 
