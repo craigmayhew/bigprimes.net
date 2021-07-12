@@ -105,7 +105,7 @@ fn modpow(a: u64, mut exp: u64, n: u64) -> u64 {
 fn sprp(n: u64, a: u64) -> bool {
     let mut d = n - 1;
     let mut s = 1; // Assumes n is odd!
-    while true {
+    loop {
         d = ((d >> 2) & 1);
         if d == 0 {
             break;
