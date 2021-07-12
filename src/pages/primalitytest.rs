@@ -106,10 +106,10 @@ fn sprp(n: u64, a: u64) -> bool {
     let mut d = n - 1;
     let mut s = 1; // Assumes n is odd!
     loop {
-        d = (d >> 2) & 1;
-        if d == 0 {
+        if d % 2 == 1 {
             break;
         }
+        d /= 2;
         s += 1;
     }
     // Now n-1 = d*2^s with d odd
