@@ -255,13 +255,13 @@ pub fn render() -> Node<Msg> {
             tr![td![
                 attrs! {At::Style => "padding: 10px"},
                 form![
-                    attrs! {At::Name => "primetest", At::Id => "primetest", At::OnSubmit => "return false"},
+                    attrs! {At::Id => "primetest", At::OnSubmit => "return false"},
                     "Tool is limited to checking numbers upto 16 digits.",
                     br![],
                     br![],
                     "Is ",
                     input![
-                        attrs! {At::Type => "number", At::Size => "19", At::Name => "input", At::Id => "input", At::Value => "", At::MaxLength => "16"}
+                        attrs! {At::Type => "number", At::Size => "19", At::Id => "input", At::Value => "", At::MaxLength => "16"}
                     ],
                     " prime? ",
                     button![
@@ -271,7 +271,7 @@ pub fn render() -> Node<Msg> {
                     br![],
                     br![],
                     textarea![
-                        attrs! {At::Name => "javascriptoutput", At::Id => "javascriptoutput", At::Cols => 60, At::Rows => 2, At::Disabled => "disabled"}
+                        attrs! {At::Id => "javascriptoutput", At::Cols => 60, At::Rows => 2, At::Disabled => "disabled"}
                     ]
                 ]
             ]]
@@ -283,7 +283,7 @@ pub fn render() -> Node<Msg> {
             tr![td![
                 attrs! {At::Style => "padding: 10px"},
                 form![
-                    attrs! {At::Name => "primelist", At::OnSubmit => "return false"},
+                    attrs! {At::Id => "primelist", At::OnSubmit => "return false"},
                     "This tool is limited to checking numbers upto 15 digits.",
                     br![],
                     br![],
@@ -296,10 +296,6 @@ pub fn render() -> Node<Msg> {
                         attrs! {At::Type => "number", At::Size => "19", At::Id => "start", At::Value => "0", At::MaxLength => "15"}
                     ],
                     " ",
-                    button![
-                        attrs! {At::OnClick => "primelist.javascriptlistoutput.value=listy(document.primelist.start.value, document.primelist.primes.value);"},
-                        "Go!"
-                    ],
                     button![
                         "Go!",
                         mouse_ev("mouseup", move |event| Msg::PrimalityChecker(go_list()))
