@@ -106,7 +106,7 @@ fn sprp(n: u64, a: u64) -> bool {
     let mut d = n - 1;
     let mut s = 1; // Assumes n is odd!
     loop {
-        d = ((d >> 2) & 1);
+        d = (d >> 2) & 1;
         if d == 0 {
             break;
         }
@@ -138,7 +138,7 @@ pub struct Check {
 pub fn check(input: String) -> Check {
     let trial_limit = 1300; // Should be bigger, like 10000
     let n: u64 = input.parse::<u64>().unwrap();
-    let mut result;
+    let result;
     let mut is_prime = false;
 
     if n > 9007199254740991 {
@@ -208,7 +208,6 @@ pub fn listy(start_number: u64, number_of_primes: u64) -> String {
 pub fn go_crunch() -> () {
     let window = web_sys::window().expect("no global `window` exists");
     let document = window.document().expect("should have a document on window");
-    let body = document.body().expect("document should have a body");
 
     let el_input_value = document
         .get_element_by_id("input")
@@ -226,7 +225,6 @@ pub fn go_crunch() -> () {
 pub fn go_list() {
     let window = web_sys::window().expect("no global `window` exists");
     let document = window.document().expect("should have a document on window");
-    let body = document.body().expect("document should have a body");
 
     let el_start_value = document
         .get_element_by_id("start")

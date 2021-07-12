@@ -67,7 +67,7 @@ pub enum Msg {
 }
 
 /// The sole source of updating the model
-fn update(msg: Msg, model: &mut Model, orders: &mut impl Orders<Msg>) {
+fn update(msg: Msg, model: &mut Model, _orders: &mut impl Orders<Msg>) {
     match msg {
         //TODO: IS there a bug here that model.download.n = perfect_download is used for mersenne?
         Msg::GenerateMersenneDownload(_event, perfect_download) => {
