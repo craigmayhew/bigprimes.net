@@ -249,7 +249,6 @@ pub fn render() -> Node<Msg> {
         br![],
         br![],
         br![],
-        //TODO: Convert the j.js file into rust!
         table![
             attrs! {At::Class => "text", At::Width => "300", At::Style => "border:1px solid #444; background-color:#e0faed"},
             tr![td![
