@@ -267,7 +267,7 @@ pub fn render() -> Node<Msg> {
                     br![],
                     "Is ",
                     input![
-                        attrs! {At::Type => "number", At::Size => "19", At::Id => "input", At::Value => "", At::MaxLength => "16"}
+                        attrs! {At::Type => "number", At::Size => "19", At::Id => "input", At::Value => "31", At::MaxLength => "16"}
                     ],
                     " prime? ",
                     button![
@@ -295,11 +295,11 @@ pub fn render() -> Node<Msg> {
                     br![],
                     "This will show ",
                     input![
-                        attrs! {At::Type => "number", At::Size => "4", At::Id => "primes", At::Value => "1", At::MaxLength => "2"}
+                        attrs! {At::Type => "number", At::Size => "4", At::Id => "primes", At::Value => "5", At::MaxLength => "2"}
                     ],
                     " prime numbers after ",
                     input![
-                        attrs! {At::Type => "number", At::Size => "19", At::Id => "start", At::Value => "0", At::MaxLength => "15"}
+                        attrs! {At::Type => "number", At::Size => "19", At::Id => "start", At::Value => "31", At::MaxLength => "15"}
                     ],
                     " ",
                     button![
