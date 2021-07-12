@@ -210,7 +210,7 @@ pub fn go_crunch() -> () {
         .unwrap()
         .value();
     let el_output_textarea = document
-        .get_element_by_id("javascriptoutput")
+        .get_element_by_id("prime_check_output")
         .expect("missing output textarea");
     el_output_textarea.set_inner_html(&check(el_input_value));
     ()
@@ -234,7 +234,7 @@ pub fn go_list() {
         .unwrap()
         .value();
     let el_output_textarea = document
-        .get_element_by_id("javascriptlistoutput")
+        .get_element_by_id("prime_check_list_output")
         .expect("missing output textarea");
     el_output_textarea.set_inner_html(&listy(
         el_start_value.parse::<u64>().unwrap(),
@@ -270,7 +270,7 @@ pub fn render() -> Node<Msg> {
                     br![],
                     br![],
                     textarea![
-                        attrs! {At::Id => "javascriptoutput", At::Cols => 60, At::Rows => 2, At::Disabled => "disabled"}
+                        attrs! {At::Id => "prime_check_output", At::Cols => 60, At::Rows => 2, At::Disabled => "disabled"}
                     ]
                 ]
             ]]
@@ -302,7 +302,7 @@ pub fn render() -> Node<Msg> {
                     br![],
                     br![],
                     textarea![
-                        attrs! {At::Id => "javascriptlistoutput", At::Cols => 60, At::Rows => 10, At::Disabled => "disabled"}
+                        attrs! {At::Id => "prime_check_list_output", At::Cols => 60, At::Rows => 10, At::Disabled => "disabled"}
                     ]
                 ]
             ]]
