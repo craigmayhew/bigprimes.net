@@ -47,7 +47,7 @@ mod numerics_to_text {
             //TODO: replace these with unicode or svgs
             //e.g. if the license allows, replace with https://commons.wikimedia.org/wiki/File:Babylonian_numerals.svg
             glyphs[i].push_str(
-                "<img height=\"15\" src=\"https://static.bigprimes.net/imgs/babnumbers/bab_",
+                "<img height=\"15\" src=\"../../babnumbers/bab_",
             );
             glyphs[i].push_str(&i.to_string());
             glyphs[i].push_str(".gif\" alt=\"");
@@ -849,7 +849,7 @@ mod tests {
 
     #[test]
     fn den_to_babylonian_test() {
-        assert_eq!(numerics_to_text::den_to_babylonian("9003")," &nbsp; <img height=\"15\" src=\"https://static.bigprimes.net/imgs/babnumbers/bab_2.gif\" alt=\"2\"> &nbsp; <img height=\"15\" src=\"https://static.bigprimes.net/imgs/babnumbers/bab_30.gif\" alt=\"30\"> &nbsp; <img height=\"15\" src=\"https://static.bigprimes.net/imgs/babnumbers/bab_3.gif\" alt=\"3\">");
+        assert_eq!(numerics_to_text::den_to_babylonian("9003")," &nbsp; <img height=\"15\" src=\"../../babnumbers/bab_2.gif\" alt=\"2\"> &nbsp; <img height=\"15\" src=\"../../babnumbers/bab_30.gif\" alt=\"30\"> &nbsp; <img height=\"15\" src=\"../../babnumbers/bab_3.gif\" alt=\"3\">");
     }
 
     #[test]
