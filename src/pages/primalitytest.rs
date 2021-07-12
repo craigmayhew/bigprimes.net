@@ -1,6 +1,6 @@
 use crate::Msg;
 use seed::prelude::*;
-use web_sys::{HtmlElement, HtmlInputElement};
+use web_sys::{HtmlInputElement};
 
 fn trial_divide(n: u64, max: u64) -> u64 {
     // Trial divides the positive integer n by the primes from 2 to max
