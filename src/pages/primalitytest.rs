@@ -337,4 +337,10 @@ mod tests {
         assert_eq!(sprp(217, 7), false);
         assert_eq!(sprp(19, 13), true);
     }
+
+    #[test]
+    fn mod_pow_test() {
+        assert_eq!(modpow(6,3,11), 7);
+        assert_eq!(modpow(113,7,11), 9);
+    }
 }
