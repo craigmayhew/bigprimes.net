@@ -343,4 +343,10 @@ mod tests {
         assert_eq!(modpow(6,3,11), 7);
         assert_eq!(modpow(113,7,11), 9);
     }
+
+    #[test]
+    fn mod_mult_test() {
+        assert_eq!(modmult(3,3,4), 1);
+        assert_eq!(modmult(110,4,7), 6);
+    }
 }
