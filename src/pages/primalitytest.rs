@@ -130,11 +130,16 @@ fn sprp(n: u64, a: u64) -> bool {
     return false;
 }
 
-#[wasm_bindgen]
-pub fn check(input: String) -> String {
+pub struct Check {
+    pub is_prime: bool,
+    pub result: String,
+}
+
+pub fn check(input: String) -> Check {
     let trial_limit = 1300; // Should be bigger, like 10000
     let n: u64 = input.parse::<u64>().unwrap();
     let mut result;
+    let mut is_prime = false;
 
     if n > 9007199254740991 {
         result = "Sorry, this routine will only handle integers below 9007199254740991.".to_owned();
@@ -151,6 +156,7 @@ pub fn check(input: String) -> String {
             result = format!("{} is not a prime! It is {} * {}", n, i, n / i);
         } else if n < trial_limit * trial_limit {
             result = format!("{} is a (proven) prime!", n);
+            is_prime = true;
         } else if sprp(n, 2)
             && sprp(n, 3)
             && sprp(n, 5)
@@ -163,6 +169,7 @@ pub fn check(input: String) -> String {
             // small numbers they are quick anyway.
             if n < 341550071728321 {
                 result = format!("{} is a (proven) prime.", n);
+                is_prime = true;
             } else if n == 341550071728321 {
                 result = format!("{} is not a prime! It is 10670053 * 32010157.", n);
             } else {
@@ -170,6 +177,7 @@ pub fn check(input: String) -> String {
                     "{} is probably a prime (it is a sprp bases 2, 3, 5, 7, 11, 13 and  17).",
                     n
                 );
+                is_prime = true;
             };
         } else {
             result = format!(
@@ -179,18 +187,17 @@ pub fn check(input: String) -> String {
         };
     };
 
-    return result;
+    return Check{is_prime, result};
 }
 
-#[wasm_bindgen]
 pub fn listy(start_number: u64, number_of_primes: u64) -> String {
     let mut i = 0;
     let mut j = start_number;
     let mut list: String = "".to_string();
     while i < number_of_primes {
         let result = check(j.to_string());
-        if result != "".to_owned() {
-            list = list + &result + "\n";
+        if result.is_prime == true {
+            list = list + &result.result + "\n";
             i += 1;
         }
         j += 1;
@@ -212,7 +219,7 @@ pub fn go_crunch() -> () {
     let el_output_textarea = document
         .get_element_by_id("prime_check_output")
         .expect("missing output textarea");
-    el_output_textarea.set_inner_html(&check(el_input_value));
+    el_output_textarea.set_inner_html(&check(el_input_value).result);
     ()
 }
 
