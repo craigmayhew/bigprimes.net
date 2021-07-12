@@ -63,11 +63,13 @@ pub enum Msg {
         pages::archive::perfect::perfects_utils::PerfectDownload,
     ),
     UrlChanged(subs::UrlChanged),
+    PrimalityChecker(()),
 }
 
 /// The sole source of updating the model
 fn update(msg: Msg, model: &mut Model, orders: &mut impl Orders<Msg>) {
     match msg {
+        //TODO: IS there a bug here that model.download.n = perfect_download is used for mersenne?
         Msg::GenerateMersenneDownload(_event, perfect_download) => {
             //event.prevent_default();
             model.download.n = perfect_download.n;
@@ -84,6 +86,9 @@ fn update(msg: Msg, model: &mut Model, orders: &mut impl Orders<Msg>) {
                 pages::archive::perfect::perfects_utils::PerfectDownload { n: 0, p: 0 };
             model.page = page;
             model.slug = slug;
+            ()
+        }
+        Msg::PrimalityChecker(_gocrunch) => {
             ()
         }
     }

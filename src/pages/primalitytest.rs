@@ -1,7 +1,8 @@
 use crate::Msg;
 use seed::prelude::*;
+use web_sys::{HtmlElement, HtmlInputElement};
 
-fn trial_divide(n: usize, max: usize) -> usize {
+fn trial_divide(n: u64, max: u64) -> u64 {
     // Trial divides the positive integer n by the primes from 2 to max
     // Returns the first prime divisor found, or 0 if none found
     // Note: if n < max^2 is a prime, then n will be returned.
@@ -11,7 +12,7 @@ fn trial_divide(n: usize, max: usize) -> usize {
         3
     } else {
         // No need to go past the square root of our number
-        let sqrt: usize = (n as f64).sqrt().floor() as usize;
+        let sqrt: u64 = (n as f64).sqrt().floor() as u64;
         let stop = if sqrt > max { max } else { sqrt };
         // Okay, lets "wheel factor" alternately adding 2 and 4
         let mut di = 2;
@@ -31,6 +32,179 @@ fn trial_divide(n: usize, max: usize) -> usize {
     }
 }
 
+// modadd(a,b,N) finds a+b (mod N) where a, b, and N can be
+// up to (2^53-1)/2.  Might up this to 2^53-1 eventually...
+fn modadd(a: u64, b: u64, n: u64) -> u64 {
+    // When the integers a, b satisfy a+b > 2^53-1, then (a+b)%N is wrong
+    // so we add this routine to allow us to reach a, b = 2^53-1.
+    if a + b > 9007199254740991 {
+        // Could reduce a and b (mod N) here, but assuming that has already been done
+        // won't hurt if not... subtract 2^52 from one, 2^52-1 from the other and the
+        // add it back modulo N (MaxInt+1)
+        let t = ((a - 4503599627370496) + (b - 4503599627370495)) % n;
+        return t + (9007199254740991 % n);
+    }
+    // Usual case: a + b is not too large:
+    (a + b) % n
+}
+
+fn modmult(mut a: u64, mut b: u64, n: u64) -> u64 {
+    if a > n {
+        a = a % n;
+    }
+    if b > n {
+        b = b % n;
+    }
+    if a * b <= 9007199254740991 {
+        return (a * b) % n;
+    } else {
+        if b > a {
+            return modmult(b.clone(), a, n);
+        }
+
+        // Right to left binary multiplication
+        let mut t = 0;
+        let mut f = a;
+        while b > 1 {
+            if (b & 1) == 1 {
+                t = modadd(t, f, n);
+            }
+            //TODO: bitshift might be cleaner and faster
+            b = (b as f64 / 2.0).floor() as u64;
+            f = modadd(f, f, n);
+        }
+        t = modadd(t, f, n);
+        return t;
+    }
+}
+
+// modpow(a,exp,N) finds a^exp (mod N) where a, b, and N are 
+// limited by modmult
+fn modpow(a: u64, mut exp: u64, n: u64) -> u64 {
+    if exp == 0 {return 1;}
+
+    // Right to left binary exponentiation
+    let mut t = 1;
+    let mut f = a;
+    while exp > 1 {
+        if (exp & 1) == 1 {  // if exponent is odd
+        t = modmult(t, f, n);
+        }
+        exp = (exp as f64 / 2.0).floor() as u64;
+        f = modmult(f, f, n);
+    };
+    t = modmult(t, f, n);
+    return t;
+}
+
+
+// sprp(N,a) checks if N (odd!) is a strong probable prime base a 
+// (returns true or false)
+fn sprp(n: u64, a: u64) -> bool {
+    let mut d = n-1;
+    let mut s = 1;              // Assumes n is odd!
+    while true {
+        d = ((d >> 2) & 1);
+        if d == 0 {
+            break;
+        }
+        s += 1;
+    }
+    // Now n-1 = d*2^s with d odd
+    let mut b = modpow(a,d,n);
+    if b == 1 {return true;}
+    if b+1 == n {return true;}
+    while s > 1 {
+      b = modmult(b,b,n);
+      if b+1 == n {return true;}
+      s = s - 1;
+    }
+    return false;
+}
+
+#[wasm_bindgen]
+pub fn check(input: String) -> String {
+    let trial_limit = 1300; // Should be bigger, like 10000
+    let n:u64 = input.parse::<u64>().unwrap();
+    let mut result;
+
+    if n > 9007199254740991 {
+        result = "Sorry, this routine will only handle integers below 9007199254740991.".to_owned();
+    } else if n == 1 {
+        result = "The number 1 is neither prime or composite (it is the multiplicative identity).".to_owned();
+    } else if n < 1 {
+        result = "We usually restrict the terms prime and composite to positive integers".to_owned();
+    } else {
+        // Okay, n is of a resonable size, lets trial divide
+        let i = trial_divide(n, trial_limit);
+        if i > 0 && i != n {
+            result = format!("{} is not a prime! It is {} * {}", n, i, n/i);
+        } else if n < trial_limit * trial_limit {
+            result = format!("{} is a (proven) prime!", n);
+        } else if sprp(n, 2)
+            && sprp(n, 3)
+            && sprp(n, 5)
+            && sprp(n, 7)
+            && sprp(n, 11)
+            && sprp(n, 13)
+            && sprp(n, 17)
+        {
+            // Some of these tests are unnecessary for small numbers, but for
+            // small numbers they are quick anyway.
+            if n < 341550071728321 {
+                result = format!("{} is a (proven) prime.", n);
+            } else if n == 341550071728321 {
+                result = format!("{} is not a prime! It is 10670053 * 32010157.", n);
+            } else {
+                result = format!("{} is probably a prime (it is a sprp bases 2, 3, 5, 7, 11, 13 and  17).", n);
+            };
+        } else {
+            result = format!("{} is (proven) composite (failed sprp test base {}).", n, 17);
+        };
+    };
+    
+    return result;
+}
+
+#[wasm_bindgen]
+pub fn listy(start_number: u64, number_of_primes: u64) -> String {
+    let mut i = 0;
+    let mut j = start_number;
+    let mut list: String = "".to_string();
+    while i < number_of_primes {
+        let result = check(j.to_string());
+        if result != "".to_owned() {
+            list = list + &result + "\n";
+            i += 1;
+        }
+        j += 1;
+    }
+    list
+}
+
+pub fn go_crunch() -> (){
+    let window = web_sys::window().expect("no global `window` exists");
+    let document = window.document().expect("should have a document on window");
+    let body = document.body().expect("document should have a body");
+
+    let el_input_value = document.get_element_by_id("input").unwrap().dyn_into::<HtmlInputElement>().unwrap().value();
+    let el_output_textarea = document.get_element_by_id("javascriptoutput").expect("missing output textarea");
+    el_output_textarea.set_inner_html(&check(el_input_value));
+    ()
+}
+
+pub fn go_list(){
+    let window = web_sys::window().expect("no global `window` exists");
+    let document = window.document().expect("should have a document on window");
+    let body = document.body().expect("document should have a body");
+
+    let el_start_value = document.get_element_by_id("start").unwrap().dyn_into::<HtmlInputElement>().unwrap().value();
+    let el_primes_value = document.get_element_by_id("primes").unwrap().dyn_into::<HtmlInputElement>().unwrap().value();
+    let el_output_textarea = document.get_element_by_id("javascriptlistoutput").expect("missing output textarea");
+    el_output_textarea.set_inner_html(&listy(el_start_value.parse::<u64>().unwrap(),el_primes_value.parse::<u64>().unwrap()));
+    ()                  
+}
+
 pub fn render() -> Node<Msg> {
     div![
         h1!["Primality Test, Calculate Primes"],
@@ -38,26 +212,30 @@ pub fn render() -> Node<Msg> {
         br![],
         br![],
         //TODO: Convert the j.js file into rust!
-        Script!(attrs! {At::Src => "https://static.bigprimes.net/j.js"}),
         table![
             attrs! {At::Class => "text", At::Width => "300", At::Style => "border:1px solid #444; background-color:#e0faed"},
             tr![td![
                 attrs! {At::Style => "padding: 10px"},
                 form![
-                    attrs! {At::Name => "primetest", At::OnSubmit => "return false"},
+                    attrs! {At::Name => "primetest", At::Id => "primetest", At::OnSubmit => "return false"},
                     "Tool is limited to checking numbers upto 16 digits.",
                     br![],
                     br![],
                     "Is ",
                     input![
-                        attrs! {At::Type => "text", At::Size => "16", At::Name => "input", At::Value => "", At::MaxLength => "16"}
+                        attrs! {At::Type => "number", At::Size => "19", At::Name => "input", At::Id => "input", At::Value => "", At::MaxLength => "16"}
                     ],
                     " prime? ",
-                    button![attrs! {At::OnClick => "check(false,0)"}, "Check!"],
+                    button![
+                        "Check!",
+                        mouse_ev("mouseup", move |event| Msg::PrimalityChecker(
+                            go_crunch()
+                        ))
+                    ],
                     br![],
                     br![],
                     textarea![
-                        attrs! {At::Name => "javascriptoutput", At::Cols => 60, At::Rows => 2, At::Disabled => "disabled"}
+                        attrs! {At::Name => "javascriptoutput", At::Id => "javascriptoutput", At::Cols => 60, At::Rows => 2, At::Disabled => "disabled"}
                     ]
                 ]
             ]]
@@ -75,21 +253,27 @@ pub fn render() -> Node<Msg> {
                     br![],
                     "This will show ",
                     input![
-                        attrs! {At::Type => "text", At::Size => "4", At::Name => "primes", At::Value => "1", At::MaxLength => "2"}
+                        attrs! {At::Type => "number", At::Size => "4", At::Id => "primes", At::Value => "1", At::MaxLength => "2"}
                     ],
                     " prime numbers after ",
                     input![
-                        attrs! {At::Type => "text", At::Size => "16", At::Name => "start", At::Value => "0", At::MaxLength => "15"}
+                        attrs! {At::Type => "number", At::Size => "19", At::Id => "start", At::Value => "0", At::MaxLength => "15"}
                     ],
                     " ",
                     button![
-                        attrs! {At::OnClick => "primelist.javascriptlistoutput.value='';listy();"},
+                        attrs! {At::OnClick => "primelist.javascriptlistoutput.value=listy(document.primelist.start.value, document.primelist.primes.value);"},
                         "Go!"
+                    ],
+                    button![
+                        "Go!",
+                        mouse_ev("mouseup", move |event| Msg::PrimalityChecker(
+                            go_list()
+                        ))
                     ],
                     br![],
                     br![],
                     textarea![
-                        attrs! {At::Name => "javascriptlistoutput", At::Cols => 60, At::Rows => 10, At::Disabled => "disabled"}
+                        attrs! {At::Id => "javascriptlistoutput", At::Cols => 60, At::Rows => 10, At::Disabled => "disabled"}
                     ]
                 ]
             ]]
@@ -110,5 +294,13 @@ mod tests {
         assert_eq!(trial_divide(7777771111111111, 10000), 11);
         //in the case of a prime
         assert_eq!(trial_divide(777777111111113, 10000), 0);
+    }
+
+    #[test]
+    fn sprp_test() {
+        assert_eq!(sprp(27, 5), false);
+        assert_eq!(sprp(31, 7), true);
+        assert_eq!(sprp(217, 7), false);
+        assert_eq!(sprp(19, 13), true);
     }
 }
