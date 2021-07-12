@@ -88,9 +88,7 @@ fn update(msg: Msg, model: &mut Model, orders: &mut impl Orders<Msg>) {
             model.slug = slug;
             ()
         }
-        Msg::PrimalityChecker(_gocrunch) => {
-            ()
-        }
+        Msg::PrimalityChecker(_gocrunch) => (),
     }
 }
 

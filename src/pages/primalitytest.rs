@@ -78,31 +78,33 @@ fn modmult(mut a: u64, mut b: u64, n: u64) -> u64 {
     }
 }
 
-// modpow(a,exp,N) finds a^exp (mod N) where a, b, and N are 
+// modpow(a,exp,N) finds a^exp (mod N) where a, b, and N are
 // limited by modmult
 fn modpow(a: u64, mut exp: u64, n: u64) -> u64 {
-    if exp == 0 {return 1;}
+    if exp == 0 {
+        return 1;
+    }
 
     // Right to left binary exponentiation
     let mut t = 1;
     let mut f = a;
     while exp > 1 {
-        if (exp & 1) == 1 {  // if exponent is odd
-        t = modmult(t, f, n);
+        if (exp & 1) == 1 {
+            // if exponent is odd
+            t = modmult(t, f, n);
         }
         exp = (exp as f64 / 2.0).floor() as u64;
         f = modmult(f, f, n);
-    };
+    }
     t = modmult(t, f, n);
     return t;
 }
 
-
-// sprp(N,a) checks if N (odd!) is a strong probable prime base a 
+// sprp(N,a) checks if N (odd!) is a strong probable prime base a
 // (returns true or false)
 fn sprp(n: u64, a: u64) -> bool {
-    let mut d = n-1;
-    let mut s = 1;              // Assumes n is odd!
+    let mut d = n - 1;
+    let mut s = 1; // Assumes n is odd!
     while true {
         d = ((d >> 2) & 1);
         if d == 0 {
@@ -111,13 +113,19 @@ fn sprp(n: u64, a: u64) -> bool {
         s += 1;
     }
     // Now n-1 = d*2^s with d odd
-    let mut b = modpow(a,d,n);
-    if b == 1 {return true;}
-    if b+1 == n {return true;}
+    let mut b = modpow(a, d, n);
+    if b == 1 {
+        return true;
+    }
+    if b + 1 == n {
+        return true;
+    }
     while s > 1 {
-      b = modmult(b,b,n);
-      if b+1 == n {return true;}
-      s = s - 1;
+        b = modmult(b, b, n);
+        if b + 1 == n {
+            return true;
+        }
+        s = s - 1;
     }
     return false;
 }
@@ -125,20 +133,22 @@ fn sprp(n: u64, a: u64) -> bool {
 #[wasm_bindgen]
 pub fn check(input: String) -> String {
     let trial_limit = 1300; // Should be bigger, like 10000
-    let n:u64 = input.parse::<u64>().unwrap();
+    let n: u64 = input.parse::<u64>().unwrap();
     let mut result;
 
     if n > 9007199254740991 {
         result = "Sorry, this routine will only handle integers below 9007199254740991.".to_owned();
     } else if n == 1 {
-        result = "The number 1 is neither prime or composite (it is the multiplicative identity).".to_owned();
+        result = "The number 1 is neither prime or composite (it is the multiplicative identity)."
+            .to_owned();
     } else if n < 1 {
-        result = "We usually restrict the terms prime and composite to positive integers".to_owned();
+        result =
+            "We usually restrict the terms prime and composite to positive integers".to_owned();
     } else {
         // Okay, n is of a resonable size, lets trial divide
         let i = trial_divide(n, trial_limit);
         if i > 0 && i != n {
-            result = format!("{} is not a prime! It is {} * {}", n, i, n/i);
+            result = format!("{} is not a prime! It is {} * {}", n, i, n / i);
         } else if n < trial_limit * trial_limit {
             result = format!("{} is a (proven) prime!", n);
         } else if sprp(n, 2)
@@ -156,13 +166,19 @@ pub fn check(input: String) -> String {
             } else if n == 341550071728321 {
                 result = format!("{} is not a prime! It is 10670053 * 32010157.", n);
             } else {
-                result = format!("{} is probably a prime (it is a sprp bases 2, 3, 5, 7, 11, 13 and  17).", n);
+                result = format!(
+                    "{} is probably a prime (it is a sprp bases 2, 3, 5, 7, 11, 13 and  17).",
+                    n
+                );
             };
         } else {
-            result = format!("{} is (proven) composite (failed sprp test base {}).", n, 17);
+            result = format!(
+                "{} is (proven) composite (failed sprp test base {}).",
+                n, 17
+            );
         };
     };
-    
+
     return result;
 }
 
@@ -182,27 +198,49 @@ pub fn listy(start_number: u64, number_of_primes: u64) -> String {
     list
 }
 
-pub fn go_crunch() -> (){
+pub fn go_crunch() -> () {
     let window = web_sys::window().expect("no global `window` exists");
     let document = window.document().expect("should have a document on window");
     let body = document.body().expect("document should have a body");
 
-    let el_input_value = document.get_element_by_id("input").unwrap().dyn_into::<HtmlInputElement>().unwrap().value();
-    let el_output_textarea = document.get_element_by_id("javascriptoutput").expect("missing output textarea");
+    let el_input_value = document
+        .get_element_by_id("input")
+        .unwrap()
+        .dyn_into::<HtmlInputElement>()
+        .unwrap()
+        .value();
+    let el_output_textarea = document
+        .get_element_by_id("javascriptoutput")
+        .expect("missing output textarea");
     el_output_textarea.set_inner_html(&check(el_input_value));
     ()
 }
 
-pub fn go_list(){
+pub fn go_list() {
     let window = web_sys::window().expect("no global `window` exists");
     let document = window.document().expect("should have a document on window");
     let body = document.body().expect("document should have a body");
 
-    let el_start_value = document.get_element_by_id("start").unwrap().dyn_into::<HtmlInputElement>().unwrap().value();
-    let el_primes_value = document.get_element_by_id("primes").unwrap().dyn_into::<HtmlInputElement>().unwrap().value();
-    let el_output_textarea = document.get_element_by_id("javascriptlistoutput").expect("missing output textarea");
-    el_output_textarea.set_inner_html(&listy(el_start_value.parse::<u64>().unwrap(),el_primes_value.parse::<u64>().unwrap()));
-    ()                  
+    let el_start_value = document
+        .get_element_by_id("start")
+        .unwrap()
+        .dyn_into::<HtmlInputElement>()
+        .unwrap()
+        .value();
+    let el_primes_value = document
+        .get_element_by_id("primes")
+        .unwrap()
+        .dyn_into::<HtmlInputElement>()
+        .unwrap()
+        .value();
+    let el_output_textarea = document
+        .get_element_by_id("javascriptlistoutput")
+        .expect("missing output textarea");
+    el_output_textarea.set_inner_html(&listy(
+        el_start_value.parse::<u64>().unwrap(),
+        el_primes_value.parse::<u64>().unwrap(),
+    ));
+    ()
 }
 
 pub fn render() -> Node<Msg> {
@@ -228,9 +266,7 @@ pub fn render() -> Node<Msg> {
                     " prime? ",
                     button![
                         "Check!",
-                        mouse_ev("mouseup", move |event| Msg::PrimalityChecker(
-                            go_crunch()
-                        ))
+                        mouse_ev("mouseup", move |event| Msg::PrimalityChecker(go_crunch()))
                     ],
                     br![],
                     br![],
@@ -266,9 +302,7 @@ pub fn render() -> Node<Msg> {
                     ],
                     button![
                         "Go!",
-                        mouse_ev("mouseup", move |event| Msg::PrimalityChecker(
-                            go_list()
-                        ))
+                        mouse_ev("mouseup", move |event| Msg::PrimalityChecker(go_list()))
                     ],
                     br![],
                     br![],
