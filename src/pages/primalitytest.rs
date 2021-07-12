@@ -265,7 +265,7 @@ pub fn render() -> Node<Msg> {
                     " prime? ",
                     button![
                         "Check!",
-                        mouse_ev("mouseup", move |event| Msg::PrimalityChecker(go_crunch()))
+                        mouse_ev("mouseup", move |_event| Msg::PrimalityChecker(go_crunch()))
                     ],
                     br![],
                     br![],
@@ -297,7 +297,7 @@ pub fn render() -> Node<Msg> {
                     " ",
                     button![
                         "Go!",
-                        mouse_ev("mouseup", move |event| Msg::PrimalityChecker(go_list()))
+                        mouse_ev("mouseup", move |_event| Msg::PrimalityChecker(go_list()))
                     ],
                     br![],
                     br![],
