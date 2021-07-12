@@ -3,7 +3,6 @@
 pub mod archive;
 pub mod contact;
 pub mod cruncher;
-pub mod downloads;
 pub mod error;
 pub mod faq;
 pub mod home;

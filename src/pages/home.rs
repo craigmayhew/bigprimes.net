@@ -33,7 +33,7 @@ pub fn render() -> Node<Msg> {
                 ],
                 tr![
                     td!["10th March 2018"],
-                    td![El::from_html("Added torrents for the <a class=\"link\" href=\"https://static.bigprimes.net/archive/one-million-primes.7z.torrent\">first million primes</a> and <a class=\"link\" href=\"https://static.bigprimes.net/archive/one-billion-primes.7z.torrent\">first billion prime numbers</a>.")],
+                    td![El::from_html("Added torrents for the <del>first million primes</del> and <del>first billion prime numbers</del>. (July 2021 update, these torrents have been retired)")],
                 ],
                 tr![
                     td!["12th November 2017"],
