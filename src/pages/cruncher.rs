@@ -46,9 +46,7 @@ mod numerics_to_text {
         for i in 1..59 {
             //TODO: replace these with unicode or svgs
             //e.g. if the license allows, replace with https://commons.wikimedia.org/wiki/File:Babylonian_numerals.svg
-            glyphs[i].push_str(
-                "<img height=\"15\" src=\"../../babnumbers/bab_",
-            );
+            glyphs[i].push_str("<img height=\"15\" src=\"../../babnumbers/bab_");
             glyphs[i].push_str(&i.to_string());
             glyphs[i].push_str(".gif\" alt=\"");
             glyphs[i].push_str(&i.to_string());

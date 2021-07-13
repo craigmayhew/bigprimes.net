@@ -85,9 +85,7 @@ fn update(msg: Msg, model: &mut Model, _orders: &mut impl Orders<Msg>) {
             model.slug = slug;
             ()
         }
-        Msg::PrimalityChecker(_) => {
-            ()
-        },
+        Msg::PrimalityChecker(_) => (),
     }
 }
 
