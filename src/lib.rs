@@ -70,12 +70,10 @@ fn update(msg: Msg, model: &mut Model, _orders: &mut impl Orders<Msg>) {
     match msg {
         //TODO: IS there a bug here that model.download.n = perfect_download is used for mersenne?
         Msg::GenerateMersenneDownload(_event, perfect_download) => {
-            //event.prevent_default();
             model.download.n = perfect_download.n;
             model.download.p = perfect_download.p
         }
         Msg::GeneratePerfectDownload(_event, perfect_download) => {
-            //event.prevent_default();
             model.download.n = perfect_download.n;
             model.download.p = perfect_download.p
         }
@@ -87,7 +85,9 @@ fn update(msg: Msg, model: &mut Model, _orders: &mut impl Orders<Msg>) {
             model.slug = slug;
             ()
         }
-        Msg::PrimalityChecker(_gocrunch) => (),
+        Msg::PrimalityChecker(_) => {
+            ()
+        },
     }
 }
 
