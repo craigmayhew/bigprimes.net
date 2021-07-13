@@ -258,8 +258,8 @@ pub fn render() -> Node<Msg> {
             attrs! {At::Class => "text", At::Width => "300", At::Style => "border:1px solid #444; background-color:#e0faed"},
             tr![td![
                 attrs! {At::Style => "padding: 10px"},
-                form![
-                    attrs! {At::Id => "primetest", At::OnSubmit => "return false"},
+                div![
+                    attrs! {At::Id => "primetest"},
                     "Tool is limited to checking numbers upto 16 digits.",
                     br![],
                     br![],
@@ -286,8 +286,8 @@ pub fn render() -> Node<Msg> {
             attrs! {At::Class => "text", At::Width => "300", At::Style => "border:1px solid #444; background-color:#e0faed"},
             tr![td![
                 attrs! {At::Style => "padding: 10px"},
-                form![
-                    attrs! {At::Id => "primelist", At::OnSubmit => "return false"},
+                div![
+                    attrs! {At::Id => "primelist"},
                     "This tool is limited to checking numbers upto 15 digits.",
                     br![],
                     br![],
