@@ -2,6 +2,13 @@ use crate::Msg;
 use seed::prelude::*;
 use web_sys::HtmlInputElement;
 
+#[derive(Clone)]
+pub struct PrimalityTestPageInputs {
+    pub number: u64,
+    pub primes: u64,
+    pub start: u64,
+}
+
 fn trial_divide(n: u64, max: u64) -> u64 {
     // Trial divides the positive integer n by the primes from 2 to max
     // Returns the first prime divisor found, or 0 if none found
@@ -210,7 +217,7 @@ pub fn go_crunch() -> () {
     let document = window.document().expect("should have a document on window");
 
     let el_input_value = document
-        .get_element_by_id("input")
+        .get_element_by_id("number")
         .unwrap()
         .dyn_into::<HtmlInputElement>()
         .unwrap()
@@ -248,7 +255,7 @@ pub fn go_list() {
     ()
 }
 
-pub fn render() -> Node<Msg> {
+pub fn render(model: &crate::Model) -> Node<Msg> {
     div![
         h1!["Primality Test, Calculate Primes"],
         br![],
@@ -265,16 +272,15 @@ pub fn render() -> Node<Msg> {
                     br![],
                     "Is ",
                     input![
-                        attrs! {At::Type => "number", At::Size => "19", At::Id => "input", At::Value => "31", At::MaxLength => "16"}
+                        attrs! {At::Type => "number", At::Size => "19", At::Id => "number", At::Value => model.primalitycheckerfieldvalues.number.to_string(), At::MaxLength => "16"},
+                        input_ev(Ev::Input, |val| {
+                            Msg::PrimalityCheckerInputNumberValueChanged(val)
+                        }),
                     ],
                     " prime? ",
                     button![
                         "Check!",
-                        ev(Ev::Click, |event| {
-                            event.prevent_default();
-                            event.stop_propagation();
-                            Msg::PrimalityChecker(go_crunch())
-                        })
+                        ev(Ev::Click, |_e| { Msg::PrimalityChecker(go_crunch()) })
                     ],
                     br![],
                     br![],
@@ -297,19 +303,23 @@ pub fn render() -> Node<Msg> {
                     br![],
                     "This will show ",
                     input![
-                        attrs! {At::Type => "number", At::Size => "4", At::Id => "primes", At::Value => "5", At::MaxLength => "2"}
+                        attrs! {At::Type => "number", At::Size => "4", At::Id => "primes", At::Value => model.primalitycheckerfieldvalues.primes.to_string(), At::MaxLength => "2"},
+                        input_ev(Ev::Input, |val| {
+                            Msg::PrimalityCheckerInputPrimesValueChanged(val)
+                        }),
                     ],
                     " prime numbers after ",
                     input![
-                        attrs! {At::Type => "number", At::Size => "19", At::Id => "start", At::Value => "31", At::MaxLength => "15"}
+                        attrs! {At::Type => "number", At::Size => "19", At::Id => "start", At::Value => model.primalitycheckerfieldvalues.start.to_string(), At::MaxLength => "15"},
+                        input_ev(
+                            Ev::Input,
+                            |val| Msg::PrimalityCheckerInputStartValueChanged(val)
+                        ),
                     ],
                     " ",
                     button![
                         "Go!",
-                        ev(Ev::Click, |event| {
-                            event.stop_propagation();
-                            Msg::PrimalityChecker(go_list())
-                        })
+                        ev(Ev::Click, |_e| { Msg::PrimalityChecker(go_list()) })
                     ],
                     br![],
                     br![],

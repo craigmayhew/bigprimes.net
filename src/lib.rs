@@ -29,6 +29,7 @@ pub enum Page {
 // Model
 pub struct Model {
     download: pages::archive::perfect::perfects_utils::PerfectDownload,
+    primalitycheckerfieldvalues: pages::primalitytest::PrimalityTestPageInputs,
     page: Page,
     slug: std::string::String,
 }
@@ -39,6 +40,11 @@ impl Model {
 
         Self {
             download: pages::archive::perfect::perfects_utils::PerfectDownload { n: 0, p: 0 },
+            primalitycheckerfieldvalues: pages::primalitytest::PrimalityTestPageInputs {
+                number: 31,
+                primes: 5,
+                start: 65000,
+            },
             page: page,
             slug: slug,
         }
@@ -63,6 +69,9 @@ pub enum Msg {
     ),
     UrlChanged(subs::UrlChanged),
     PrimalityChecker(()),
+    PrimalityCheckerInputNumberValueChanged(String),
+    PrimalityCheckerInputPrimesValueChanged(String),
+    PrimalityCheckerInputStartValueChanged(String),
 }
 
 /// The sole source of updating the model
@@ -85,7 +94,17 @@ fn update(msg: Msg, model: &mut Model, _orders: &mut impl Orders<Msg>) {
             model.slug = slug;
             ()
         }
-        Msg::PrimalityChecker(_) => (),
+        //todo: split this into two, one for ok button and have the function calls in here rather than in the view
+        Msg::PrimalityChecker(_) => {}
+        Msg::PrimalityCheckerInputNumberValueChanged(value) => {
+            model.primalitycheckerfieldvalues.number = value.parse::<u64>().unwrap();
+        }
+        Msg::PrimalityCheckerInputPrimesValueChanged(value) => {
+            model.primalitycheckerfieldvalues.primes = value.parse::<u64>().unwrap();
+        }
+        Msg::PrimalityCheckerInputStartValueChanged(value) => {
+            model.primalitycheckerfieldvalues.start = value.parse::<u64>().unwrap();
+        }
     }
 }
 
@@ -103,7 +122,7 @@ fn view(model: &Model) -> Node<Msg> {
         Page::MersenneArchive => pages::archive::mersenne::render(&model),
         Page::NumberCruncher => pages::cruncher::render(model.slug.to_owned()),
         Page::PerfectArchive => pages::archive::perfect::render(&model),
-        Page::PrimalityChecker => pages::primalitytest::render(),
+        Page::PrimalityChecker => pages::primalitytest::render(&model),
         Page::PrimeNumbersArchive => pages::archive::prime::render(model.slug.to_owned()),
         Page::Status => pages::status::render(),
     }
@@ -143,7 +162,7 @@ fn routes(url: seed::Url) -> (Page, std::string::String) {
             None => (Page::NumberCruncher, empty_string),
         },
         "faq" => (Page::Faq, empty_string),
-        "primalitytest" => (Page::PrimalityChecker, empty_string),
+        "primalitytest" => (Page::PrimalityChecker, url.path()[0].to_owned()),
         "status" => (Page::Status, empty_string),
         _ => (Page::Error, empty_string),
     }
