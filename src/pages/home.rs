@@ -16,6 +16,10 @@ pub fn render() -> Node<Msg> {
                     td![attrs!{At::Width => "300"},"News"],
                 ],
                 tr![
+                    td!["2nd April 2022"],
+                    td![El::from_html("bigprimes.net web2 version is now deployed to Cloudflare Pages and no longer AWS CloudFront.")],
+                ],
+                tr![
                     td!["26th June 2021"],
                     td![El::from_html("bigprimes.net is now using the <a class=\"link\" href=\"https://github.com/thedodd/trunk\">trunk</a> WASM web application bundler for Rust.")],
                 ],
