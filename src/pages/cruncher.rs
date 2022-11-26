@@ -537,7 +537,7 @@ fn html_factors(slug: &str, slug_len: usize, max_len_factoring: usize) -> Node<M
             attrs! {At::Width => "200"},
             "It it has factors:",
             br![],
-            El::from_html(&numerics_to_text::list_factors(&slug, "<br>".to_owned()))
+            El::from_html(None, &numerics_to_text::list_factors(&slug, "<br>".to_owned()))
         ]
     } else {
         td!["Number too large to factor"]
@@ -550,9 +550,9 @@ fn html_roman(slug: &str, max_len_roman: usize) -> Node<Msg> {
         td![
             attrs! {At::Width => "40"},
             if slug.len() <= max_len_roman {
-                El::from_html(&numerics_to_text::den_to_roman(&slug))
+                El::from_html(None, &numerics_to_text::den_to_roman(&slug))
             } else {
-                El::from_html("")
+                El::from_html(None, "")
             }
         ],
     ]
@@ -564,9 +564,9 @@ fn html_chinese(slug: &str, max_len_chinese: usize) -> Node<Msg> {
         td![
             style! {"vertical-align" => "middle"; "background-color" => "#FFF"},
             if slug.len() <= max_len_chinese {
-                El::from_html(&numerics_to_text::den_to_chinese(&slug))
+                El::from_html(None, &numerics_to_text::den_to_chinese(&slug))
             } else {
-                El::from_html("")
+                El::from_html(None, "")
             }
         ]
     ]
@@ -576,9 +576,9 @@ fn html_egyptian(slug: &str, max_len_egyptian: usize) -> Node<Msg> {
     tr![
         td![attrs! {At::Width => "200"}, "Egyptian Numerals:",],
         td![if slug.len() <= max_len_egyptian {
-            El::from_html(&numerics_to_text::den_to_egyptian(&slug))
+            El::from_html(None, &numerics_to_text::den_to_egyptian(&slug))
         } else {
-            El::from_html("")
+            El::from_html(None, "")
         }]
     ]
 }
@@ -775,7 +775,7 @@ fn html_crunched_number(slug: String) -> Node<Msg> {
                     td![attrs! {At::Width => "200"}, "Babylonian Numerals:",],
                     td![
                         style! {"vertical-align" => "middle"; "background-color" => "#FFF"},
-                        El::from_html(&numerics_to_text::den_to_babylonian(&slug)),
+                        El::from_html(None, &numerics_to_text::den_to_babylonian(&slug)),
                     ]
                 ],
             ],

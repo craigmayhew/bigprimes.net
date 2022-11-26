@@ -357,7 +357,7 @@ pub fn render(model: &crate::Model) -> Node<Msg> {
 
         html.push(tr![
             td![perfect.n.to_string()],         //rank
-            td![El::from_html(&equation)],      //perfect number as a formula
+            td![El::from_html(None, &equation)],      //perfect number as a formula
             td![perfect.digits.to_string()],    //digits in length
             td![perfect.discovery.to_string()], //discovery
             if model.download.n == perfect.n {
