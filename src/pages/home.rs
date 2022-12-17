@@ -12,8 +12,8 @@ pub fn render() -> Node<Msg> {
             tbody![
                 tr![
                     //TODO: change this to styles
-                    td![attrs!{At::Width => "100"},"Date"],
-                    td![attrs!{At::Width => "300"},"News"],
+                    td![attrs!{At::Width => "200"},"Date"],
+                    td![attrs!{At::Width => "500"},"News"],
                 ],
                 tr![
                     td!["2nd April 2022"],
