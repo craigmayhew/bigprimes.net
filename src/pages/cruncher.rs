@@ -537,7 +537,10 @@ fn html_factors(slug: &str, slug_len: usize, max_len_factoring: usize) -> Node<M
             attrs! {At::Width => "200"},
             "It it has factors:",
             br![],
-            El::from_html(None, &numerics_to_text::list_factors(&slug, "<br>".to_owned()))
+            El::from_html(
+                None,
+                &numerics_to_text::list_factors(&slug, "<br>".to_owned())
+            )
         ]
     } else {
         td!["Number too large to factor"]

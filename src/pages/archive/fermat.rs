@@ -50,9 +50,9 @@ fn generate_rows() -> std::vec::Vec<Node<Msg>> {
             pow(two.to_biguint().unwrap(), pow(two, nth_fermat)) + 1.to_biguint().unwrap();
 
         html.push(tr![
-            td![fermats[n].n.to_string()],                //rank
+            td![fermats[n].n.to_string()],                      //rank
             td![El::from_html(None, &equation)],                //fermat number as a formula
-            td![fermats[n].digits.to_string()],           //digits in length
+            td![fermats[n].digits.to_string()],                 //digits in length
             td![El::from_html(None, fermats[n].prime_factors)], //prime factors
             td![crate::utils::save_as_file(
                 download_filename,
