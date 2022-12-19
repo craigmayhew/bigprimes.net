@@ -6,7 +6,7 @@ description = "The rust source code that powers bigprimes.net"
 readme = "README.md"
 license = "MIT/APACHE"
 repository = "https://github.com/craigmayhew/bigprimes.net"
-edition = "2018" #rust has two major editions, 2018 is the latest
+edition = "2021"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
@@ -15,7 +15,7 @@ crate-type = ["cdylib", "rlib"]
 default = ["console_error_panic_hook"]
 
 [dependencies]
-seed = "0.8"
+seed = "0.9"
 num-bigint = "0.4"
 num-traits = "0.2"
 regex = "1"
