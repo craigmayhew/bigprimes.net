@@ -15,7 +15,7 @@ crate-type = ["cdylib", "rlib"]
 default = ["console_error_panic_hook"]
 
 [dependencies]
-seed = "0.9"
+seed = { version = "0.10.0", features = ["routing"] }
 num-bigint = "0.4"
 num-traits = "0.2"
 regex = "1"
