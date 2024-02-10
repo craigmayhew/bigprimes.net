@@ -58,8 +58,6 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - { toolchain: stable }
-          - { toolchain: beta }
           - { toolchain: nightly }
 
     steps:
