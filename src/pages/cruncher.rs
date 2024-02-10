@@ -1,3 +1,5 @@
+extern crate test;
+
 use crate::Msg;
 use seed::prelude::*;
 
@@ -799,6 +801,7 @@ pub fn render(slug: String) -> Node<Msg> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use test::Bencher;
 
     #[test]
     fn numerics_to_text_convert_test() {
@@ -815,12 +818,22 @@ mod tests {
         assert_eq!(numerics_to_text::convert("1999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999".to_string()), "Error");
     }
 
+    #[bench]
+    fn numerics_to_text_convert_bench(b: &mut Bencher) {
+        b.iter(|| numerics_to_text::convert("123123123".to_string()));
+    }
+
     #[test]
     fn numerics_to_text_is_odd_test() {
         assert_eq!(numerics_to_text::is_odd("170"), false);
         assert_eq!(numerics_to_text::is_odd("90001"), true);
         assert_eq!(numerics_to_text::is_odd("1001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001000"), false);
         assert_eq!(numerics_to_text::is_odd("1001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001001"), true);
+    }
+
+    #[bench]
+    fn numerics_to_text_is_odd_bench(b: &mut Bencher) {
+        b.iter(|| numerics_to_text::is_odd("100100"));
     }
 
     #[test]
@@ -843,9 +856,19 @@ mod tests {
         assert_eq!(numerics_to_text::den_to_roman("2002"), "MMII");
     }
 
+    #[bench]
+    fn den_to_roman_bench(b: &mut Bencher) {
+        b.iter(|| numerics_to_text::den_to_roman("2002"));
+    }
+
     #[test]
     fn den_to_egyptian_test() {
         //TODO: egyptian tests
+    }
+
+    #[bench]
+    fn den_to_egyptian_bench(_b: &mut Bencher) {
+        //TODO: egyptian bench
     }
 
     #[test]
@@ -853,9 +876,19 @@ mod tests {
         assert_eq!(numerics_to_text::den_to_babylonian("9003")," &nbsp; <img height=\"15\" src=\"../../babnumbers/bab_2.gif\" alt=\"2\"> &nbsp; <img height=\"15\" src=\"../../babnumbers/bab_30.gif\" alt=\"30\"> &nbsp; <img height=\"15\" src=\"../../babnumbers/bab_3.gif\" alt=\"3\">");
     }
 
+    #[bench]
+    fn den_to_babylonian_bench(b: &mut Bencher) {
+        b.iter(|| numerics_to_text::den_to_babylonian("9003"));
+    }
+
     #[test]
     fn den_to_chinese_test() {
         assert_eq!(numerics_to_text::den_to_chinese("20"), "&#36019;&#25342;");
+    }
+
+    #[bench]
+    fn den_to_chinese_bench(b: &mut Bencher) {
+        b.iter(|| numerics_to_text::den_to_chinese("9003"));
     }
 
     #[test]
@@ -865,6 +898,11 @@ mod tests {
             numerics_to_text::list_factors("20", ",".to_owned()),
             ",1,2,4,5,10,20"
         );
+    }
+
+    #[bench]
+    fn list_factors_bench(b: &mut Bencher) {
+        b.iter(|| numerics_to_text::list_factors("20", ",".to_owned()));
     }
 }
 

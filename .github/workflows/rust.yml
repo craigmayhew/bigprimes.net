@@ -49,3 +49,23 @@ jobs:
           rustup toolchain install ${{ matrix.config.toolchain }}
           rustup default ${{ matrix.config.toolchain }}
           cargo test --verbose
+
+  bench:
+    needs: lint
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - { toolchain: stable }
+          - { toolchain: beta }
+          - { toolchain: nightly }
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run benchmarks ${{ matrix.config.toolchain }}
+        run: |
+          rustup toolchain install ${{ matrix.config.toolchain }}
+          rustup default ${{ matrix.config.toolchain }}
+          cargo bench
