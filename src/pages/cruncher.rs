@@ -867,13 +867,13 @@ mod tests {
 
     #[test]
     fn den_to_roman_test() {
-        assert_eq!(numerics_to_text::den_to_roman("5"), "V");
-        assert_eq!(numerics_to_text::den_to_roman("10"), "X");
-        assert_eq!(numerics_to_text::den_to_roman("12"), "XII");
-        assert_eq!(numerics_to_text::den_to_roman("57"), "LVII");
-        assert_eq!(numerics_to_text::den_to_roman("2002"), "MMII");
+        assert_eq!(numerics_to_text::den_to_roman("5"), "Ⅴ");
+        assert_eq!(numerics_to_text::den_to_roman("10"), "Ⅹ");
+        assert_eq!(numerics_to_text::den_to_roman("12"), "ⅩⅡ");
+        assert_eq!(numerics_to_text::den_to_roman("57"), "ⅬⅦ");
+        assert_eq!(numerics_to_text::den_to_roman("2002"), "ⅯⅯⅡ");
     }
-
+    
     #[bench]
     fn den_to_roman_bench(b: &mut Bencher) {
         b.iter(|| numerics_to_text::den_to_roman("2002"));
