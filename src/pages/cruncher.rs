@@ -873,7 +873,7 @@ mod tests {
         assert_eq!(numerics_to_text::den_to_roman("57"), "ⅬⅦ");
         assert_eq!(numerics_to_text::den_to_roman("2002"), "ⅯⅯⅡ");
     }
-    
+
     #[bench]
     fn den_to_roman_bench(b: &mut Bencher) {
         b.iter(|| numerics_to_text::den_to_roman("2002"));
