@@ -892,6 +892,8 @@ mod tests {
             numerics_to_text::den_to_babylonian("9003"),
             " &nbsp; 𒈫 &nbsp; 𒌍 &nbsp; 𒐈"
         );
+
+        assert_eq!(numerics_to_text::den_to_babylonian("55"), " &nbsp; 𒐐𒐊");
     }
 
     #[bench]
