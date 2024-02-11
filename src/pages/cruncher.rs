@@ -43,16 +43,13 @@ mod numerics_to_text {
     }
 
     pub fn den_to_babylonian(str_num: &str) -> String {
-        let mut glyphs: Vec<String> = vec!["".to_owned(); 60];
-        glyphs[0] = " &nbsp; &nbsp; &nbsp; ".to_owned();
+        let mut glyphs: Vec<String> = Vec::with_capacity(60);
+        let units = vec!["", "𒁹", "𒈫", "𒐈", "𒐉", "𒐊", "𒐋", "𒐌", "𒐍", "𒐎"];
+        let tens = vec!["", "𒌋", "𒎙", "𒌍", "𒐏", "𒐐", "𒐑"];
+
+        glyphs.push(" &nbsp; &nbsp; ".to_owned());
         for i in 1..59 {
-            //TODO: replace these with unicode or svgs
-            //e.g. if the license allows, replace with https://commons.wikimedia.org/wiki/File:Babylonian_numerals.svg
-            glyphs[i].push_str("<img height=\"15\" src=\"../../babnumbers/bab_");
-            glyphs[i].push_str(&i.to_string());
-            glyphs[i].push_str(".gif\" alt=\"");
-            glyphs[i].push_str(&i.to_string());
-            glyphs[i].push_str("\">");
+            glyphs.push(format!("{}{}", tens[i / 10], units[i % 10]));
         }
         let mut val: Vec<&str> = vec![""; 1000];
         let mut num: BigUint = num_bigint::BigUint::from_str_radix(&str_num, 10).unwrap();
@@ -891,7 +888,10 @@ mod tests {
 
     #[test]
     fn den_to_babylonian_test() {
-        assert_eq!(numerics_to_text::den_to_babylonian("9003")," &nbsp; <img height=\"15\" src=\"../../babnumbers/bab_2.gif\" alt=\"2\"> &nbsp; <img height=\"15\" src=\"../../babnumbers/bab_30.gif\" alt=\"30\"> &nbsp; <img height=\"15\" src=\"../../babnumbers/bab_3.gif\" alt=\"3\">");
+        assert_eq!(
+            numerics_to_text::den_to_babylonian("9003"),
+            " &nbsp; 𒈫 &nbsp; 𒌍 &nbsp; 𒐈"
+        );
     }
 
     #[bench]
