@@ -43,15 +43,15 @@ mod numerics_to_text {
     }
 
     pub fn den_to_babylonian(str_num: &str) -> String {
-        let mut glyphs: Vec<String> = Vec::with_capacity(60);
         let units = vec!["", "𒁹", "𒈫", "𒐈", "𒐉", "𒐊", "𒐋", "𒐌", "𒐍", "𒐎"];
         let tens = vec!["", "𒌋", "𒎙", "𒌍", "𒐏", "𒐐", "𒐑"];
 
+        let mut glyphs: Vec<String> = Vec::with_capacity(60);
         glyphs.push(" &nbsp; &nbsp; ".to_owned());
         for i in 1..59 {
             glyphs.push(format!("{}{}", tens[i / 10], units[i % 10]));
         }
-        let mut val: Vec<&str> = vec![""; 1000];
+        let mut val: Vec<&str> = Vec::with_capacity(1);
         let mut num: BigUint = num_bigint::BigUint::from_str_radix(&str_num, 10).unwrap();
         let sixty: BigUint = 60.to_biguint().unwrap();
         while num > Zero::zero() {
@@ -59,10 +59,8 @@ mod numerics_to_text {
             val.push(" &nbsp; ");
             num /= &sixty;
         }
-        //reverse the vector
-        val = val.iter().rev().cloned().collect();
-        //convert to String
-        val.into_iter().collect()
+        //reverse the vector and collect to String
+        val.iter().rev().cloned().collect()
     }
 
     pub fn dec_to_base(str_num: &str, base: u32) -> String {
