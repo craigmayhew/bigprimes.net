@@ -1,5 +1,5 @@
 curl https://sh.rustup.rs -sSf | sh -s -- -y
-source $HOME/.cargo/env
+. $HOME/.cargo/env
 curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh -s -- -y
 rustup target add wasm32-unknown-unknown
 cargo install cargo-binstall
