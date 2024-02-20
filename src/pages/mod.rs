@@ -7,4 +7,3 @@ pub mod error;
 pub mod faq;
 pub mod home;
 pub mod primalitytest;
-pub mod status;

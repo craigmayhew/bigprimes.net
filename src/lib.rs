@@ -17,7 +17,6 @@ pub enum Page {
     Error,
     Faq,
     Home,
-    Status,
     FermatArchive,
     FibonacciArchive,
     MersenneArchive,
@@ -125,7 +124,6 @@ fn view(model: &Model) -> Node<Msg> {
         Page::PerfectArchive => pages::archive::perfect::render(&model),
         Page::PrimalityChecker => pages::primalitytest::render(&model),
         Page::PrimeNumbersArchive => pages::archive::prime::render(model.slug.to_owned()),
-        Page::Status => pages::status::render(),
     }
 }
 
@@ -164,7 +162,6 @@ fn routes(url: seed::Url) -> (Page, std::string::String) {
         },
         "faq" => (Page::Faq, empty_string),
         "primalitytest" => (Page::PrimalityChecker, url.path()[0].to_owned()),
-        "status" => (Page::Status, empty_string),
         _ => (Page::Error, empty_string),
     }
 }
