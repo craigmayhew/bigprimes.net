@@ -55,9 +55,9 @@ pub mod prime_utils {
 }
 
 pub fn render(slug: String) -> Node<Msg> {
-    let numbers_per_page: usize = 100;
-    let col_count = 4;
-    let numbers_per_col = numbers_per_page / col_count;
+    const NUMBERS_PER_PAGE: usize = 100;
+    const COL_COUNT: usize = 4;
+    const NUMBERS_PER_COL: usize = NUMBERS_PER_PAGE / COL_COUNT;
 
     // check that slug is a numeric string
     // and if not then
@@ -93,13 +93,13 @@ pub fn render(slug: String) -> Node<Msg> {
         let primes = prime_utils::sieve_n_primes(
             first_prime_on_page,
             upper_bound_of_sieve,
-            numbers_per_page,
+            NUMBERS_PER_PAGE,
         );
 
         let mut prime_vec_formatted = vec![];
-        for col in 1..col_count + 1 {
+        for col in 1..COL_COUNT + 1 {
             let mut prime_vec = vec![];
-            for i in numbers_per_col * (col - 1)..numbers_per_col * col {
+            for i in NUMBERS_PER_COL * (col - 1)..NUMBERS_PER_COL * col {
                 // check data is available to display
                 if i >= primes.len() {
                     continue;
@@ -124,7 +124,7 @@ pub fn render(slug: String) -> Node<Msg> {
         if slug_int <= 1 {
             prev_link = vec![];
         //display a link with text "back to 1st prime numbers"
-        } else if slug_int as isize - numbers_per_page as isize <= 0 {
+        } else if slug_int as isize - NUMBERS_PER_PAGE as isize <= 0 {
             href_prev = "/archive/prime/1/".to_string();
             prev_link = vec![a![
                 "back to 1st prime numbers",
@@ -133,18 +133,18 @@ pub fn render(slug: String) -> Node<Msg> {
         } else {
             href_prev = format!(
                 "/archive/prime/{}/",
-                &(slug_int - numbers_per_page).to_string()
+                &(slug_int - NUMBERS_PER_PAGE).to_string()
             );
             prev_link = vec![a![
                 "previous ",
-                numbers_per_page.to_string(),
+                NUMBERS_PER_PAGE.to_string(),
                 " prime numbers",
                 attrs! {At::Class => "link", At::Href => href_prev}
             ]];
         }
         let href_next: String = format!(
             "/archive/prime/{}/",
-            &(slug_int + numbers_per_page).to_string()
+            &(slug_int + NUMBERS_PER_PAGE).to_string()
         );
 
         div![
@@ -153,7 +153,7 @@ pub fn render(slug: String) -> Node<Msg> {
             "This page shows the ",
             nth(slug_int),
             " prime number followed by the next ",
-            (numbers_per_page - 1).to_string(),
+            (NUMBERS_PER_PAGE - 1).to_string(),
             ".",
             br![],
             br![],
@@ -164,7 +164,7 @@ pub fn render(slug: String) -> Node<Msg> {
             br![],
             a![
                 "next ",
-                numbers_per_page.to_string(),
+                NUMBERS_PER_PAGE.to_string(),
                 " prime numbers",
                 attrs! {At::Class => "link", At::Href => href_next}
             ],
