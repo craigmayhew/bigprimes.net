@@ -76,8 +76,7 @@ fn modmult(mut a: u64, mut b: u64, n: u64) -> u64 {
             if (b & 1) == 1 {
                 t = modadd(t, f, n);
             }
-            //TODO: bitshift might be cleaner and faster
-            b = (b as f64 / 2.0).floor() as u64;
+            b >>= 1;
             f = modadd(f, f, n);
         }
         t = modadd(t, f, n);
@@ -372,5 +371,11 @@ mod tests {
     fn mod_mult_test() {
         assert_eq!(modmult(3, 3, 4), 1);
         assert_eq!(modmult(110, 4, 7), 6);
+    }
+
+    #[bench]
+    fn mod_mult_bench(b: &mut Bencher) {
+        b.iter(|| modmult(3, 3, 4));
+        b.iter(|| modmult(110, 4, 7));
     }
 }
