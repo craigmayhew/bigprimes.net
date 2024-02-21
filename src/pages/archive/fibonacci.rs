@@ -32,7 +32,7 @@ pub fn render(slug: String) -> Node<Msg> {
     let slug_int: usize = slug.parse().unwrap();
     let fib_vec = nth_fibonacci(slug_int, numbers_per_page);
 
-    let mut fib_vec_formatted = vec![];
+    let mut fib_vec_formatted = Vec::with_capacity(numbers_per_page);
     for i in 0..numbers_per_page {
         fib_vec_formatted.push(span![fib_vec[i].to_string()]);
         fib_vec_formatted.push(br![]);
