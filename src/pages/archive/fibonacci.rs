@@ -3,6 +3,7 @@ use seed::prelude::*;
 
 extern crate num_bigint as bigint;
 extern crate num_traits;
+extern crate test;
 use num_bigint::BigUint;
 use num_traits::{One, Zero};
 use std::mem::replace;
@@ -27,6 +28,24 @@ fn nth_fibonacci(n: usize, count: usize) -> Vec<BigUint> {
     x
 }
 
+fn add_space_every_3_chars_from_right(s: &str) -> String {
+    // First, reverse the input string to start adding spaces from the end
+    let reversed: String = s.chars().rev().collect();
+
+    // Process the reversed string in chunks of 3 characters
+    let chunks: Vec<String> = reversed
+        .as_bytes()
+        // Split the reversed byte slice into chunks of 3
+        .chunks(3)
+        // Map each chunk: convert back to &str, reverse characters, and collect into a String
+        .map(|chunk| std::str::from_utf8(chunk).unwrap().chars().rev().collect())
+        // Collect the processed chunks into a Vec<String>
+        .collect();
+
+    // Join the chunks with spaces and reverse the resulting string to restore original order
+    chunks.join(" ").chars().rev().collect()
+}
+
 pub fn render(slug: String) -> Node<Msg> {
     let numbers_per_page: usize = 25;
     let slug_int: usize = slug.parse().unwrap();
@@ -34,8 +53,9 @@ pub fn render(slug: String) -> Node<Msg> {
 
     let mut fib_vec_formatted = Vec::with_capacity(numbers_per_page);
     for i in 0..numbers_per_page {
-        fib_vec_formatted.push(span![fib_vec[i].to_string()]);
-        fib_vec_formatted.push(br![]);
+        fib_vec_formatted.push(p![add_space_every_3_chars_from_right(
+            &fib_vec[i].to_string()
+        )]);
     }
 
     let href_prev: String;
@@ -107,6 +127,7 @@ pub fn render(slug: String) -> Node<Msg> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use test::Bencher;
 
     #[test]
     fn nth_fibonacci_test() {
@@ -126,5 +147,10 @@ mod tests {
         assert_eq!(nth_fibonacci(1, 2), vec![f1, f2]);
         assert_eq!(nth_fibonacci(3, 6), vec![f3, f4, f5, f6, f7, f8]);
         assert_eq!(nth_fibonacci(9, 3), vec![f9, f10, f11]);
+    }
+
+    #[bench]
+    fn nth_fibonaccit_bench(b: &mut Bencher) {
+        b.iter(|| nth_fibonacci(12300, 9));
     }
 }
