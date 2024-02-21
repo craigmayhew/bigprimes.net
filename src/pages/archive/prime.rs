@@ -30,7 +30,7 @@ pub mod prime_utils {
                     //is prime
                     if pr >= start {
                         //is greater than start variable
-                        return Some(pr) //prime and we want it returned
+                        return Some(pr); //prime and we want it returned
                     }
                 }
                 None // not prime
@@ -68,7 +68,7 @@ pub fn render(slug: String) -> Node<Msg> {
             "Malformed page url, was the number correctly entered?"
         ];
     }
-    
+
     let mut slug_int: usize = slug.parse().unwrap();
     if slug_int < 1 {
         slug_int = 1
@@ -88,11 +88,8 @@ pub fn render(slug: String) -> Node<Msg> {
         upper_bound_of_sieve = first_prime_on_page + 10000;
     }
 
-    let primes = prime_utils::sieve_n_primes(
-        first_prime_on_page,
-        upper_bound_of_sieve,
-        NUMBERS_PER_PAGE,
-    );
+    let primes =
+        prime_utils::sieve_n_primes(first_prime_on_page, upper_bound_of_sieve, NUMBERS_PER_PAGE);
 
     let mut prime_vec_formatted = Vec::new();
     for col in 1..COL_COUNT + 1 {
