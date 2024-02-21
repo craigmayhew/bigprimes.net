@@ -6,5 +6,5 @@ rustup target add wasm32-unknown-unknown
 #cargo-binstall --locked --no-confirm trunk
 cargo install --locked trunk
 cargo install wasm-bindgen-cli
-rustup default nightly
+rustup default beta
 trunk build
