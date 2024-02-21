@@ -366,6 +366,12 @@ mod tests {
         assert_eq!(modpow(113, 7, 11), 9);
     }
 
+    #[bench]
+    fn mod_pow_bench(b: &mut Bencher) {
+        b.iter(|| modpow(6, 3, 11));
+        b.iter(|| modpow(113, 7, 11));
+    }
+
     #[test]
     fn mod_mult_test() {
         assert_eq!(modmult(3, 3, 4), 1);
