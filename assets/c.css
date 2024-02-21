@@ -9,7 +9,7 @@ nav {
   display: inline-block;
   height: 400px;
   vertical-align: top;
-  width: 14%;
+  width: 210px;
 }
 nav div {
   margin-bottom: 10px;
@@ -93,6 +93,7 @@ body, .text {
 #app {
   display: inline-block;
   vertical-align: top;
+  max-width: 850px;
 }
 
 #tbl tr th, #tbl tr td {background-color: #fff; border: 0;}
