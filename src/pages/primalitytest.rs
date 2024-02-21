@@ -102,8 +102,7 @@ fn modpow(a: u64, mut exp: u64, n: u64) -> u64 {
         exp = (exp as f64 / 2.0).floor() as u64;
         f = modmult(f, f, n);
     }
-    t = modmult(t, f, n);
-    return t;
+    modmult(t, f, n)
 }
 
 // sprp(N,a) checks if N (odd!) is a strong probable prime base a
@@ -133,7 +132,7 @@ fn sprp(n: u64, a: u64) -> bool {
         }
         s = s - 1;
     }
-    return false;
+    false
 }
 
 pub struct Check {
@@ -193,7 +192,7 @@ pub fn check(input: String) -> Check {
         };
     };
 
-    return Check { is_prime, result };
+    Check { is_prime, result }
 }
 
 pub fn listy(start_number: u64, number_of_primes: u64) -> String {
