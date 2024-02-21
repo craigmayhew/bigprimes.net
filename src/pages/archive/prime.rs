@@ -65,137 +65,137 @@ pub fn render(slug: String) -> Node<Msg> {
     let slug_is_int: bool = rgx.is_match(&slug);
 
     if !slug_is_int {
-        div![
+        return div![
             h1!["The Prime Numbers"],
             br![],
             "Malformed page url, was the number correctly entered?"
-        ]
+        ];
+    }
+    
+    let mut slug_int: usize = slug.parse().unwrap();
+    if slug_int < 1 {
+        slug_int = 1
+    };
+
+    // TODO: slug_int*100 and first_prime_on_page are both inefficient
+    // first_prime_on_page could be multiplied by slightly more than 1, just enough to cover expected primes on the page
+    // slug_int*100 would cover us up until prime gaps are above 100 on average
+    let first_prime_on_page = prime_utils::sieve_n_primes(2, slug_int * 100, slug_int)
+        .pop()
+        .unwrap();
+
+    let upper_bound_of_sieve;
+    if slug_int < 1000 {
+        upper_bound_of_sieve = 10000;
     } else {
-        let mut slug_int: usize = slug.parse().unwrap();
-        if slug_int < 1 {
-            slug_int = 1
-        };
+        upper_bound_of_sieve = first_prime_on_page + 10000;
+    }
 
-        // TODO: slug_int*100 and first_prime_on_page are both inefficient
-        // first_prime_on_page could be multiplied by slightly more than 1, just enough to cover expected primes on the page
-        // slug_int*100 would cover us up until prime gaps are above 100 on average
-        let first_prime_on_page = prime_utils::sieve_n_primes(2, slug_int * 100, slug_int)
-            .pop()
-            .unwrap();
+    let primes = prime_utils::sieve_n_primes(
+        first_prime_on_page,
+        upper_bound_of_sieve,
+        NUMBERS_PER_PAGE,
+    );
 
-        let upper_bound_of_sieve;
-        if slug_int < 1000 {
-            upper_bound_of_sieve = 10000;
-        } else {
-            upper_bound_of_sieve = first_prime_on_page + 10000;
-        }
-
-        let primes = prime_utils::sieve_n_primes(
-            first_prime_on_page,
-            upper_bound_of_sieve,
-            NUMBERS_PER_PAGE,
-        );
-
-        let mut prime_vec_formatted = vec![];
-        for col in 1..COL_COUNT + 1 {
-            let mut prime_vec = vec![];
-            for i in NUMBERS_PER_COL * (col - 1)..NUMBERS_PER_COL * col {
-                // check data is available to display
-                if i >= primes.len() {
-                    continue;
-                }
-
-                // the data is there, display it
-                let mut href: String = "/cruncher/".to_owned();
-                href.push_str(&primes[i].to_string());
-                prime_vec.push(a![
-                    primes[i].to_string(),
-                    attrs! {At::Class => "link", At::Href => href}
-                ]);
-                prime_vec.push(br![]);
+    let mut prime_vec_formatted = vec![];
+    for col in 1..COL_COUNT + 1 {
+        let mut prime_vec = vec![];
+        for i in NUMBERS_PER_COL * (col - 1)..NUMBERS_PER_COL * col {
+            // check data is available to display
+            if i >= primes.len() {
+                continue;
             }
 
-            prime_vec_formatted.push(div![prime_vec, attrs! {At::Class => "prime_archive_div"}]);
+            // the data is there, display it
+            let mut href: String = "/cruncher/".to_owned();
+            href.push_str(&primes[i].to_string());
+            prime_vec.push(a![
+                primes[i].to_string(),
+                attrs! {At::Class => "link", At::Href => href}
+            ]);
+            prime_vec.push(br![]);
         }
 
-        let href_prev: String;
-        let prev_link: Vec<Node<_>>;
-        // we are on the first page of primes so don't display a previous button
-        if slug_int <= 1 {
-            prev_link = vec![];
-        //display a link with text "back to 1st prime numbers"
-        } else if slug_int as isize - NUMBERS_PER_PAGE as isize <= 0 {
-            href_prev = "/archive/prime/1/".to_string();
-            prev_link = vec![a![
-                "back to 1st prime numbers",
-                attrs! {At::Class => "link", At::Href => href_prev}
-            ]];
-        } else {
-            href_prev = format!(
-                "/archive/prime/{}/",
-                &(slug_int - NUMBERS_PER_PAGE).to_string()
-            );
-            prev_link = vec![a![
-                "previous ",
-                NUMBERS_PER_PAGE.to_string(),
-                " prime numbers",
-                attrs! {At::Class => "link", At::Href => href_prev}
-            ]];
-        }
-        let href_next: String = format!(
-            "/archive/prime/{}/",
-            &(slug_int + NUMBERS_PER_PAGE).to_string()
-        );
-
-        div![
-            h1!["The Prime Numbers"],
-            br![],
-            "This page shows the ",
-            nth(slug_int),
-            " prime number followed by the next ",
-            (NUMBERS_PER_PAGE - 1).to_string(),
-            ".",
-            br![],
-            br![],
-            prime_vec_formatted,
-            br![],
-            br![],
-            prev_link,
-            br![],
-            a![
-                "next ",
-                NUMBERS_PER_PAGE.to_string(),
-                " prime numbers",
-                attrs! {At::Class => "link", At::Href => href_next}
-            ],
-            br![],
-            br![],
-            a![
-                "100th prime Number",
-                attrs! {At::Class => "link", At::Href => "/archive/prime/100/"}
-            ],
-            br![],
-            a![
-                "1000th prime Number",
-                attrs! {At::Class => "link", At::Href => "/archive/prime/1000/"}
-            ],
-            br![],
-            a![
-                "10000th prime Number",
-                attrs! {At::Class => "link", At::Href => "/archive/prime/10000/"}
-            ],
-            br![],
-            a![
-                "100000th prime Number",
-                attrs! {At::Class => "link", At::Href => "/archive/prime/100000/"}
-            ],
-            br![],
-            a![
-                "1000000th prime Number",
-                attrs! {At::Class => "link", At::Href => "/archive/prime/1000000/"}
-            ],
-        ]
+        prime_vec_formatted.push(div![prime_vec, attrs! {At::Class => "prime_archive_div"}]);
     }
+
+    let href_prev: String;
+    let prev_link: Vec<Node<_>>;
+    // we are on the first page of primes so don't display a previous button
+    if slug_int <= 1 {
+        prev_link = vec![];
+    //display a link with text "back to 1st prime numbers"
+    } else if slug_int as isize - NUMBERS_PER_PAGE as isize <= 0 {
+        href_prev = "/archive/prime/1/".to_string();
+        prev_link = vec![a![
+            "back to 1st prime numbers",
+            attrs! {At::Class => "link", At::Href => href_prev}
+        ]];
+    } else {
+        href_prev = format!(
+            "/archive/prime/{}/",
+            &(slug_int - NUMBERS_PER_PAGE).to_string()
+        );
+        prev_link = vec![a![
+            "previous ",
+            NUMBERS_PER_PAGE.to_string(),
+            " prime numbers",
+            attrs! {At::Class => "link", At::Href => href_prev}
+        ]];
+    }
+    let href_next: String = format!(
+        "/archive/prime/{}/",
+        &(slug_int + NUMBERS_PER_PAGE).to_string()
+    );
+
+    div![
+        h1!["The Prime Numbers"],
+        br![],
+        "This page shows the ",
+        nth(slug_int),
+        " prime number followed by the next ",
+        (NUMBERS_PER_PAGE - 1).to_string(),
+        ".",
+        br![],
+        br![],
+        prime_vec_formatted,
+        br![],
+        br![],
+        prev_link,
+        br![],
+        a![
+            "next ",
+            NUMBERS_PER_PAGE.to_string(),
+            " prime numbers",
+            attrs! {At::Class => "link", At::Href => href_next}
+        ],
+        br![],
+        br![],
+        a![
+            "100th prime Number",
+            attrs! {At::Class => "link", At::Href => "/archive/prime/100/"}
+        ],
+        br![],
+        a![
+            "1000th prime Number",
+            attrs! {At::Class => "link", At::Href => "/archive/prime/1000/"}
+        ],
+        br![],
+        a![
+            "10000th prime Number",
+            attrs! {At::Class => "link", At::Href => "/archive/prime/10000/"}
+        ],
+        br![],
+        a![
+            "100000th prime Number",
+            attrs! {At::Class => "link", At::Href => "/archive/prime/100000/"}
+        ],
+        br![],
+        a![
+            "1000000th prime Number",
+            attrs! {At::Class => "link", At::Href => "/archive/prime/1000000/"}
+        ],
+    ]
 }
 
 #[cfg(test)]
