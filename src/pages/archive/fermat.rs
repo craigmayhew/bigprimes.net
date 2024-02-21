@@ -33,7 +33,7 @@ mod fermat_utils {
 }
 
 fn generate_rows() -> std::vec::Vec<Node<Msg>> {
-    let mut html = vec![];
+    let mut html = Vec::new();
     let two: usize = 2;
 
     let fermats = fermat_utils::fermats();

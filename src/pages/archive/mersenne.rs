@@ -371,7 +371,7 @@ pub mod mersenne_utils {
 }
 
 pub fn render(model: &crate::Model) -> Node<Msg> {
-    let mut html = vec![];
+    let mut html = Vec::new();
     let mersennes = mersenne_utils::mersennes();
 
     for n in 1..mersennes.len() {

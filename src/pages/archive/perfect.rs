@@ -340,7 +340,7 @@ pub mod perfects_utils {
 }
 
 pub fn render(model: &crate::Model) -> Node<Msg> {
-    let mut html = vec![];
+    let mut html = Vec::new();
     let perfects = perfects_utils::perfects().to_owned();
 
     for perfect in perfects.iter() {

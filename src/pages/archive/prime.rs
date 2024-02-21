@@ -97,9 +97,9 @@ pub fn render(slug: String) -> Node<Msg> {
         NUMBERS_PER_PAGE,
     );
 
-    let mut prime_vec_formatted = vec![];
+    let mut prime_vec_formatted = Vec::new();
     for col in 1..COL_COUNT + 1 {
-        let mut prime_vec = vec![];
+        let mut prime_vec = Vec::new();
         for i in NUMBERS_PER_COL * (col - 1)..NUMBERS_PER_COL * col {
             // check data is available to display
             if i >= primes.len() {
@@ -123,7 +123,7 @@ pub fn render(slug: String) -> Node<Msg> {
     let prev_link: Vec<Node<_>>;
     // we are on the first page of primes so don't display a previous button
     if slug_int <= 1 {
-        prev_link = vec![];
+        prev_link = Vec::new();
     //display a link with text "back to 1st prime numbers"
     } else if slug_int as isize - NUMBERS_PER_PAGE as isize <= 0 {
         href_prev = "/archive/prime/1/".to_string();
