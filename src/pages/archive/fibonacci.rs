@@ -57,32 +57,24 @@ pub fn render(slug: String) -> Node<Msg> {
         )]);
     }
 
-    let href_prev: String;
-    let prev_link: Vec<Node<_>>;
-    if slug_int <= 1 {
-        prev_link = vec![];
+    let prev_link: Vec<Node<_>> = if slug_int <= 1 {
+        Vec::new()
     } else if slug_int <= 25 {
-        href_prev = "/archive/fibonacci/1/".to_string();
-        prev_link = vec![a![
+        vec![a![
             "back to 1st fibonacci numbers",
-            attrs! {At::Class => "link", At::Href => href_prev}
-        ]];
+            attrs! {At::Class => "link", At::Href => "/archive/fibonacci/1/".to_string()}
+        ]]
     } else {
-        href_prev = format!(
-            "/archive/fibonacci/{}/",
-            &(slug_int - numbers_per_page).to_string()
-        );
-        prev_link = vec![a![
+        vec![a![
             "previous ",
             numbers_per_page.to_string(),
             " fibonacci numbers",
-            attrs! {At::Class => "link", At::Href => href_prev}
-        ]];
-    }
-    let href_next: String = format!(
-        "/archive/fibonacci/{}/",
-        &(slug_int + numbers_per_page).to_string()
-    );
+            attrs! {At::Class => "link", At::Href => format!(
+                "/archive/fibonacci/{}/",
+                &(slug_int - numbers_per_page).to_string()
+            )}
+        ]]
+    };
 
     div![
         h1!["The Fibonacci Numbers"],
@@ -102,7 +94,10 @@ pub fn render(slug: String) -> Node<Msg> {
             "next ",
             numbers_per_page.to_string(),
             " fibonacci numbers",
-            attrs! {At::Class => "link", At::Href => href_next}
+            attrs! {At::Class => "link", At::Href => format!(
+                "/archive/fibonacci/{}/",
+                &(slug_int + numbers_per_page).to_string()
+            )}
         ],
         br![],
         br![],
