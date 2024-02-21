@@ -1,6 +1,5 @@
 use crate::Msg;
 use seed::prelude::*;
-use std::convert::TryInto;
 
 use num_bigint::{BigUint, ToBigUint};
 use num_traits::pow;

@@ -5,7 +5,6 @@
 extern crate seed;
 
 use seed::prelude::*;
-use web_sys;
 
 pub mod pages;
 pub mod utils;
