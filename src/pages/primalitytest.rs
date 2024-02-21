@@ -334,7 +334,9 @@ pub fn render(model: &crate::Model) -> Node<Msg> {
 
 #[cfg(test)]
 mod tests {
+    extern crate test;
     use super::*;
+    use test::Bencher;
 
     #[test]
     fn trial_divide_test() {
@@ -345,6 +347,11 @@ mod tests {
         assert_eq!(trial_divide(7777771111111111, 10000), 11);
         //in the case of a prime
         assert_eq!(trial_divide(777777111111113, 10000), 0);
+    }
+
+    #[bench]
+    fn trial_divide_bench(b: &mut Bencher) {
+        b.iter(|| trial_divide(7777771, 10000));
     }
 
     #[test]
