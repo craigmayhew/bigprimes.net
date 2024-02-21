@@ -29,14 +29,11 @@ pub mod prime_utils {
                 if is_pr {
                     //is prime
                     if pr >= start {
-                        //is greater than start vaariable
-                        Some(pr) //prime and we want it returned
-                    } else {
-                        None // not prime
+                        //is greater than start variable
+                        return Some(pr) //prime and we want it returned
                     }
-                } else {
-                    None // not prime
                 }
+                None // not prime
             })
             .collect()
     }
