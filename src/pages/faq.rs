@@ -9,8 +9,6 @@ pub fn render() -> Node<Msg> {
         br![],
         b!["Is x prime?"],
         p!["Please try our number cruncher. If your question is more complex then try using the contact form. I can't promise a quick response though."],
-        b!["I've taken the time to send you an email. Why haven't you responded?!"],
-        p!["I apologise, I run this site in what little spare time I have. You will get a response."],
         b!["I've found a bug/mistake on bigprimes.net!"],
         p!["Please opening an issue on ",a!["github", attrs!{At::Class => "link", At::Href => "https://github.com/craigmayhew/bigprimes.net/"}]],
         b!["What is the first set of 100 numbers (e.g. 100-199, 1300-1399, 312300-312399) that does not contain a prime number?"],
