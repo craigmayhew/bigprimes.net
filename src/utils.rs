@@ -47,7 +47,7 @@ mod tests {
     extern crate num_bigint;
     extern crate num_traits;
 
-    use num_bigint::{BigUint, ToBigUint};
+    use num_bigint::ToBigUint;
 
     use super::*;
 
