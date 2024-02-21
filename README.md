@@ -1,11 +1,14 @@
-# bigprimes.net
+<img align="right" border="1" src="./assets/screen-capture.gif" height="300" />
 
-<img align="right" border="1" src="./assets/screen-capture.gif" height="200" />
+# bigprimes.net
 
 [![Rust](https://img.shields.io/badge/Rust%20%3E%3D%201.76-000.svg?style=flat-square&logo=rust&colorA=000000&style=popout)](https://rust-lang.org/)
 [![Build Status](https://github.com/craigmayhew/bigprimes.net/workflows/Rust/badge.svg)](https://github.com/craigmayhew/bigprimes.net/actions)
 
 A single page web app, written exclusively in rust and compiled to WebAssembly.
+
+### Design patterns
+BigPrimes uses the [Seed](https://github.com/seed-rs/seed) framework. Seed is inspired by [Elm](https://en.wikipedia.org/wiki/Elm_(programming_language)) and so uses the model-view-update (MVU) architecture.
 
 ## Contributing
 Contributions are very welcome in the form of PRs. If it's a big contribution I recommend contacting me first and we can make sure it's aligned to the project direction. 
@@ -24,16 +27,10 @@ Contributions are very welcome in the form of PRs. If it's a big contribution I 
  6. Build `trunk build`
  7. Build, serve and rebuild on changes `trunk serve --open`
 
-### Design patterns
-BigPrimes uses the [Seed](https://github.com/seed-rs/seed) framework. Seed is inspired by [Elm](https://en.wikipedia.org/wiki/Elm_(programming_language)) and so uses the model-view-update (MVU) architecture.
-
 ### Build
-
  - Build: `wasm-pack build` or `trunk build`
  - Build and serve locally: `trunk serve --open`
 
-Thanks
-===
+## Thanks
  - https://seed-rs.org/
  - https://github.com/thedodd/trunk
- 
