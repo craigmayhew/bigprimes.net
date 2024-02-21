@@ -10,9 +10,7 @@ use std::mem::replace;
 
 use crate::utils::nth;
 
-/*
- * Return a vector of fibonnaci numbers from n to n+count
- */
+/// Return a vector of fibonnaci numbers from n to n+count
 fn nth_fibonacci(n: usize, count: usize) -> Vec<BigUint> {
     let mut f0: BigUint = Zero::zero();
     let mut f1: BigUint = One::one();
@@ -28,6 +26,7 @@ fn nth_fibonacci(n: usize, count: usize) -> Vec<BigUint> {
     x
 }
 
+/// Add a space character every 3 characters, starting from the right of the String
 fn add_space_every_3_chars_from_right(s: &str) -> String {
     // First, reverse the input string to start adding spaces from the end
     let reversed: String = s.chars().rev().collect();
