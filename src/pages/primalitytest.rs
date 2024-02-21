@@ -99,7 +99,7 @@ fn modpow(a: u64, mut exp: u64, n: u64) -> u64 {
             // if exponent is odd
             t = modmult(t, f, n);
         }
-        exp = (exp as f64 / 2.0).floor() as u64;
+        exp >>= 1;
         f = modmult(f, f, n);
     }
     modmult(t, f, n)
