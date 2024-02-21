@@ -14,7 +14,7 @@ use crate::utils::nth;
 fn nth_fibonacci(n: usize, count: usize) -> Vec<BigUint> {
     let mut f0: BigUint = Zero::zero();
     let mut f1: BigUint = One::one();
-    let mut x = vec![];
+    let mut x = Vec::new();
     for i in 0..(n + count - 1) {
         let f2 = f0 + &f1;
         // This is a low cost way of swapping f0 with f1 and f1 with f2.
