@@ -3,6 +3,7 @@ use seed::prelude::*;
 
 extern crate num_bigint;
 extern crate num_traits;
+extern crate test;
 
 use num_bigint::BigUint;
 
@@ -50,6 +51,7 @@ mod tests {
     use num_bigint::ToBigUint;
 
     use super::*;
+    use test::Bencher;
 
     #[test]
     fn nth_test() {
@@ -62,6 +64,11 @@ mod tests {
         assert_eq!(nth(7000000000000000011), "7000000000000000011th");
         assert_eq!(nth(7000000000000000012), "7000000000000000012th");
         assert_eq!(nth(7000000000000000013), "7000000000000000013th");
+    }
+
+    #[bench]
+    fn nth_bench(b: &mut Bencher) {
+        b.iter(|| nth(7000000000000000013));
     }
 
     #[test]
