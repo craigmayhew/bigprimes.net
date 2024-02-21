@@ -13,7 +13,7 @@ pub mod utils;
 #[derive(Copy, Clone)]
 pub enum Page {
     Archive,
-    ContactUs,
+    Contact,
     Error,
     Faq,
     Home,
@@ -113,7 +113,7 @@ fn update(msg: Msg, model: &mut Model, _orders: &mut impl Orders<Msg>) {
 fn view(model: &Model) -> Node<Msg> {
     match model.page {
         Page::Archive => pages::archive::index::render(),
-        Page::ContactUs => pages::contact::render(),
+        Page::Contact => pages::contact::render(),
         Page::Error => pages::error::render(),
         Page::Faq => pages::faq::render(),
         Page::FermatArchive => pages::archive::fermat::render(),
@@ -155,7 +155,7 @@ fn routes(url: seed::Url) -> (Page, std::string::String) {
                 },
             }
         }
-        "contactus" => (Page::ContactUs, empty_string),
+        "contact" => (Page::Contact, empty_string),
         "cruncher" => match url.path().get(1).as_ref() {
             Some(_slug) => (Page::NumberCruncher, url.path()[1].to_owned()),
             None => (Page::NumberCruncher, empty_string),
