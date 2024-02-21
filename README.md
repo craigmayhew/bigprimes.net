@@ -21,11 +21,12 @@ Contributions are very welcome in the form of PRs. If it's a big contribution I 
 ### Setup your local dev environment
  1. Clone bigprimes.net `git clone https://github.com/craigmayhew/bigprimes.net.git`
  2. Install cargo rustc, rustup `curl https://sh.rustup.rs -sSf | sh`
- 3. Install wasm-pack `curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh`
- 4. `cargo install --locked trunk`
- 5. `cargo install wasm-bindgen-cli`
- 6. Build `trunk build`
- 7. Build, serve and rebuild on changes `trunk serve --open`
+ 3. Add ability to compile to webassembly `rustup target add wasm32-unknown-unknown`
+ 4. Install wasm-pack `curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh`
+ 5. `cargo +stable install --locked trunk`
+ 6. `cargo install wasm-bindgen-cli`
+ 7. Build `trunk build`
+ 8. Build, serve and rebuild on changes `trunk serve --open`
 
 ### Build
  - Build: `wasm-pack build` or `trunk build`
