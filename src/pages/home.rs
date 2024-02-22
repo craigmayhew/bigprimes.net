@@ -22,6 +22,7 @@ pub fn render() -> Node<Msg> {
                     td![attrs!{At::Width => "200"},"Date"],
                     td![attrs!{At::Width => "500"},"News"],
                 ],
+                bp_table_row!("21st February 2024","rust benchmarks added. Followed by performance and usability improvmenets."),
                 bp_table_row!("2nd April 2022","bigprimes.net web2 version is now deployed to Cloudflare Pages and no longer AWS CloudFront."),
                 bp_table_row!("26th June 2021","bigprimes.net is now using the <a class=\"link\" href=\"https://github.com/thedodd/trunk\">trunk</a> WASM web application bundler for Rust."),
                 bp_table_row!("28th July 2019","bigprimes.net has been rewritten from the ground up using rust!<br>All archives have been retired in favour of client side processing in web assembly."),
