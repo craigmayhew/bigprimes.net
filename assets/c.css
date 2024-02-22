@@ -3,7 +3,7 @@ h1   {  font-size: 18px;}
 img  {  border: 0;}
 table{  border-collapse: collapse;}
 header{ background: #eee; height: 70px; max-width: 1200px;}
-footer{ height: 70px; max-width: 1200px; margin-top: 30px; text-align: center; width: 99%;}
+footer{ height: 70px; max-width: 1200px; margin-top: 30px; text-align: center;}
 
 nav {
   display: inline-block;
