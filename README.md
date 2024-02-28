@@ -1,6 +1,6 @@
-<img align="right" border="1" src="./assets/screen-capture.gif" height="300" />
-
 # bigprimes.net
+
+<img align="right" border="1" src="./assets/screen-capture.gif" height="200" />
 
 [![Rust](https://img.shields.io/badge/Rust%20%3E%3D%201.76-000.svg?style=flat-square&logo=rust&colorA=000000&style=popout)](https://rust-lang.org/)
 [![Build Status](https://github.com/craigmayhew/bigprimes.net/workflows/Rust/badge.svg)](https://github.com/craigmayhew/bigprimes.net/actions)
