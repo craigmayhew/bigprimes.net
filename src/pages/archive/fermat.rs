@@ -134,6 +134,7 @@ mod tests {
             "<a href=\"/cruncher/17/\">P7</a>".to_string()
         );
         assert_eq!(fermats[0].to_vec()[2], 617.to_string());
+        assert_eq!(fermats[3].to_vec()[1], "2<sup>256</sup>+1".to_string());
     }
 
     #[bench]
