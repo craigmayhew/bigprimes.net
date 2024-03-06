@@ -16,6 +16,9 @@ mod fermat_utils {
     }
 
     impl<'a> Fermat<'a> {
+        /// # Return a Vec<String> from a Fermat struct
+        ///
+        /// Implement string conversion for each field
         pub fn to_vec(&self) -> Vec<String> {
             use num_bigint::{BigUint, ToBigUint};
             use num_traits::pow;
