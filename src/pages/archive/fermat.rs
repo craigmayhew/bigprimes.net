@@ -22,7 +22,7 @@ mod fermat_utils {
 
             let equation: String = format!("2<sup>{}</sup>+1", &two_to_the_n);
 
-            let download_filename: String = format!("F{}.txt", &self.n.to_string());
+            let download_filename: String = format!("F{}.txt", &self.n);
 
             let fermat_value: BigUint =
                 pow(2_u32.to_biguint().unwrap(), two_to_the_n) + 1.to_biguint().unwrap();
