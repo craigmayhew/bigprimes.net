@@ -603,28 +603,19 @@ fn html_egyptian(slug: &str, max_len_egyptian: usize) -> Node<Msg> {
 
 fn html_mersenne_prime(str_num: &str) -> Node<Msg> {
     let n = mersenne::nth_mersenne_prime(str_num) as usize;
+    let nth = format!("It is the {} ",nth(n));
 
-    if n == 0 {
-        span![
-            "It is not a ",
-            a![
-                "mersenne prime",
-                attrs! {At::Class => "link", At::Href => "http://en.wikipedia.org/wiki/Mersenne_prime"}
-            ],
-            "."
-        ]
-    } else {
-        span![
-            "It is the ",
-            nth(n),
-            " ",
-            a![
-                "mersenne prime",
-                attrs! {At::Class => "link", At::Href => "http://en.wikipedia.org/wiki/Mersenne_prime"}
-            ],
-            "."
-        ]
-    }
+    span![
+        match n {
+            0 => "It is not a ",
+            _ => &nth,
+        },
+        a![
+            "mersenne prime",
+            attrs! {At::Class => "link", At::Href => "http://en.wikipedia.org/wiki/Mersenne_prime"}
+        ],
+        "."
+    ]
 }
 
 fn html_nth_prime(str_num: &str) -> Node<Msg> {
