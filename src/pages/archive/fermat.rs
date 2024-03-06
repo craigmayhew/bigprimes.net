@@ -5,6 +5,8 @@ extern crate test;
 
 /// # fns for generating Fermats
 mod fermat_utils {
+    use num_traits::One;
+
     /// # Fermat struct
     pub struct Fermat<'a> {
         pub n: u64,
@@ -25,7 +27,7 @@ mod fermat_utils {
             let download_filename: String = format!("F{}.txt", &self.n);
 
             let fermat_value: BigUint =
-                pow(2_u32.to_biguint().unwrap(), two_to_the_n) + 1.to_biguint().unwrap();
+                pow(2_u32.to_biguint().unwrap(), two_to_the_n) + BigUint::one();
 
             vec![
                 self.n.to_string(),
