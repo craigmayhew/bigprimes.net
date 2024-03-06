@@ -10,6 +10,8 @@ use std::mem::replace;
 
 use crate::utils::nth;
 
+const NUMBERS_PER_PAGE: usize = 25;
+
 /// Return a vector of fibonnaci numbers from n to n+count
 fn nth_fibonacci(n: usize, count: usize) -> Vec<BigUint> {
     let mut f0: BigUint = Zero::zero();
@@ -47,12 +49,11 @@ fn add_space_every_3_chars_from_right(s: &str) -> String {
 
 /// # Generate html using seed macros
 pub fn render(slug: String) -> Node<Msg> {
-    let numbers_per_page: usize = 25;
     let slug_int: usize = slug.parse().unwrap();
-    let fib_vec = nth_fibonacci(slug_int, numbers_per_page);
+    let fib_vec = nth_fibonacci(slug_int, NUMBERS_PER_PAGE);
 
-    let mut fib_vec_formatted = Vec::with_capacity(numbers_per_page);
-    for i in 0..numbers_per_page {
+    let mut fib_vec_formatted = Vec::with_capacity(NUMBERS_PER_PAGE);
+    for i in 0..NUMBERS_PER_PAGE {
         fib_vec_formatted.push(p![add_space_every_3_chars_from_right(
             &fib_vec[i].to_string()
         )]);
@@ -60,7 +61,7 @@ pub fn render(slug: String) -> Node<Msg> {
 
     let prev_link: Vec<Node<_>> = if slug_int <= 1 {
         Vec::new()
-    } else if slug_int <= 25 {
+    } else if slug_int <= NUMBERS_PER_PAGE {
         vec![a![
             "back to 1st fibonacci numbers",
             attrs! {At::Class => "link", At::Href => "/archive/fibonacci/1/".to_string()}
@@ -68,11 +69,11 @@ pub fn render(slug: String) -> Node<Msg> {
     } else {
         vec![a![
             "previous ",
-            numbers_per_page.to_string(),
+            NUMBERS_PER_PAGE.to_string(),
             " fibonacci numbers",
             attrs! {At::Class => "link", At::Href => format!(
                 "/archive/fibonacci/{}/",
-                &(slug_int - numbers_per_page).to_string()
+                &(slug_int - NUMBERS_PER_PAGE).to_string()
             )}
         ]]
     };
@@ -83,7 +84,7 @@ pub fn render(slug: String) -> Node<Msg> {
         "This page shows the ",
         nth(slug_int),
         " fibonacci number followed by the next ",
-        (numbers_per_page - 1).to_string(),
+        (NUMBERS_PER_PAGE - 1).to_string(),
         ".",
         br![],
         br![],
@@ -93,11 +94,11 @@ pub fn render(slug: String) -> Node<Msg> {
         br![],
         a![
             "next ",
-            numbers_per_page.to_string(),
+            NUMBERS_PER_PAGE.to_string(),
             " fibonacci numbers",
             attrs! {At::Class => "link", At::Href => format!(
                 "/archive/fibonacci/{}/",
-                &(slug_int + numbers_per_page).to_string()
+                &(slug_int + NUMBERS_PER_PAGE).to_string()
             )}
         ],
         br![],
