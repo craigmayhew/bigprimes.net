@@ -11,8 +11,8 @@ pub fn render() -> Node<Msg> {
         span![
             "Please contact me via ",
             a![
-                "twitter",
-                attrs! {At::Class => "link", At::Href => "https://twitter.com/craigmayhew"}
+                "X",
+                attrs! {At::Class => "link", At::Href => "https://x.com/craigmayhew"}
             ],
             " or by opening an issue on ",
             a![
