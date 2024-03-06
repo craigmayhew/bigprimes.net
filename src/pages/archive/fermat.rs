@@ -1,12 +1,11 @@
 use crate::Msg;
 use seed::prelude::*;
 
-use num_bigint::{BigUint, ToBigUint};
-use num_traits::pow;
-
 extern crate test;
 
+/// # fns for generating Fermats
 mod fermat_utils {
+    /// # Fermat struct
     pub struct Fermat<'a> {
         pub n: u64,
         pub f: u64,
@@ -14,6 +13,35 @@ mod fermat_utils {
         pub prime_factors: &'a str,
     }
 
+    impl<'a> Fermat<'a> {
+        pub fn to_vec(&self) -> Vec<String> {
+            use num_bigint::{BigUint, ToBigUint};
+            use num_traits::pow;
+
+            let equation: String =
+                format!("2<sup>{}</sup>+1", &(2_u32.pow(self.n as u32)).to_string());
+
+            let download_filename: String = format!("F{}.txt", &self.n.to_string());
+
+            let nth_fermat: usize = self.n as usize; //counts from 11 to 0
+
+            let fermat_value: BigUint = pow(2_u32.to_biguint().unwrap(), pow(2_usize, nth_fermat))
+                + 1.to_biguint().unwrap();
+
+            vec![
+                self.n.to_string(),
+                equation,
+                self.digits.to_string(),
+                self.prime_factors.to_string(),
+                download_filename,
+                fermat_value.to_string(),
+            ]
+        }
+    }
+
+    /// # Return Vec of populated Fermat structs
+    ///
+    /// The data to populate the Fermat structs is hard coded within this fn
     pub fn fermats<'a>() -> Vec<Fermat<'a>> {
         vec![
 			Fermat {n: 11, f: 0, digits:  617, prime_factors: "<a href=\"/cruncher/319489/\">P27567</a> × 974849 × 167988556341760475137 × 3560841906445833920513 × <a href=\"/cruncher/4093/\">P564</a>"},
@@ -32,31 +60,23 @@ mod fermat_utils {
     }
 }
 
+/// # Return html table rows populated with Fermats
 fn generate_rows() -> std::vec::Vec<Node<Msg>> {
     let mut html = Vec::new();
-    let two: usize = 2;
 
     let fermats = fermat_utils::fermats();
 
-    for n in 0..fermats.len() {
-        let download_filename: String = format!("F{}.txt", &fermats[n].n.to_string());
-
-        let equation: String = format!(
-            "2<sup>{}</sup>+1",
-            &(two.pow((fermats.len() - 1 - n).try_into().unwrap())).to_string()
-        );
-        let nth_fermat: usize = fermats.len() - 1 - n; //counts from 11 to 0
-        let fermat_value: BigUint =
-            pow(two.to_biguint().unwrap(), pow(two, nth_fermat)) + 1.to_biguint().unwrap();
+    for f_n in fermats {
+        let f = f_n.to_vec();
 
         html.push(tr![
-            td![fermats[n].n.to_string()],                      //rank
-            td![El::from_html(None, &equation)],                //fermat number as a formula
-            td![fermats[n].digits.to_string()],                 //digits in length
-            td![El::from_html(None, fermats[n].prime_factors)], //prime factors
+            td![&f[0]],                      //rank
+            td![El::from_html(None, &f[1])], //fermat number as a formula
+            td![&f[2]],                      //digits in length
+            td![El::from_html(None, &f[3])], //prime factors
             td![crate::utils::save_as_file(
-                download_filename,
-                fermat_value.to_string()
+                f[4].to_string(),
+                f[5].to_string()
             )],
         ]);
     }
@@ -106,4 +126,22 @@ mod tests {
         b.iter(|| fermat_utils::fermats());
     }
 
+    #[test]
+    fn fermat_to_vec_test<'a>() {
+        let fermats = fermat_utils::fermats();
+        assert_eq!(
+            fermats[9].to_vec()[3],
+            "<a href=\"/cruncher/17/\">P7</a>".to_string()
+        );
+        assert_eq!(fermats[0].to_vec()[2], 617.to_string());
+    }
+
+    #[bench]
+    fn fermat_to_vec_bench(b: &mut Bencher) {
+        b.iter(|| {
+            fermat_utils::fermats()
+                .iter()
+                .any(|v| !v.to_vec().is_empty())
+        });
+    }
 }
