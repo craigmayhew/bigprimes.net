@@ -18,15 +18,14 @@ mod fermat_utils {
             use num_bigint::{BigUint, ToBigUint};
             use num_traits::pow;
 
-            let equation: String =
-                format!("2<sup>{}</sup>+1", &(2_u32.pow(self.n as u32)).to_string());
+            let two_to_the_n = 1 << self.n;
+
+            let equation: String = format!("2<sup>{}</sup>+1", &two_to_the_n);
 
             let download_filename: String = format!("F{}.txt", &self.n.to_string());
 
-            let nth_fermat: usize = self.n as usize; //counts from 11 to 0
-
-            let fermat_value: BigUint = pow(2_u32.to_biguint().unwrap(), pow(2_usize, nth_fermat))
-                + 1.to_biguint().unwrap();
+            let fermat_value: BigUint =
+                pow(2_u32.to_biguint().unwrap(), two_to_the_n) + 1.to_biguint().unwrap();
 
             vec![
                 self.n.to_string(),
