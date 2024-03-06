@@ -4,6 +4,8 @@ use seed::prelude::*;
 use num_bigint::{BigUint, ToBigUint};
 use num_traits::pow;
 
+extern crate test;
+
 mod fermat_utils {
     pub struct Fermat<'a> {
         pub n: u64,
@@ -90,6 +92,7 @@ pub fn render() -> Node<Msg> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use test::Bencher;
 
     #[test]
     fn fermat_test<'a>() {
@@ -98,4 +101,10 @@ mod tests {
         assert_eq!(fermats[2].prime_factors, "<a href=\"/cruncher/17/\">P7</a>");
         assert_eq!(fermats[11].digits, 617);
     }
+
+    #[bench]
+    fn fermat_bench(b: &mut Bencher) {
+        b.iter(|| fermat_utils::fermats());
+    }
+
 }
