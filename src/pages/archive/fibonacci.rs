@@ -45,6 +45,7 @@ fn add_space_every_3_chars_from_right(s: &str) -> String {
     chunks.join(" ").chars().rev().collect()
 }
 
+/// # Generate html using seed macros
 pub fn render(slug: String) -> Node<Msg> {
     let numbers_per_page: usize = 25;
     let slug_int: usize = slug.parse().unwrap();

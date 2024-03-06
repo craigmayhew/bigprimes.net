@@ -1,6 +1,7 @@
 use crate::Msg;
 use seed::prelude::*;
 
+/// # Generate html using seed macros
 pub fn render() -> Node<Msg> {
     div![
         h1!["FAQ"],

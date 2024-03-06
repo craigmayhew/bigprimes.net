@@ -8,6 +8,7 @@ macro_rules! bp_table_row {
     };
 }
 
+/// # Generate html using seed macros
 pub fn render() -> Node<Msg> {
     div![
         h1!["News"],

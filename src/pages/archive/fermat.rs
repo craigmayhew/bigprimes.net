@@ -88,6 +88,7 @@ fn generate_rows() -> std::vec::Vec<Node<Msg>> {
     html
 }
 
+/// # Generate html using seed macros
 pub fn render() -> Node<Msg> {
     let html: std::vec::Vec<Node<Msg>> = generate_rows();
 
