@@ -114,7 +114,7 @@ fn sprp(n: u64, a: u64) -> bool {
         if d % 2 == 1 {
             break;
         }
-        d /= 2;
+        d >>= 1;
         s += 1;
     }
     // Now n-1 = d*2^s with d odd
