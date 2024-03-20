@@ -483,12 +483,18 @@ mod numerics_to_text {
         }
     }
 
+    /// # Return a bool depending on the string being palindromic
     pub fn is_palindrome(string: &str) -> bool {
-        let half_len = string.len() / 2;
-        string
-            .chars()
-            .take(half_len)
-            .eq(string.chars().rev().take(half_len))
+        let mut i = 0;
+        let mut j = string.len()-1;
+        while i < j {
+            if &string.as_bytes()[i] != &string.as_bytes()[j] {
+                return false;
+            }
+            j -= 1;
+            i += 1;
+        }
+        true
     }
 
     pub fn nth_root(str_num: &str, n: usize) -> String {
