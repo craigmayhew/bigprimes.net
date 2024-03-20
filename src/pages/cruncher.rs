@@ -913,6 +913,15 @@ mod tests {
     fn list_factors_bench(b: &mut Bencher) {
         b.iter(|| numerics_to_text::list_factors("20", ",".to_owned()));
     }
+
+    #[test]
+    fn is_palindrome_test() {
+        assert_eq!(numerics_to_text::is_palindrome("9003"), false);
+        assert_eq!(numerics_to_text::is_palindrome("11111111111111122222222223333339003"), false);
+        assert_eq!(numerics_to_text::is_palindrome("0111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"), false);
+        assert_eq!(numerics_to_text::is_palindrome("1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"), true);
+        assert_eq!(numerics_to_text::is_palindrome("22322"), true);
+    }
 }
 
 //todo: this file is vast, break it up!
