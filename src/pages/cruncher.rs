@@ -922,6 +922,15 @@ mod tests {
         assert_eq!(numerics_to_text::is_palindrome("1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"), true);
         assert_eq!(numerics_to_text::is_palindrome("22322"), true);
     }
+
+    #[bench]
+    fn is_palindrome_bench(b: &mut Bencher) {
+        b.iter(|| numerics_to_text::is_palindrome("9003"));
+        b.iter(|| numerics_to_text::is_palindrome("11111111111111122222222223333339003"));
+        b.iter(|| numerics_to_text::is_palindrome("0111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"));
+        b.iter(|| numerics_to_text::is_palindrome("1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"));
+        b.iter(|| numerics_to_text::is_palindrome("22322"));
+    }
 }
 
 //todo: this file is vast, break it up!
