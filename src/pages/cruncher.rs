@@ -486,7 +486,7 @@ mod numerics_to_text {
     /// # Return a bool depending on the string being palindromic
     pub fn is_palindrome(string: &str) -> bool {
         let mut i = 0;
-        let mut j = string.len()-1;
+        let mut j = string.len() - 1;
         while i < j {
             if &string.as_bytes()[i] != &string.as_bytes()[j] {
                 return false;
@@ -923,7 +923,10 @@ mod tests {
     #[test]
     fn is_palindrome_test() {
         assert_eq!(numerics_to_text::is_palindrome("9003"), false);
-        assert_eq!(numerics_to_text::is_palindrome("11111111111111122222222223333339003"), false);
+        assert_eq!(
+            numerics_to_text::is_palindrome("11111111111111122222222223333339003"),
+            false
+        );
         assert_eq!(numerics_to_text::is_palindrome("0111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"), false);
         assert_eq!(numerics_to_text::is_palindrome("1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"), true);
         assert_eq!(numerics_to_text::is_palindrome("22322"), true);
