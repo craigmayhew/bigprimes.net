@@ -485,10 +485,11 @@ mod numerics_to_text {
 
     /// # Return a bool depending on the string being palindromic
     pub fn is_palindrome(string: &str) -> bool {
+        let bytes = string.as_bytes();
         let mut i = 0;
-        let mut j = string.len() - 1;
+        let mut j = bytes.len() - 1;
         while i < j {
-            if &string.as_bytes()[i] != &string.as_bytes()[j] {
+            if bytes[i] != bytes[j] {
                 return false;
             }
             j -= 1;
