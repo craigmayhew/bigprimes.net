@@ -360,6 +360,14 @@ mod tests {
         assert_eq!(sprp(19, 13), true);
     }
 
+    #[bench]
+    fn sprp_bench(b: &mut Bencher) {
+        b.iter(|| sprp(27, 5));
+        b.iter(|| sprp(31, 7));
+        b.iter(|| sprp(217, 7));
+        b.iter(|| sprp(19, 13));
+    }
+
     #[test]
     fn mod_pow_test() {
         assert_eq!(modpow(6, 3, 11), 7);
