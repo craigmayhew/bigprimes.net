@@ -13,7 +13,7 @@ fn trial_divide(n: u64, max: u64) -> u64 {
     // Trial divides the positive integer n by the primes from 2 to max
     // Returns the first prime divisor found, or 0 if none found
     // Note: if n < max^2 is a prime, then n will be returned.
-    if n % 2 == 0 {
+    if n & 1 == 0 {
         2
     } else if n % 3 == 0 {
         3
@@ -110,10 +110,7 @@ fn modpow(a: u64, mut exp: u64, n: u64) -> u64 {
 fn sprp(n: u64, a: u64) -> bool {
     let mut d = n - 1;
     let mut s = 1; // Assumes n is odd!
-    loop {
-        if d % 2 == 1 {
-            break;
-        }
+    while d & 1 == 0 {
         d >>= 1;
         s += 1;
     }
