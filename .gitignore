@@ -1,3 +1,10 @@
+*~
 .idea
+.DS_Store
+.svn
+.cvs
+*.bak
+*.swp
 dist
 target
+Thumbs.db
