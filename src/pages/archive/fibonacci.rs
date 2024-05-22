@@ -37,8 +37,8 @@ fn add_space_every_3_chars_from_right(s: &str) -> String {
         .as_bytes()
         // Split the reversed byte slice into chunks of 3
         .chunks(3)
-        // Map each chunk: convert back to &str, reverse characters, and collect into a String
-        .map(|chunk| std::str::from_utf8(chunk).unwrap().chars().rev().collect())
+        // Map each chunk: convert back to &str, and collect into a String
+        .map(|chunk| std::str::from_utf8(chunk).unwrap().chars().collect())
         // Collect the processed chunks into a Vec<String>
         .collect();
 
