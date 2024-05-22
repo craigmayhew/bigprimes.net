@@ -901,12 +901,12 @@ mod tests {
         );
 
         assert_eq!(numerics_to_text::den_to_babylonian("55"), " &nbsp; 𒐐𒐊");
+        assert_eq!(numerics_to_text::den_to_babylonian("59"), " &nbsp; 𒐐𒐎"); // tests the 59th glyph is present
     }
 
     #[bench]
     fn den_to_babylonian_bench(b: &mut Bencher) {
         b.iter(|| numerics_to_text::den_to_babylonian("9003"));
-        b.iter(|| numerics_to_text::den_to_babylonian("54179")); // tests the 59th glyph is present
     }
 
     #[test]
