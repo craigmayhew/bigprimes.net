@@ -399,6 +399,8 @@ mod numerics_to_text {
         triplets: Vec<&str>,
     ) -> String {
         // chunk the number, ...rxyy
+        //TODO: These should be constants but as of num_bigint crate v0.4.5 they only have ZERO as a constant
+        // See related PR https://github.com/rust-num/num-bigint/pull/307
         let ten: BigUint = 10.to_biguint().unwrap();
         let hundred: BigUint = 100.to_biguint().unwrap();
         let thousand: BigUint = 1000.to_biguint().unwrap();
