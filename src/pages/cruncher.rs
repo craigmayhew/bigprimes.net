@@ -901,6 +901,7 @@ mod tests {
             " &nbsp; 𒈫 &nbsp; 𒌍 &nbsp; 𒐈"
         );
 
+        assert_eq!(numerics_to_text::den_to_babylonian("1"), " &nbsp; 𒁹");
         assert_eq!(numerics_to_text::den_to_babylonian("55"), " &nbsp; 𒐐𒐊");
         assert_eq!(numerics_to_text::den_to_babylonian("59"), " &nbsp; 𒐐𒐎"); // tests the 59th glyph is present
     }
