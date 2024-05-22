@@ -50,9 +50,9 @@ mod numerics_to_text {
         for i in 1..59 {
             glyphs.push(format!("{}{}", TENS[i / 10], UNITS[i % 10]));
         }
-        let mut val: Vec<&str> = Vec::with_capacity(1);
-        let mut num: BigUint = num_bigint::BigUint::from_str_radix(&str_num, 10).unwrap();
+        let mut num: BigUint = BigUint::from_str_radix(&str_num, 10).unwrap();
         let sixty: BigUint = 60.to_biguint().unwrap();
+        let mut val: Vec<&str> = Vec::with_capacity(1);
         while num > Zero::zero() {
             val.push(
                 &glyphs[(&num % &sixty)
