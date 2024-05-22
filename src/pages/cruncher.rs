@@ -641,18 +641,19 @@ fn html_mersenne_prime(str_num: &str) -> Node<Msg> {
 
 fn html_nth_prime(str_num: &str) -> Node<Msg> {
     if MAX_LEN_PRIME_CHECK < str_num.len() {
-        span!["It is too large to check primality."]
-    } else {
-        //check primes in the first million numbers
+        return span!["It is too large to check primality."];
+    } else if "1" != str_num {
+        // "1" causes a panic as the prime_list will be empty
+
+        // check primes in the first million numbers
         let mut primes_list = prime::sieve(2, str_num.parse::<usize>().unwrap());
 
         let final_prime_in_sieve = primes_list.pop().unwrap();
         if str_num == final_prime_in_sieve.to_string() {
-            span!["It is the ", nth(primes_list.len() + 1), " prime number."]
-        } else {
-            span!["It is not a prime number."]
+            return span!["It is the ", nth(primes_list.len() + 1), " prime number."];
         }
     }
+    span!["It is not a prime number."]
 }
 
 fn html_crunched_number(slug: String) -> Node<Msg> {
