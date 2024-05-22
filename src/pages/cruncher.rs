@@ -41,13 +41,14 @@ mod numerics_to_text {
     }
 
     pub fn den_to_babylonian(str_num: &str) -> String {
-        let units = vec!["", "𒁹", "𒈫", "𒐈", "𒐉", "𒐊", "𒐋", "𒐌", "𒐍", "𒐎"];
-        let tens = vec!["", "𒌋", "𒎙", "𒌍", "𒐏", "𒐐", "𒐑"];
+        const UNITS: [&str; 10] = ["", "𒁹", "𒈫", "𒐈", "𒐉", "𒐊", "𒐋", "𒐌", "𒐍", "𒐎"];
+        const TENS: [&str; 7] = ["", "𒌋", "𒎙", "𒌍", "𒐏", "𒐐", "𒐑"];
 
+        // Create a precomputed vector of glyphs for 0-59
         let mut glyphs: Vec<String> = Vec::with_capacity(60);
         glyphs.push(" &nbsp; &nbsp; ".to_owned());
         for i in 1..59 {
-            glyphs.push(format!("{}{}", tens[i / 10], units[i % 10]));
+            glyphs.push(format!("{}{}", TENS[i / 10], UNITS[i % 10]));
         }
         let mut val: Vec<&str> = Vec::with_capacity(1);
         let mut num: BigUint = num_bigint::BigUint::from_str_radix(&str_num, 10).unwrap();
