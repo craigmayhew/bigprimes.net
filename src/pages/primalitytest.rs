@@ -195,7 +195,7 @@ pub fn check(input: String) -> Check {
 pub fn listy(start_number: u64, number_of_primes: u64) -> String {
     let mut i = 0;
     let mut j = start_number;
-    let mut list: String = "".to_string();
+    let mut list: String = String::new();
     while i < number_of_primes {
         let result = check(j.to_string());
         if result.is_prime == true {
