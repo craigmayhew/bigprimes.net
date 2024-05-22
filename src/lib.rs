@@ -127,7 +127,7 @@ fn view(model: &Model) -> Node<Msg> {
 }
 
 fn routes(url: seed::Url) -> (Page, std::string::String) {
-    let empty_string = "".to_owned();
+    let empty_string = String::new();
 
     if url.path().is_empty() {
         return (Page::Home, empty_string);

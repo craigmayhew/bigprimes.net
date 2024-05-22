@@ -26,7 +26,7 @@ mod numerics_to_text {
     fn den2numerals(n: &str, glyphs: Vec<Vec<&str>>) -> String {
         //this function converts a number in the form of a string
         //to roman/egyptian/babylonian/chinese numerals
-        let mut numerals: String = "".to_owned();
+        let mut numerals: String = String::new();
         let n_vec: Vec<char> = n.chars().collect();
         for i in 0..n.len() {
             let digit: String = n_vec[n.len() - 1 - i].to_string();
@@ -408,7 +408,7 @@ mod numerics_to_text {
         let x: usize = ((&num / &hundred) % &ten).to_usize().unwrap();
         let y: usize = (&num % &hundred).to_usize().unwrap();
         // init the output string
-        let mut string: String = "".to_owned();
+        let mut string: String = String::new();
         // do hundreds
         if x > 0 {
             string.push_str(units[x]);
@@ -481,7 +481,7 @@ mod numerics_to_text {
         }
 
         if factorial_n != 0 {
-            let mut string: String = "".to_owned();
+            let mut string: String = String::new();
             string.push_str("It is the ");
             string.push_str(&nth(factorial_n));
             string.push_str(" factorial number. (");
@@ -514,7 +514,7 @@ mod numerics_to_text {
         let answer = number.nth_root(n.to_u32().unwrap()).to_owned();
 
         if pow(answer.to_owned(), n) == number {
-            let mut string: String = "".to_owned();
+            let mut string: String = String::new();
             string.push_str(&answer.to_string());
             Some(string)
         } else {
