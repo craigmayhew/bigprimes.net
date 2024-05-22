@@ -53,7 +53,11 @@ mod numerics_to_text {
         let mut num: BigUint = num_bigint::BigUint::from_str_radix(&str_num, 10).unwrap();
         let sixty: BigUint = 60.to_biguint().unwrap();
         while num > Zero::zero() {
-            val.push(&glyphs[(&num % &sixty).to_usize().unwrap()]);
+            val.push(
+                &glyphs[(&num % &sixty)
+                    .to_usize()
+                    .expect("conversion to usize failed")],
+            );
             val.push(" &nbsp; ");
             num /= &sixty;
         }
