@@ -157,7 +157,7 @@ mod tests {
     }
 
     #[bench]
-    fn nth_fibonaccit_bench(b: &mut Bencher) {
+    fn nth_fibonacci_bench(b: &mut Bencher) {
         b.iter(|| nth_fibonacci(12300, 9));
     }
 
