@@ -48,7 +48,7 @@ mod numerics_to_text {
         // Create a precomputed vector of glyphs for 0-59
         let mut glyphs: Vec<String> = Vec::with_capacity(60);
         glyphs.push(" &nbsp; &nbsp; ".to_owned());
-        for i in 1..59 {
+        for i in 1..=59 {
             glyphs.push(format!("{}{}", TENS[i / 10], UNITS[i % 10]));
         }
 
