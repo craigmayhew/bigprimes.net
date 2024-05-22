@@ -22,7 +22,7 @@ jobs:
           - { toolchain: nightly }
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Lint code ${{ matrix.config.toolchain }}
         run: |
           rustup toolchain install ${{ matrix.config.toolchain }}
@@ -41,7 +41,7 @@ jobs:
           - { toolchain: nightly }
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Run tests ${{ matrix.config.toolchain }}
         run: |
           rustup toolchain install ${{ matrix.config.toolchain }}
@@ -59,7 +59,7 @@ jobs:
           - { toolchain: nightly }
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Run benchmarks ${{ matrix.config.toolchain }}
         run: |
           rustup toolchain install ${{ matrix.config.toolchain }}
