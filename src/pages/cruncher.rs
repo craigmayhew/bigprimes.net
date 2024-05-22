@@ -40,6 +40,7 @@ mod numerics_to_text {
         numerals
     }
 
+    /// convert a base 10 &str to String of babylonian glyphs
     pub fn den_to_babylonian(str_num: &str) -> String {
         const UNITS: [&str; 10] = ["", "𒁹", "𒈫", "𒐈", "𒐉", "𒐊", "𒐋", "𒐌", "𒐍", "𒐎"];
         const TENS: [&str; 7] = ["", "𒌋", "𒎙", "𒌍", "𒐏", "𒐐", "𒐑"];
@@ -50,8 +51,12 @@ mod numerics_to_text {
         for i in 1..59 {
             glyphs.push(format!("{}{}", TENS[i / 10], UNITS[i % 10]));
         }
+
+        // Convert the input string number to BigUint
         let mut num: BigUint = BigUint::from_str_radix(&str_num, 10).unwrap();
         let sixty: BigUint = 60.to_biguint().unwrap();
+
+        // Collect glyphs
         let mut val: Vec<&str> = Vec::with_capacity(1);
         while num > Zero::zero() {
             val.push(
