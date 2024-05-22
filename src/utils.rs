@@ -3,7 +3,6 @@ use seed::prelude::*;
 
 extern crate num_bigint;
 extern crate num_traits;
-extern crate test;
 
 use num_bigint::BigUint;
 
@@ -47,6 +46,7 @@ pub fn generate_file(n: u64, value: BigUint) -> Node<Msg> {
 mod tests {
     extern crate num_bigint;
     extern crate num_traits;
+    extern crate test;
 
     use num_bigint::ToBigUint;
 

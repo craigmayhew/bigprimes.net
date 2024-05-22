@@ -3,7 +3,6 @@ use seed::prelude::*;
 
 extern crate num_bigint as bigint;
 extern crate num_traits;
-extern crate test;
 use num_bigint::BigUint;
 use num_traits::{One, Zero};
 use std::mem::replace;
@@ -122,6 +121,7 @@ pub fn render(slug: String) -> Node<Msg> {
 
 #[cfg(test)]
 mod tests {
+    extern crate test;
     use super::*;
     use test::Bencher;
 

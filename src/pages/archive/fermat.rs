@@ -1,8 +1,6 @@
 use crate::Msg;
 use seed::prelude::*;
 
-extern crate test;
-
 /// # fns for generating Fermats
 mod fermat_utils {
     use num_traits::One;
@@ -115,6 +113,7 @@ pub fn render() -> Node<Msg> {
 
 #[cfg(test)]
 mod tests {
+    extern crate test;
     use super::*;
     use test::Bencher;
 

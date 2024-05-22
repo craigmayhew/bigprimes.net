@@ -1,5 +1,3 @@
-extern crate test;
-
 use crate::Msg;
 use seed::prelude::*;
 
@@ -811,6 +809,7 @@ pub fn render(slug: String) -> Node<Msg> {
 
 #[cfg(test)]
 mod tests {
+    extern crate test;
     use super::*;
     use test::Bencher;
 
