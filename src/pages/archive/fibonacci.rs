@@ -149,4 +149,20 @@ mod tests {
     fn nth_fibonaccit_bench(b: &mut Bencher) {
         b.iter(|| nth_fibonacci(12300, 9));
     }
+
+    #[test]
+    fn add_space_every_3_chars_from_right_test() {
+        assert_eq!(add_space_every_3_chars_from_right("34"), "34");
+        assert_eq!(add_space_every_3_chars_from_right("123"), "123");
+        assert_eq!(add_space_every_3_chars_from_right("1234"), "1 234");
+    }
+
+    #[bench]
+    fn add_space_every_3_chars_from_right_bench(b: &mut Bencher) {
+        b.iter(|| {
+            add_space_every_3_chars_from_right(
+                "123456789123456789123456789123456789123456789123456789",
+            )
+        });
+    }
 }
