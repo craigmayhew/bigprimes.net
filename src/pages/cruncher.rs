@@ -619,12 +619,15 @@ fn html_egyptian(slug: &str, max_len_egyptian: usize) -> Node<Msg> {
 
 fn html_mersenne_prime(str_num: &str) -> Node<Msg> {
     let n = mersenne::nth_mersenne_prime(str_num) as usize;
-    let nth = format!("It is the {} ", nth(n));
+    let n_th: String;
 
     span![
         match n {
             0 => "It is not a ",
-            _ => &nth,
+            _ => {
+                n_th = format!("It is the {} ", nth(n));
+                &n_th
+            }
         },
         a![
             "mersenne prime",
