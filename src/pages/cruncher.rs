@@ -506,16 +506,17 @@ mod numerics_to_text {
         true
     }
 
-    pub fn nth_root(str_num: &str, n: usize) -> String {
+    /// return Some(n) for nth root, or None if natural root does not exist
+    pub fn nth_root(str_num: &str, n: usize) -> Option<String> {
         let number: BigUint = num_bigint::BigUint::from_str_radix(&str_num, 10).unwrap();
         let answer = number.nth_root(n.to_u32().unwrap()).to_owned();
 
         if pow(answer.to_owned(), n) == number {
             let mut string: String = "".to_owned();
             string.push_str(&answer.to_string());
-            string
+            Some(string)
         } else {
-            "0".to_owned()
+            None
         }
     }
 }
@@ -717,26 +718,22 @@ fn html_crunched_number(slug: String) -> Node<Msg> {
                 //TODO hardcoded example value
                 //"It is not a triangle number.",
                 //br![],
-                if numerics_to_text::nth_root(&slug, 2) != "0" {
-                    format!(
-                        "It is the {} square number.",
-                        &nth(numerics_to_text::nth_root(&slug, 2)
-                            .parse::<usize>()
-                            .unwrap())
-                    )
-                } else {
-                    "It is not a square number.".to_owned()
+                match numerics_to_text::nth_root(&slug, 2) {
+                    Some(n) => {
+                        format!("It is the {} square number.", &n.parse::<usize>().unwrap())
+                    }
+                    None => {
+                        "It is not a square number.".to_owned()
+                    }
                 },
                 br![],
-                if numerics_to_text::nth_root(&slug, 3) != "0" {
-                    format!(
-                        "It is the {} cube number.",
-                        &nth(numerics_to_text::nth_root(&slug, 3)
-                            .parse::<usize>()
-                            .unwrap())
-                    )
-                } else {
-                    "It is not a cube number.".to_owned()
+                match numerics_to_text::nth_root(&slug, 3) {
+                    Some(n) => {
+                        format!("It is the {} cube number.", &n.parse::<usize>().unwrap())
+                    }
+                    None => {
+                        "It is not a cube number.".to_owned()
+                    }
                 },
                 br![],
                 br![],
