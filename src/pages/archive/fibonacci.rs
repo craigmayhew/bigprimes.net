@@ -28,7 +28,6 @@ fn nth_fibonacci(n: usize, count: usize) -> Vec<BigUint> {
 }
 
 /// Add a space character every 3 characters, starting from the right of the String
-fn add_space_every_3_chars_from_right(s: &str) -> String {
     // First, reverse the input string to start adding spaces from the end
     let reversed: String = s.chars().rev().collect();
 
@@ -44,6 +43,7 @@ fn add_space_every_3_chars_from_right(s: &str) -> String {
 
     // Join the chunks with spaces and reverse the resulting string to restore original order
     chunks.join(" ").chars().rev().collect()
+fn add_space_every_3_ascii_chars_from_right(s: &str) -> String {
 }
 
 /// # Generate html using seed macros
@@ -53,7 +53,7 @@ pub fn render(slug: String) -> Node<Msg> {
 
     let mut fib_vec_formatted = Vec::with_capacity(NUMBERS_PER_PAGE);
     for i in 0..NUMBERS_PER_PAGE {
-        fib_vec_formatted.push(p![add_space_every_3_chars_from_right(
+        fib_vec_formatted.push(p![add_space_every_3_ascii_chars_from_right(
             &fib_vec[i].to_string()
         )]);
     }
@@ -151,16 +151,16 @@ mod tests {
     }
 
     #[test]
-    fn add_space_every_3_chars_from_right_test() {
-        assert_eq!(add_space_every_3_chars_from_right("34"), "34");
-        assert_eq!(add_space_every_3_chars_from_right("123"), "123");
-        assert_eq!(add_space_every_3_chars_from_right("1234"), "1 234");
+    fn add_space_every_3_ascii_chars_from_right_test() {
+        assert_eq!(add_space_every_3_ascii_chars_from_right("34"), "34");
+        assert_eq!(add_space_every_3_ascii_chars_from_right("123"), "123");
+        assert_eq!(add_space_every_3_ascii_chars_from_right("1234"), "1 234");
     }
 
     #[bench]
-    fn add_space_every_3_chars_from_right_bench(b: &mut Bencher) {
+    fn add_space_every_3_ascii_chars_from_right_bench(b: &mut Bencher) {
         b.iter(|| {
-            add_space_every_3_chars_from_right(
+            add_space_every_3_ascii_chars_from_right(
                 "123456789123456789123456789123456789123456789123456789",
             )
         });
