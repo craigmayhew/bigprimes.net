@@ -27,23 +27,34 @@ fn nth_fibonacci(n: usize, count: usize) -> Vec<BigUint> {
     x
 }
 
-/// Add a space character every 3 characters, starting from the right of the String
-    // First, reverse the input string to start adding spaces from the end
-    let reversed: String = s.chars().rev().collect();
-
-    // Process the reversed string in chunks of 3 characters
-    let chunks: Vec<String> = reversed
-        .as_bytes()
-        // Split the reversed byte slice into chunks of 3
-        .chunks(3)
-        // Map each chunk: convert back to &str, and collect into a String
-        .map(|chunk| std::str::from_utf8(chunk).unwrap().chars().collect())
-        // Collect the processed chunks into a Vec<String>
-        .collect();
-
-    // Join the chunks with spaces and reverse the resulting string to restore original order
-    chunks.join(" ").chars().rev().collect()
+/// Add a space character every 3 ascii characters, starting from the right of the String
 fn add_space_every_3_ascii_chars_from_right(s: &str) -> String {
+    // Convert the input string to bytes
+    let bytes = s.as_bytes();
+
+    // Create a vector with preallocated capacity to store the result.
+    // The capacity is the original length plus space for potential spaces.
+    let mut result = Vec::with_capacity(bytes.len() + (bytes.len() / 3));
+
+    let mut count = 0;
+    // Iterate over the bytes in reverse order to start adding spaces from the right
+    for byte in bytes.iter().rev() {
+        if count == 3 {
+            // Insert a space after every 3 characters
+            result.push(b' ');
+            count = 0;
+        }
+        // Push the current byte to the result
+        result.push(*byte);
+        count += 1;
+    }
+
+    // Reverse the result to restore the original order
+    result.reverse();
+
+    // Convert the byte vector back to a String.
+    // Since we started with valid UTF-8 single-byte characters, this will be safe.
+    String::from_utf8(result).expect("Error when converting bytes to string")
 }
 
 /// # Generate html using seed macros
