@@ -7,6 +7,7 @@ readme = "README.md"
 license = "MIT/APACHE"
 repository = "https://github.com/craigmayhew/bigprimes.net"
 edition = "2021"
+publish = false # Prevent crate publishing, as bigprimes is neither a library nor a developer tool.
 
 [lib]
 crate-type = ["cdylib", "rlib"]
