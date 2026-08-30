@@ -40,9 +40,9 @@ impl Model {
         Self {
             download: pages::archive::perfect::perfects_utils::PerfectDownload { n: 0, p: 0 },
             primalitycheckerfieldvalues: pages::primalitytest::PrimalityTestPageInputs {
-                number: 31,
-                primes: 5,
-                start: 65000,
+                number: "31".to_owned(),
+                primes: "5".to_owned(),
+                start: "65000".to_owned(),
             },
             page: page,
             slug: slug,
@@ -96,13 +96,13 @@ fn update(msg: Msg, model: &mut Model, _orders: &mut impl Orders<Msg>) {
         //todo: split this into two, one for ok button and have the function calls in here rather than in the view
         Msg::PrimalityChecker(_) => {}
         Msg::PrimalityCheckerInputNumberValueChanged(value) => {
-            model.primalitycheckerfieldvalues.number = value.parse::<u64>().unwrap();
+            model.primalitycheckerfieldvalues.number = value;
         }
         Msg::PrimalityCheckerInputPrimesValueChanged(value) => {
-            model.primalitycheckerfieldvalues.primes = value.parse::<u64>().unwrap();
+            model.primalitycheckerfieldvalues.primes = value;
         }
         Msg::PrimalityCheckerInputStartValueChanged(value) => {
-            model.primalitycheckerfieldvalues.start = value.parse::<u64>().unwrap();
+            model.primalitycheckerfieldvalues.start = value;
         }
     }
 }
