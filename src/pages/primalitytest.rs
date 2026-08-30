@@ -39,49 +39,8 @@ fn trial_divide(n: u64, max: u64) -> u64 {
     }
 }
 
-// modadd(a,b,N) finds a+b (mod N) where a, b, and N can be
-// up to (2^53-1)/2.  Might up this to 2^53-1 eventually...
-fn modadd(a: u64, b: u64, n: u64) -> u64 {
-    // When the integers a, b satisfy a+b > 2^53-1, then (a+b)%N is wrong
-    // so we add this routine to allow us to reach a, b = 2^53-1.
-    if a + b > 9007199254740991 {
-        // Could reduce a and b (mod N) here, but assuming that has already been done
-        // won't hurt if not... subtract 2^52 from one, 2^52-1 from the other and the
-        // add it back modulo N (MaxInt+1)
-        let t = ((a - 4503599627370496) + (b - 4503599627370495)) % n;
-        return t + (9007199254740991 % n);
-    }
-    // Usual case: a + b is not too large:
-    (a + b) % n
-}
-
-fn modmult(mut a: u64, mut b: u64, n: u64) -> u64 {
-    if a > n {
-        a = a % n;
-    }
-    if b > n {
-        b = b % n;
-    }
-    if a * b <= 9007199254740991 {
-        return (a * b) % n;
-    } else {
-        if b > a {
-            return modmult(b.clone(), a, n);
-        }
-
-        // Right to left binary multiplication
-        let mut t = 0;
-        let mut f = a;
-        while b > 1 {
-            if (b & 1) == 1 {
-                t = modadd(t, f, n);
-            }
-            b >>= 1;
-            f = modadd(f, f, n);
-        }
-        t = modadd(t, f, n);
-        return t;
-    }
+fn modmult(a: u64, b: u64, n: u64) -> u64 {
+    ((u128::from(a) * u128::from(b)) % u128::from(n)) as u64
 }
 
 // modpow(a,exp,N) finds a^exp (mod N) where a, b, and N are
@@ -381,6 +340,16 @@ mod tests {
     fn mod_mult_test() {
         assert_eq!(modmult(3, 3, 4), 1);
         assert_eq!(modmult(110, 4, 7), 6);
+    }
+
+    #[test]
+    fn mod_mult_handles_u64_product_overflow() {
+        let a: u64 = 9_007_199_254_740_000;
+        let b: u64 = 9_007_199_254_739_000;
+        let n: u64 = 9_007_199_254_740_991;
+
+        assert!(a.checked_mul(b).is_none());
+        assert_eq!(modmult(a, b, n), 1_973_081);
     }
 
     #[bench]
