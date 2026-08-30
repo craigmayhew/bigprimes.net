@@ -51,6 +51,28 @@ jobs:
           rustup default ${{ matrix.config.toolchain }}
           cargo test --verbose
 
+  wasm-test:
+    needs: lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - name: Install Rust nightly with WebAssembly support
+        run: |
+          rustup toolchain install nightly
+          rustup default nightly
+          rustup target add wasm32-unknown-unknown
+      - name: Install wasm-pack
+        run: |
+          curl --fail --location --proto '=https' --tlsv1.2 \
+            --output wasm-pack.tar.gz \
+            https://github.com/wasm-bindgen/wasm-pack/releases/download/v0.15.0/wasm-pack-v0.15.0-x86_64-unknown-linux-musl.tar.gz
+          echo "c09f971ecaed9a2efc80fdcea7a00ef6b53c7fadc8c57d1f61b53a6aa66b668a  wasm-pack.tar.gz" | sha256sum --check
+          tar --extract --gzip --file wasm-pack.tar.gz
+          sudo install wasm-pack-v0.15.0-x86_64-unknown-linux-musl/wasm-pack /usr/local/bin/wasm-pack
+      - name: Run WebAssembly browser tests
+        run: wasm-pack test --headless --chrome --test web
+
   bench:
     needs: lint
     runs-on: ubuntu-latest
