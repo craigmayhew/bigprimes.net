@@ -2,11 +2,35 @@ use crate::Msg;
 use seed::prelude::*;
 use web_sys::HtmlInputElement;
 
+const INVALID_NUMBER_MESSAGE: &str =
+    "Please enter an unsigned 64-bit integer in decimal or 0x-prefixed hexadecimal notation.";
+// These witnesses make Miller-Rabin deterministic for every value in the u64 range.
+const DETERMINISTIC_MILLER_RABIN_BASES: [u64; 7] =
+    [2, 325, 9_375, 28_178, 450_775, 9_780_504, 1_795_265_022];
+
 #[derive(Clone)]
 pub struct PrimalityTestPageInputs {
-    pub number: u64,
-    pub primes: u64,
-    pub start: u64,
+    pub number: String,
+    pub primes: String,
+    pub start: String,
+}
+
+fn parse_number(input: &str) -> Result<u64, &'static str> {
+    let input = input.trim();
+    if input.is_empty() {
+        return Err(INVALID_NUMBER_MESSAGE);
+    }
+
+    let parsed = if let Some(hex_digits) = input
+        .strip_prefix("0x")
+        .or_else(|| input.strip_prefix("0X"))
+    {
+        u64::from_str_radix(hex_digits, 16)
+    } else {
+        input.parse::<u64>()
+    };
+
+    parsed.map_err(|_| INVALID_NUMBER_MESSAGE)
 }
 
 fn trial_divide(n: u64, max: u64) -> u64 {
@@ -64,30 +88,32 @@ fn modpow(a: u64, mut exp: u64, n: u64) -> u64 {
     modmult(t, f, n)
 }
 
-// sprp(N,a) checks if N (odd!) is a strong probable prime base a
-// (returns true or false)
+// Checks whether odd n is a strong probable prime to base a.
 fn sprp(n: u64, a: u64) -> bool {
+    let a = a % n;
+    if a == 0 {
+        return true;
+    }
+
     let mut d = n - 1;
-    let mut s = 1; // Assumes n is odd!
+    let mut s = 0;
     while d & 1 == 0 {
         d >>= 1;
         s += 1;
     }
-    // Now n-1 = d*2^s with d odd
+
     let mut b = modpow(a, d, n);
-    if b == 1 {
+    if b == 1 || b == n - 1 {
         return true;
     }
-    if b + 1 == n {
-        return true;
-    }
-    while s > 1 {
+
+    for _ in 1..s {
         b = modmult(b, b, n);
-        if b + 1 == n {
+        if b == n - 1 {
             return true;
         }
-        s = s - 1;
     }
+
     false
 }
 
@@ -97,55 +123,45 @@ pub struct Check {
 }
 
 pub fn check(input: String) -> Check {
+    let n = match parse_number(&input) {
+        Ok(n) => n,
+        Err(message) => {
+            return Check {
+                is_prime: false,
+                result: message.to_owned(),
+            };
+        }
+    };
+
     let trial_limit = 1300; // Should be bigger, like 10000
-    let n: u64 = input.parse::<u64>().unwrap();
     let result;
     let mut is_prime = false;
 
-    if n > 9007199254740991 {
-        result = "Sorry, this routine will only handle integers below 9007199254740991.".to_owned();
-    } else if n == 1 {
+    if n == 1 {
         result = "The number 1 is neither prime or composite (it is the multiplicative identity)."
             .to_owned();
-    } else if n < 1 {
+    } else if n == 0 {
         result =
             "We usually restrict the terms prime and composite to positive integers".to_owned();
     } else {
-        // Okay, n is of a resonable size, lets trial divide
         let i = trial_divide(n, trial_limit);
         if i > 0 && i != n {
             result = format!("{} is not a prime! It is {} * {}", n, i, n / i);
         } else if n < trial_limit * trial_limit {
             result = format!("{} is a (proven) prime!", n);
             is_prime = true;
-        } else if sprp(n, 2)
-            && sprp(n, 3)
-            && sprp(n, 5)
-            && sprp(n, 7)
-            && sprp(n, 11)
-            && sprp(n, 13)
-            && sprp(n, 17)
+        } else if let Some(base) = DETERMINISTIC_MILLER_RABIN_BASES
+            .iter()
+            .find(|&&base| !sprp(n, base))
         {
-            // Some of these tests are unnecessary for small numbers, but for
-            // small numbers they are quick anyway.
-            if n < 341550071728321 {
-                result = format!("{} is a (proven) prime.", n);
-                is_prime = true;
-            } else if n == 341550071728321 {
-                result = format!("{} is not a prime! It is 10670053 * 32010157.", n);
-            } else {
-                result = format!(
-                    "{} is probably a prime (it is a sprp bases 2, 3, 5, 7, 11, 13 and  17).",
-                    n
-                );
-                is_prime = true;
-            };
-        } else {
             result = format!(
                 "{} is (proven) composite (failed sprp test base {}).",
-                n, 17
+                n, base
             );
-        };
+        } else {
+            result = format!("{} is a (proven) prime.", n);
+            is_prime = true;
+        }
     };
 
     Check { is_prime, result }
@@ -202,10 +218,14 @@ pub fn go_list() {
     let el_output_textarea = document
         .get_element_by_id("prime_check_list_output")
         .expect("missing output textarea");
-    el_output_textarea.set_inner_html(&listy(
-        el_start_value.parse::<u64>().unwrap(),
-        el_primes_value.parse::<u64>().unwrap(),
-    ));
+    let output = match (
+        parse_number(&el_start_value),
+        parse_number(&el_primes_value),
+    ) {
+        (Ok(start), Ok(primes)) => listy(start, primes),
+        _ => "Please enter valid unsigned integers for the start and count.".to_owned(),
+    };
+    el_output_textarea.set_inner_html(&output);
     ()
 }
 
@@ -221,12 +241,12 @@ pub fn render(model: &crate::Model) -> Node<Msg> {
                 attrs! {At::Style => "padding: 10px"},
                 div![
                     attrs! {At::Id => "primetest"},
-                    "Tool is limited to checking numbers upto 16 digits.",
+                    "Enter a decimal integer or prefix a hexadecimal value with 0x. The full unsigned 64-bit range is supported.",
                     br![],
                     br![],
                     "Is ",
                     input![
-                        attrs! {At::Type => "number", At::Size => "19", At::Id => "number", At::Value => model.primalitycheckerfieldvalues.number.to_string(), At::MaxLength => "16"},
+                        attrs! {At::Type => "text", At::Size => "22", At::Id => "number", At::Value => model.primalitycheckerfieldvalues.number.to_string(), At::MaxLength => "20"},
                         input_ev(Ev::Input, |val| {
                             Msg::PrimalityCheckerInputNumberValueChanged(val)
                         }),
@@ -291,6 +311,53 @@ mod tests {
     extern crate test;
     use super::*;
     use test::Bencher;
+
+    #[test]
+    fn parse_number_supports_decimal_and_hexadecimal() {
+        assert_eq!(parse_number("31"), Ok(31));
+        assert_eq!(parse_number("0x1f"), Ok(31));
+        assert_eq!(parse_number("0X1F"), Ok(31));
+        assert_eq!(parse_number("18446744073709551615"), Ok(u64::MAX));
+        assert_eq!(parse_number("0xFFFFFFFFFFFFFFFF"), Ok(u64::MAX));
+    }
+
+    #[test]
+    fn parse_number_rejects_invalid_or_out_of_range_input() {
+        assert_eq!(parse_number(""), Err(INVALID_NUMBER_MESSAGE));
+        assert_eq!(parse_number("0x"), Err(INVALID_NUMBER_MESSAGE));
+        assert_eq!(parse_number("-1"), Err(INVALID_NUMBER_MESSAGE));
+        assert_eq!(
+            parse_number("18446744073709551616"),
+            Err(INVALID_NUMBER_MESSAGE)
+        );
+    }
+
+    #[test]
+    fn check_accepts_issue_24_hexadecimal_input() {
+        let result = check("0xFFFFFFFFFFFFF1".to_owned());
+
+        assert!(!result.is_prime);
+        assert_eq!(
+            result.result,
+            "72057594037927921 is not a prime! It is 59 * 1221315153185219"
+        );
+    }
+
+    #[test]
+    fn check_supports_primes_across_the_u64_range() {
+        let result = check("18446744073709551557".to_owned());
+
+        assert!(result.is_prime);
+        assert_eq!(result.result, "18446744073709551557 is a (proven) prime.");
+    }
+
+    #[test]
+    fn check_returns_an_error_for_invalid_input() {
+        let result = check("not a number".to_owned());
+
+        assert!(!result.is_prime);
+        assert_eq!(result.result, INVALID_NUMBER_MESSAGE);
+    }
 
     #[test]
     fn trial_divide_test() {
