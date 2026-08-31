@@ -614,7 +614,7 @@ fn html_chinese(slug: &str, max_len_chinese: usize) -> Node<Msg> {
     tr![
         td![attrs! {At::Width => "200"}, "Chinese Numerals:",],
         td![
-            style! {"vertical-align" => "middle"; "background-color" => "#FFF"},
+            attrs! {At::Class => "numeral-cell"},
             if slug.len() <= max_len_chinese {
                 El::from_html(None, &numerics_to_text::den_to_chinese(&slug))
             } else {
@@ -685,8 +685,6 @@ fn html_crunched_number(slug: String) -> Node<Msg> {
     let max_len_factoring = 17;
     let html_factors = html_factors(&slug, slug.len(), max_len_factoring);
 
-    let table_style = style! {"border" => "1px #000 solid"};
-
     let spoken_version_of_number: String = numerics_to_text::convert(slug.to_string());
     let title: String = match spoken_version_of_number.as_ref() {
         "Error" => slug.to_string(), //just number
@@ -694,14 +692,13 @@ fn html_crunched_number(slug: String) -> Node<Msg> {
     };
 
     div![
-        style! {"width" => "75%"; "padding" => "3px"},
+        attrs! {At::Class => "cruncher-result"},
         br![],
         br![],
         b!["The number you submitted to be crunched was:"],
         h1![title],
         table![
             attrs! {At::Class => "crunchertable", At::Width => "100%"},
-            &table_style,
             tbody![tr![td![
                 "It is an ",
                 if numerics_to_text::is_odd(&slug) {
@@ -735,7 +732,6 @@ fn html_crunched_number(slug: String) -> Node<Msg> {
         br![],
         table![
             attrs! {At::Class => "crunchertable", At::Width => "100%"},
-            &table_style,
             tbody![tr![td![
                 //TODO hardcoded example value
                 //"It is not a triangle number.",
@@ -766,14 +762,12 @@ fn html_crunched_number(slug: String) -> Node<Msg> {
         br![],
         table![
             attrs! {At::Class => "crunchertable", At::Width => "100%"},
-            &table_style,
             tbody![tr![html_factors,],],
         ],
         br![],
         br![],
         table![
             attrs! {At::Class => "crunchertable", At::Width => "100%"},
-            &table_style,
             tbody![
                 tr![
                     td![attrs! {At::Width => "200"}, "Base 2 (Binary):",],
@@ -809,7 +803,6 @@ fn html_crunched_number(slug: String) -> Node<Msg> {
         br![],
         table![
             attrs! {At::Class => "crunchertable", At::Width => "100%"},
-            &table_style,
             tbody![
                 html_roman,
                 html_egyptian,
@@ -817,7 +810,7 @@ fn html_crunched_number(slug: String) -> Node<Msg> {
                 tr![
                     td![attrs! {At::Width => "200"}, "Babylonian Numerals:",],
                     td![
-                        style! {"vertical-align" => "middle"; "background-color" => "#FFF"},
+                        attrs! {At::Class => "numeral-cell"},
                         El::from_html(None, &numerics_to_text::den_to_babylonian(&slug)),
                     ]
                 ],

@@ -236,9 +236,9 @@ pub fn render(model: &crate::Model) -> Node<Msg> {
         br![],
         br![],
         table![
-            attrs! {At::Class => "text", At::Width => "300", At::Style => "border:1px solid #444; background-color:#e0faed"},
+            attrs! {At::Class => "primality-tool text", At::Width => "300"},
             tr![td![
-                attrs! {At::Style => "padding: 10px"},
+                attrs! {At::Class => "primality-tool-cell"},
                 div![
                     attrs! {At::Id => "primetest"},
                     "Enter a decimal integer or prefix a hexadecimal value with 0x. The full unsigned 64-bit range is supported.",
@@ -267,9 +267,9 @@ pub fn render(model: &crate::Model) -> Node<Msg> {
         br![],
         br![],
         table![
-            attrs! {At::Class => "text", At::Width => "300", At::Style => "border:1px solid #444; background-color:#e0faed"},
+            attrs! {At::Class => "primality-tool text", At::Width => "300"},
             tr![td![
-                attrs! {At::Style => "padding: 10px"},
+                attrs! {At::Class => "primality-tool-cell"},
                 div![
                     attrs! {At::Id => "primelist"},
                     "This tool is limited to checking numbers up to 15 digits.",
