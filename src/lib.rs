@@ -28,6 +28,7 @@ pub enum Page {
 // Model
 pub struct Model {
     download: pages::archive::perfect::perfects_utils::PerfectDownload,
+    numbercruncherfieldvalue: String,
     primalitycheckerfieldvalues: pages::primalitytest::PrimalityTestPageInputs,
     page: Page,
     slug: std::string::String,
@@ -39,6 +40,7 @@ impl Model {
 
         Self {
             download: pages::archive::perfect::perfects_utils::PerfectDownload { n: 0, p: 0 },
+            numbercruncherfieldvalue: String::new(),
             primalitycheckerfieldvalues: pages::primalitytest::PrimalityTestPageInputs {
                 number: "31".to_owned(),
                 primes: "5".to_owned(),
@@ -67,6 +69,8 @@ pub enum Msg {
         pages::archive::perfect::perfects_utils::PerfectDownload,
     ),
     UrlChanged(subs::UrlChanged),
+    NumberCruncherInputValueChanged(String),
+    NumberCruncherRequested,
     PrimalityChecker(()),
     PrimalityCheckerInputNumberValueChanged(String),
     PrimalityCheckerInputPrimesValueChanged(String),
@@ -74,7 +78,7 @@ pub enum Msg {
 }
 
 /// The sole source of updating the model
-fn update(msg: Msg, model: &mut Model, _orders: &mut impl Orders<Msg>) {
+fn update(msg: Msg, model: &mut Model, orders: &mut impl Orders<Msg>) {
     match msg {
         //TODO: IS there a bug here that model.download.n = perfect_download is used for mersenne?
         Msg::GenerateMersenneDownload(_event, perfect_download) => {
@@ -92,6 +96,15 @@ fn update(msg: Msg, model: &mut Model, _orders: &mut impl Orders<Msg>) {
             model.page = page;
             model.slug = slug;
             ()
+        }
+        Msg::NumberCruncherInputValueChanged(value) => {
+            model.numbercruncherfieldvalue = value;
+        }
+        Msg::NumberCruncherRequested => {
+            let number = model.numbercruncherfieldvalue.trim();
+            if !number.is_empty() {
+                orders.request_url(Url::new().set_path(["cruncher", number]));
+            }
         }
         //todo: split this into two, one for ok button and have the function calls in here rather than in the view
         Msg::PrimalityChecker(_) => {}
@@ -119,7 +132,7 @@ fn view(model: &Model) -> Node<Msg> {
         Page::FibonacciArchive => pages::archive::fibonacci::render(model.slug.to_owned()),
         Page::Home => pages::home::render(),
         Page::MersenneArchive => pages::archive::mersenne::render(&model),
-        Page::NumberCruncher => pages::cruncher::render(model.slug.to_owned()),
+        Page::NumberCruncher => pages::cruncher::render(model.slug.to_owned(), model),
         Page::PerfectArchive => pages::archive::perfect::render(&model),
         Page::PrimalityChecker => pages::primalitytest::render(&model),
         Page::PrimeNumbersArchive => pages::archive::prime::render(model.slug.to_owned()),
