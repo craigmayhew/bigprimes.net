@@ -202,6 +202,40 @@ fn application_mounts_and_renders_representative_routes() {
 }
 
 #[wasm_bindgen_test(async)]
+async fn mounted_number_cruncher_form_uses_seed_event_handlers() {
+    let original_url = current_relative_url();
+    let fixture = mount_route("/cruncher/", "number-cruncher-controls-fixture");
+    let input = fixture
+        .query_selector("#cruncher-form textarea")
+        .expect("number cruncher input should be queryable")
+        .expect("number cruncher input should be rendered")
+        .dyn_into::<web_sys::HtmlTextAreaElement>()
+        .expect("number cruncher input should be an HTML textarea element");
+    input.set_value("31");
+    input
+        .dispatch_event(&web_sys::Event::new("input").expect("input event should be created"))
+        .expect("input event should be dispatched");
+    fixture
+        .query_selector("#cruncher-form input[type=submit]")
+        .expect("crunch button should be queryable")
+        .expect("crunch button should be rendered")
+        .dyn_into::<web_sys::HtmlElement>()
+        .expect("crunch button should be an HTML element")
+        .click();
+
+    next_animation_frame().await;
+
+    let heading = fixture
+        .query_selector("h1")
+        .expect("heading should be queryable")
+        .expect("number cruncher result should render a heading");
+    assert_eq!(heading.text_content().as_deref(), Some("31 - thirty one"));
+
+    fixture.remove();
+    set_relative_url(&original_url);
+}
+
+#[wasm_bindgen_test(async)]
 async fn mounted_primality_controls_handle_input_and_click_events() {
     let original_url = current_relative_url();
     let fixture = mount_route("/primalitytest/", "primality-controls-fixture");
