@@ -10,7 +10,7 @@ pub fn render() -> Node<Msg> {
         br![],
         b!["If you were expecting something to be here, please file a bug/issue on "],
         a![
-            "github",
+            "GitHub",
             attrs! {At::Class => "link", At::Href => "https://github.com/craigmayhew/bigprimes.net/issues/"}
         ],
         "."

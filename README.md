@@ -5,7 +5,7 @@
 [![Rust](https://img.shields.io/badge/Rust%20%3E%3D%201.76-000.svg?style=flat-square&logo=rust&colorA=000000&style=popout)](https://rust-lang.org/)
 [![Build Status](https://github.com/craigmayhew/bigprimes.net/workflows/Rust/badge.svg)](https://github.com/craigmayhew/bigprimes.net/actions)
 
-A single page web app, written exclusively in rust and compiled to WebAssembly.
+A single page web app, written exclusively in Rust and compiled to WebAssembly.
 
 ### Design patterns
 BigPrimes uses the [Seed](https://github.com/seed-rs/seed) framework. Seed is inspired by [Elm](https://en.wikipedia.org/wiki/Elm_(programming_language)) and so uses the model-view-update (MVU) architecture.
@@ -21,7 +21,7 @@ Contributions are very welcome in the form of PRs. If it's a big contribution I 
 ### Setup your local dev environment
  1. Clone bigprimes.net `git clone https://github.com/craigmayhew/bigprimes.net.git`
  2. Install cargo rustc, rustup `curl https://sh.rustup.rs -sSf | sh`
- 3. Add ability to compile to webassembly `rustup target add wasm32-unknown-unknown`
+ 3. Add ability to compile to WebAssembly `rustup target add wasm32-unknown-unknown`
  4. Install wasm-pack `curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh`
  5. `cargo +stable install --locked trunk`
  6. `cargo install wasm-bindgen-cli`

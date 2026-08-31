@@ -138,7 +138,7 @@ pub fn check(input: String) -> Check {
     let mut is_prime = false;
 
     if n == 1 {
-        result = "The number 1 is neither prime or composite (it is the multiplicative identity)."
+        result = "The number 1 is neither prime nor composite (it is the multiplicative identity)."
             .to_owned();
     } else if n == 0 {
         result =
@@ -272,7 +272,7 @@ pub fn render(model: &crate::Model) -> Node<Msg> {
                 attrs! {At::Class => "primality-tool-cell"},
                 div![
                     attrs! {At::Id => "primelist"},
-                    "This tool is limited to checking numbers upto 15 digits.",
+                    "This tool is limited to checking numbers up to 15 digits.",
                     br![],
                     br![],
                     "This will show ",
