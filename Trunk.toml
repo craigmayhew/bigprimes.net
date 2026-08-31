@@ -1,3 +1,9 @@
 [build]
 target = "index.html"
 dist = "dist"
+
+# Trunk injects a content-hashed inline loader, so generate its CSP hash after bundling.
+[[hooks]]
+stage = "post_build"
+command = "python3"
+command_arguments = ["scripts/generate_security_headers.py"]
