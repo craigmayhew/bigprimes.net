@@ -16,7 +16,7 @@ pub fn render() -> Node<Msg> {
             ],
             " or by opening an issue on ",
             a![
-                "github",
+                "GitHub",
                 attrs! {At::Class => "link", At::Href => "https://github.com/craigmayhew/bigprimes.net/"}
             ],
             ".",

@@ -11,7 +11,7 @@ use crate::utils::nth;
 
 const NUMBERS_PER_PAGE: usize = 25;
 
-/// Return a vector of fibonnaci numbers from n to n+count
+/// Return a vector of Fibonacci numbers from n to n+count
 fn nth_fibonacci(n: usize, count: usize) -> Vec<BigUint> {
     let mut f0: BigUint = Zero::zero();
     let mut f1: BigUint = One::one();

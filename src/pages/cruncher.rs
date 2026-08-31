@@ -40,7 +40,7 @@ mod numerics_to_text {
         numerals
     }
 
-    /// convert a base 10 &str to String of babylonian glyphs
+    /// convert a base 10 &str to String of Babylonian glyphs
     pub fn den_to_babylonian(str_num: &str) -> String {
         const UNITS: [&str; 10] = ["", "𒁹", "𒈫", "𒐈", "𒐉", "𒐊", "𒐋", "𒐌", "𒐍", "𒐎"];
         const TENS: [&str; 7] = ["", "𒌋", "𒎙", "𒌍", "𒐏", "𒐐", "𒐑"];
@@ -534,9 +534,9 @@ fn html_form(model: &crate::Model) -> Node<Msg> {
         ul![
             li!["Is it odd or even?"],
             li!["Is it a palindrome?"],
-            li!["Is it a prime number? (Checks numbers upto ",MAX_LEN_PRIME_CHECK.to_string()," digits in length)"],
-            li!["Is it a ",a!["mersenne prime", attrs!{At::Class => "link", At::Href => "https://en.wikipedia.org/wiki/Mersenne_prime"}],"?"],
-            li!["Is it a ",a!["fermat prime", attrs!{At::Class => "link", At::Href => "https://www.fermatsearch.org/"}],"?"],
+            li!["Is it a prime number? (Checks numbers up to ",MAX_LEN_PRIME_CHECK.to_string()," digits in length)"],
+            li!["Is it a ",a!["Mersenne prime", attrs!{At::Class => "link", At::Href => "https://en.wikipedia.org/wiki/Mersenne_prime"}],"?"],
+            li!["Is it a ",a!["Fermat prime", attrs!{At::Class => "link", At::Href => "https://www.fermatsearch.org/"}],"?"],
             li!["Is it a ",a!["perfect number", attrs!{At::Class => "link", At::Href => "https://en.wikipedia.org/wiki/Perfect_number"}],"?"],
             li!["Is it a triangle number?"],
             li!["Is it a square number?"],
@@ -546,10 +546,10 @@ fn html_form(model: &crate::Model) -> Node<Msg> {
             br![],
             li!["All factors of the number will be listed"],
             li!["The page will also show a list of base conversions. e.g. binary, octal and hexadecimal"],
-            li!["The number will be converted to roman numerals"],
-            li!["The number will be converted to egyptian numerals"],
-            li!["The number will be converted to chinese numerals"],
-            li!["The number will be converted to babylonian numerals"],
+            li!["The number will be converted to Roman numerals"],
+            li!["The number will be converted to Egyptian numerals"],
+            li!["The number will be converted to Chinese numerals"],
+            li!["The number will be converted to Babylonian numerals"],
         ],
         br![],
         br![],
@@ -584,7 +584,7 @@ fn html_factors(slug: &str, slug_len: usize, max_len_factoring: usize) -> Node<M
     if slug_len <= max_len_factoring {
         td![
             attrs! {At::Width => "200"},
-            "It it has factors:",
+            "It has factors:",
             br![],
             El::from_html(
                 None,
@@ -648,7 +648,7 @@ fn html_mersenne_prime(str_num: &str) -> Node<Msg> {
             }
         },
         a![
-            "mersenne prime",
+            "Mersenne prime",
             attrs! {At::Class => "link", At::Href => "https://en.wikipedia.org/wiki/Mersenne_prime"}
         ],
         "."
@@ -724,7 +724,7 @@ fn html_crunched_number(slug: String) -> Node<Msg> {
                 html_mersenne_prime(&slug),
                 br![],
                 //TODO hardcoded example value
-                //"It is not a ",a!["fermat prime", attrs!{At::Class => "link", At::Href => "https://www.fermatsearch.org/"}],".",
+                //"It is not a ",a!["Fermat prime", attrs!{At::Class => "link", At::Href => "https://www.fermatsearch.org/"}],".",
                 //br![],
                 //TODO hardcoded example value
                 //"It is not a ",a!["perfect number", attrs!{At::Class => "link", At::Href => "https://en.wikipedia.org/wiki/Perfect_number"}],".",
