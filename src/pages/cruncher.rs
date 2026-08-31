@@ -633,7 +633,7 @@ fn html_mersenne_prime(str_num: &str) -> Node<Msg> {
         },
         a![
             "mersenne prime",
-            attrs! {At::Class => "link", At::Href => "http://en.wikipedia.org/wiki/Mersenne_prime"}
+            attrs! {At::Class => "link", At::Href => "https://en.wikipedia.org/wiki/Mersenne_prime"}
         ],
         "."
     ]
