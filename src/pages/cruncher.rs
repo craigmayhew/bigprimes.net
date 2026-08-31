@@ -523,7 +523,7 @@ mod numerics_to_text {
     }
 }
 
-fn html_form() -> Node<Msg> {
+fn html_form(model: &crate::Model) -> Node<Msg> {
     div![
         h1!["Number Cruncher"],
         "Welcome to the number cruncher.
@@ -554,11 +554,27 @@ fn html_form() -> Node<Msg> {
         br![],
         br![],
 	    "Please type your number here:",
-        form![attrs!{At::Name => "crunchy", At::Action => "/cruncher/", At::Method => "get", At::Target => "_top"},
+        form![
+            attrs! {At::Id => "cruncher-form"},
+            ev(Ev::Submit, |event| {
+                event.prevent_default();
+                Msg::NumberCruncherRequested
+            }),
             div![
-                textarea![attrs!{At::Name => "number", At::Cols => "85", At::Rows => "10", At::OnKeyDown => "if (event.keyCode == 13){document.location='cruncher/'+crunchy.number.value+'/'}"}],
+                textarea![
+                    attrs! {At::Name => "number", At::Cols => "85", At::Rows => "10", At::Value => model.numbercruncherfieldvalue.to_string()},
+                    input_ev(Ev::Input, Msg::NumberCruncherInputValueChanged),
+                    keyboard_ev(Ev::KeyDown, |event| {
+                        if event.key() == "Enter" {
+                            event.prevent_default();
+                            Some(Msg::NumberCruncherRequested)
+                        } else {
+                            None
+                        }
+                    }),
+                ],
                 br![],
-                input![attrs!{At::Type => "button", At::Value => "Crunch", At::OnClick => "document.location='cruncher/'+crunchy.number.value+'/'"}],
+                input![attrs! {At::Type => "submit", At::Value => "Crunch"}],
             ],
         ],
     ]
@@ -810,13 +826,13 @@ fn html_crunched_number(slug: String) -> Node<Msg> {
     ]
 }
 
-pub fn render(slug: String) -> Node<Msg> {
+pub fn render(slug: String, model: &crate::Model) -> Node<Msg> {
     let rgx = Regex::new(r"^([1-9]+[0-9]*)$").unwrap();
 
     if rgx.is_match(&slug) {
         html_crunched_number(slug)
     } else {
-        html_form()
+        html_form(model)
     }
 }
 
