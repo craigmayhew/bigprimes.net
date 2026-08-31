@@ -165,7 +165,11 @@ fn routes(url: seed::Url) -> (Page, std::string::String) {
     }
 }
 
+pub fn start_at(root_id: &str) {
+    App::start(root_id, init, update, view);
+}
+
 #[wasm_bindgen(start)]
-pub fn main() {
-    App::start("app", init, update, view);
+pub fn start() {
+    start_at("app");
 }
