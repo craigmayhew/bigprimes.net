@@ -50,10 +50,33 @@ nav a:hover {
  text-decoration: none;
 }
 
+.cruncher-result {
+  padding: 3px;
+  width: 75%;
+}
+
+.crunchertable {
+  border: 1px solid #000;
+}
+
 .crunchertable tr td {
   background-color: inherit;
   border: 1px solid #000;
   padding: 2px;
+}
+
+.numeral-cell {
+  background-color: #fff;
+  vertical-align: middle;
+}
+
+.primality-tool {
+  background-color: #e0faed;
+  border: 1px solid #444;
+}
+
+.primality-tool-cell {
+  padding: 10px;
 }
 
 .mersennetable tr td,
