@@ -1,0 +1,10 @@
+[package]
+name = "security-headers"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+base64 = "0.22"
+regex = "1"
+sha2 = "0.10"

@@ -62,7 +62,7 @@ jobs:
         run: |
           rustup toolchain install ${{ matrix.config.toolchain }}
           rustup default ${{ matrix.config.toolchain }}
-          cargo test --verbose
+          cargo test --workspace --verbose
 
   wasm-test:
     needs: lint

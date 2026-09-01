@@ -9,6 +9,10 @@ repository = "https://github.com/craigmayhew/bigprimes.net"
 edition = "2021"
 publish = false # Prevent crate publishing, as bigprimes is neither a library nor a developer tool.
 
+[workspace]
+members = [".", "tools/security-headers"]
+resolver = "2"
+
 [lib]
 crate-type = ["cdylib", "rlib"]
 
